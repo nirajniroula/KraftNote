@@ -1,2 +1,3 @@
+include ':app:editor'
 include ':app'
 rootProject.name = "Kraft Note"
