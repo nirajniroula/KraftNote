@@ -1,15 +1,25 @@
-package com.example.kraftnote;
+package com.example.kraftnote.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.kraftnote.R;
+import com.example.kraftnote.persistence.entities.Category;
+import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
+
+import java.util.List;
+
 public class SecondFragment extends Fragment {
+    private CategoryViewModel categoryViewModel;
 
     @Override
     public View onCreateView(
@@ -28,6 +38,19 @@ public class SecondFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(SecondFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
+            }
+        });
+
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+
+
+
+
+        categoryViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Category>>() {
+            @Override
+            public void onChanged(List<Category> categories) {
+                // Todo: update RecyclerView
+                Toast.makeText(getContext(), "Category updated", Toast.LENGTH_SHORT).show();
             }
         });
     }
