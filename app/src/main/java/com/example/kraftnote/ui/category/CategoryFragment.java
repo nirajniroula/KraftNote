@@ -29,8 +29,6 @@ public class CategoryFragment extends Fragment {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
 
-
-
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {

@@ -24,4 +24,7 @@ public interface CategoryDao {
 
     @Query("SELECT * FROM Categories ORDER BY created_at")
     LiveData<List<Category>> getAll();
+
+    @Query("SELECT * FROM Categories WHERE id=:id LIMIT 1")
+    Category findById(int id);
 }
