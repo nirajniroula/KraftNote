@@ -23,7 +23,6 @@ import android.widget.Toast;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private CategoryViewModel categoryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +38,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            }
-        });
-
-        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
-
-
-
-
-        categoryViewModel.getAll().observe(this, new Observer<List<Category>>() {
-            @Override
-            public void onChanged(List<Category> categories) {
-                // Todo: update RecyclerView
-                Toast.makeText(MainActivity.this, "Category updated", Toast.LENGTH_SHORT).show();
             }
         });
     }
