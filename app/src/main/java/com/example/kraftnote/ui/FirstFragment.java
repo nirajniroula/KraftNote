@@ -78,8 +78,6 @@ public class FirstFragment extends Fragment {
             }
         });
 
-
-
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
