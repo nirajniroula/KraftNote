@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +23,6 @@ import java.util.List;
 
 public class NoteFragment extends Fragment {
     private NavController navController;
-    private Button gotoCategoryFragmentButton;
     private CategoryTabLayout categoryTabLayout;
     private CategoryViewModel categoryViewModel;
     private FloatingActionButton floatingActionButton;
@@ -56,12 +53,10 @@ public class NoteFragment extends Fragment {
     private void findViews(@NonNull final View view) {
         categoryTabLayout = view.findViewById(R.id.category_tabs);
         floatingActionButton = view.findViewById(R.id.add_note_fab);
-        gotoCategoryFragmentButton = view.findViewById(R.id.button_to_category_fragment);
     }
 
     private void listenEvents() {
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), this::categoriesMutated);
-        gotoCategoryFragmentButton.setOnClickListener(v -> gotoCategoryFragment());
     }
 
 

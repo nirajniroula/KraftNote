@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--  id must be same as from nav graph   -->
+    <item
+        android:id="@+id/NoteFragment"
+        android:title="@string/bottom_nav_notes_title"
+        android:icon="@drawable/ic_baseline_event_note_24"/>
+
+    <item
+        android:id="@+id/CategoryFragment"
+        android:title="@string/bottom_nav_categories_title"
+        android:icon="@drawable/ic_baseline_category_24"/>
+
+    <item
+        android:id="@+id/SettingFragment"
+        android:title="@string/bottom_nav_settings_title"
+        android:icon="@drawable/ic_baseline_settings_24"/>
+</menu>

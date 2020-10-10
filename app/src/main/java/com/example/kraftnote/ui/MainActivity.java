@@ -3,37 +3,44 @@ package com.example.kraftnote.ui;
 import android.os.Bundle;
 
 import com.example.kraftnote.R;
-import com.example.kraftnote.persistence.entities.Category;
-import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
-import android.view.View;
-
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private NavController navController;
+    private BottomNavigationView bottomNavigationView;
+    private NavHostFragment navHostFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        initializeProperties();
+        listenEvents();
+    }
+
+    private void initializeProperties() {
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+
+        assert navHostFragment != null;
+
+        navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+    }
+
+    private void listenEvents() {
+
     }
 
     @Override

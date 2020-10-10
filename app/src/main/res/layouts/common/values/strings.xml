@@ -10,4 +10,7 @@
     <string name="ok">OK</string>
     <string name="confirm">Confirm</string>
     <string name="confirmation_required">Confirmation Required</string>
+    <string name="bottom_nav_categories_title">Categories</string>
+    <string name="bottom_nav_notes_title">Notes</string>
+    <string name="bottom_nav_settings_title">Settings</string>
 </resources>

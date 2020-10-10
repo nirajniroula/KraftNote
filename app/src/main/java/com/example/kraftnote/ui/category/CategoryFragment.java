@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryFragment extends Fragment {
-    private Button gotoNoteFragmentButton;
     private NavController navController;
     private CategoryViewModel categoryViewModel;
     private CategoryRecyclerView categoryRecyclerView;
@@ -59,14 +58,11 @@ public class CategoryFragment extends Fragment {
     }
 
     private void findViews(View view) {
-        gotoNoteFragmentButton = view.findViewById(R.id.goto_note_fragment);
         addCategoryFab = view.findViewById(R.id.add_category_fab);
         categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
     }
 
     private void listenEvents() {
-        gotoNoteFragmentButton.setOnClickListener((View v) -> gotoNoteFragment());
-
         categoryViewModel.getCategoriesWithNotesCount()
                 .observe(getViewLifecycleOwner(), this::categoryWithNotesCountMutated);
 
