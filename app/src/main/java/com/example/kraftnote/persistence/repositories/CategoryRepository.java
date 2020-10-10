@@ -36,6 +36,10 @@ public class CategoryRepository implements IRepository<Category> {
         new UpdateTask(categoryDao).execute(category);
     }
 
+    public boolean nameExist(String categoryName) {
+        return categoryDao.nameExists(categoryName);
+    }
+
     @Override
     public void delete(Category category) {
         new DeleteTask(categoryDao).execute(category);
@@ -104,4 +108,6 @@ public class CategoryRepository implements IRepository<Category> {
             return categoryDaoWeakReference;
         }
     }
+
+
 }

@@ -49,4 +49,7 @@ public class CategoryViewModel extends AndroidViewModel implements IViewModel<Ca
         return categoriesWithNotesCount;
     }
 
+    public boolean nameExists(String categoryName) {
+        return categoryRepository.nameExist(categoryName);
+    }
 }

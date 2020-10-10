@@ -15,6 +15,7 @@
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/CategoryFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.example.kraftnote.ui.SecondFragment"
@@ -25,6 +26,7 @@
             android:id="@+id/action_SecondFragment_to_CategoryFragment"
             app:destination="@id/CategoryFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/CategoryFragment"
         android:name="com.example.kraftnote.ui.category.CategoryFragment"

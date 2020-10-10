@@ -31,4 +31,7 @@ public interface CategoryDao {
 
     @Query("SELECT * FROM CategoryWithNotesCount")
     LiveData<List<CategoryWithNotesCount>> getAllWithNotesCount();
+
+    @Query("SELECT EXISTS(SELECT * FROM Categories WHERE LOWER(name) = LOWER(:name) LIMIT 1)")
+    boolean nameExists(String name);
 }
