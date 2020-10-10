@@ -11,9 +11,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
@@ -40,7 +40,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void listenEvents() {
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            toggleBottomNavVisibility(destination.getId() == R.id.AddUpdateNoteFragment);
+        });
+    }
 
+    private void toggleBottomNavVisibility(boolean hide) {
+        bottomNavigationView.setVisibility(
+                !hide
+                        ? View.VISIBLE
+                        : View.GONE
+        );
     }
 
     @Override

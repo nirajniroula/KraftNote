@@ -14,6 +14,20 @@
         <action
             android:id="@+id/action_NoteFragment_to_CategoryFragment"
             app:destination="@id/CategoryFragment" />
+        <action
+            android:id="@+id/action_NoteFragment_to_AddUpdateNoteFragment"
+            app:destination="@id/AddUpdateNoteFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/AddUpdateNoteFragment"
+        android:name="com.example.kraftnote.ui.note.AddUpdateNoteFragment"
+        android:label="@string/save_note_fragment_label"
+        tools:layout="@layout/fragment_add_update_note">
+
+        <action
+            android:id="@+id/action_AddUpdateNoteFragment_to_NoteFragment"
+            app:destination="@id/NoteFragment" />
     </fragment>
 
     <fragment
