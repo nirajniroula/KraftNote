@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.kraftnote.persistence.entities.Category;
+import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
 
 import java.util.List;
 
@@ -24,4 +25,13 @@ public interface CategoryDao {
 
     @Query("SELECT * FROM Categories ORDER BY created_at")
     LiveData<List<Category>> getAll();
+
+    @Query("SELECT * FROM Categories WHERE id=:id LIMIT 1")
+    Category findById(int id);
+
+    @Query("SELECT * FROM CategoryWithNotesCount")
+    LiveData<List<CategoryWithNotesCount>> getAllWithNotesCount();
+
+    @Query("SELECT EXISTS(SELECT * FROM Categories WHERE LOWER(name) = LOWER(:name) LIMIT 1)")
+    boolean nameExists(String name);
 }

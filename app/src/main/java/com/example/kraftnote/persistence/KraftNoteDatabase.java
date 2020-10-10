@@ -17,10 +17,14 @@ import com.example.kraftnote.persistence.daos.TagDao;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.entities.Tag;
+import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
 
 import java.lang.ref.WeakReference;
 
-@Database(entities = {Category.class, Note.class, Tag.class}, version = 1)
+@Database(entities = {Category.class, Note.class, Tag.class},
+        views = {CategoryWithNotesCount.class},
+        version = 1
+)
 public abstract class KraftNoteDatabase extends RoomDatabase {
     private static volatile KraftNoteDatabase INSTANCE;
 

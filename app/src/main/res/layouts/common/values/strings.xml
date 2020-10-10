@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_item_all">All</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="add_category_dialog_title">Add Category</string>
+    <string name="update_category_dialog_title">Update Category</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="name">Name</string>
+    <string name="error_helper_text_add_category">Category name (case-insensitive) must be unique.</string>
+    <string name="category_added">Category Added</string>
+    <string name="unperformable_action">Cannot perform the action</string>
+    <string name="cannot_delete_category_having_notes">Cannot delete category having one or more notes.</string>
+    <string name="ok">Ok</string>
+    <string name="confirmation_required">Confirmation Required</string>
+    <string name="delete_category_question">Are you sure you want to delete this category? This process cannot be undone.</string>
+    <string name="confirm">Confirm</string>
+    <string name="category_deleted">Category Deleted</string>
+    <string name="category_created">Category created</string>
+    <string name="category_updated">Category updated</string>
+    <string name="update">Update</string>
+</resources>

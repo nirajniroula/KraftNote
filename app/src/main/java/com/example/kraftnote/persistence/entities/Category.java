@@ -14,7 +14,11 @@ public class Category extends BaseEntity {
 //        this(name, new Date());
     }
 
-//    @Ignore
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //    @Ignore
 //    public Category(String name, Date createdAt) {
 //        this.name = name;
 //        setCreatedAt(createdAt);

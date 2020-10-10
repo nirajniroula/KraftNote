@@ -1,5 +1,6 @@
 package com.example.kraftnote.ui.category;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +10,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
+import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
+    private CategoryRecyclerView categoryRecyclerView;
+    private FloatingActionButton addCategoryFab;
+    private AddEditCategoryDialogFragment addEditCategoryDialogFragment;
+    List<CategoryWithNotesCount> categoryWithNotesCounts = new ArrayList<>();
 
     @Nullable
     @Override
@@ -28,17 +38,103 @@ public class CategoryFragment extends Fragment {
     ) {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
+        return inflater.inflate(R.layout.fragment_category, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        addCategoryFab = view.findViewById(R.id.add_category_fab);
+        categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
+        addEditCategoryDialogFragment = new AddEditCategoryDialogFragment();
+
+        view.findViewById(R.id.button_fifth)
+                .setOnClickListener(view1 -> NavHostFragment.findNavController(CategoryFragment.this)
+                        .navigate(R.id.action_CategoryFragment_to_FirstFragment));
+
+        listenEvents();
+    }
+
+    private void listenEvents() {
+        categoryViewModel.getCategoriesWithNotesCount()
+                .observe(getViewLifecycleOwner(), this::categoryWithNotesCountMutated);
+
+        categoryRecyclerView.onEditButtonClicked(this::onEditRequest);
+        categoryRecyclerView.onDeleteButtonClicked(this::onDeleteRequest);
+        addEditCategoryDialogFragment.onAddRequest(this::onSaveCategory);
+        addEditCategoryDialogFragment.setCheckUniqueCallback(this::checkCategoryNameIsUnique);
+        addCategoryFab.setOnClickListener((View v) -> onCreateRequest());
+    }
+
+    private Boolean checkCategoryNameIsUnique(String categoryName, Category category) {
+        boolean isUnique = true;
+
+        for (CategoryWithNotesCount categoryWithNotesCount : categoryWithNotesCounts) {
+            Category _category = categoryWithNotesCount.getCategory();
+
+            if (category != null && category.getId() == _category.getId()) continue;
+
+            isUnique = !categoryWithNotesCount
+                    .getCategory().getName().trim().toLowerCase()
+                    .equals(categoryName.trim().toLowerCase());
+
+            if (!isUnique) break;
+        }
+
+        return isUnique;
+    }
+
+    private void onSaveCategory(Category category) {
+        if (category.getCreatedAt() == null) {
+            categoryViewModel.insert(category);
+            Toast.makeText(getContext(), R.string.category_added, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        categoryViewModel.update(category);
+        Toast.makeText(getContext(), R.string.category_updated, Toast.LENGTH_SHORT).show();
+    }
+
+    private void openAddCategoryDialog() {
+        addEditCategoryDialogFragment.show(getChildFragmentManager(), null);
+    }
+
+    private void onCreateRequest() {
+        addEditCategoryDialogFragment.setCategory(null);
+        openAddCategoryDialog();
+    }
 
 
+    private void onEditRequest(CategoryWithNotesCount categoryWithNotesCount) {
+        addEditCategoryDialogFragment.setCategory(categoryWithNotesCount.getCategory());
+        openAddCategoryDialog();
+    }
 
-        categoryViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Category>>() {
-            @Override
-            public void onChanged(List<Category> categories) {
-                // Todo: update RecyclerView
-                Toast.makeText(getContext(), "Category updated", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void onDeleteRequest(CategoryWithNotesCount categoryWithNotesCount) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        if (categoryWithNotesCount.getNotesCount() > 0) {
+            builder
+                    .setTitle(R.string.unperformable_action)
+                    .setMessage(R.string.cannot_delete_category_having_notes)
+                    .setNeutralButton(R.string.ok, null)
+                    .show();
+            return;
+        }
+
+        builder.setTitle(R.string.confirmation_required)
+                .setMessage(R.string.delete_category_question)
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                    categoryViewModel.delete(categoryWithNotesCount.getCategory());
+                    Toast.makeText(getContext(), R.string.category_deleted, Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void categoryWithNotesCountMutated(List<CategoryWithNotesCount> categoryWithNotesCounts) {
+        this.categoryWithNotesCounts = categoryWithNotesCounts;
+        categoryRecyclerView.setCategories(categoryWithNotesCounts);
     }
 }

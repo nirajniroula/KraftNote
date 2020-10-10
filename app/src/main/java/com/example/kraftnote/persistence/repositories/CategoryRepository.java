@@ -9,6 +9,7 @@ import com.example.kraftnote.persistence.KraftNoteDatabase;
 import com.example.kraftnote.persistence.daos.CategoryDao;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.repositories.contracts.IRepository;
+import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -16,11 +17,13 @@ import java.util.List;
 public class CategoryRepository implements IRepository<Category> {
     private CategoryDao categoryDao;
     private LiveData<List<Category>> allCategories;
+    private LiveData<List<CategoryWithNotesCount>> categoriesWithNotesCount;
 
     public CategoryRepository(Application application) {
         KraftNoteDatabase database = KraftNoteDatabase.getInstance(application);
         categoryDao = database.categoryDao();
         allCategories = categoryDao.getAll();
+        categoriesWithNotesCount = categoryDao.getAllWithNotesCount();
     }
 
     @Override
@@ -33,6 +36,10 @@ public class CategoryRepository implements IRepository<Category> {
         new UpdateTask(categoryDao).execute(category);
     }
 
+    public boolean nameExist(String categoryName) {
+        return categoryDao.nameExists(categoryName);
+    }
+
     @Override
     public void delete(Category category) {
         new DeleteTask(categoryDao).execute(category);
@@ -41,6 +48,10 @@ public class CategoryRepository implements IRepository<Category> {
     @Override
     public LiveData<List<Category>> getAll() {
         return allCategories;
+    }
+
+    public LiveData<List<CategoryWithNotesCount>> getCategoriesWithNotesCount() {
+        return categoriesWithNotesCount;
     }
 
     private static class InsertTask extends CategoryMutationTask {
@@ -97,4 +108,6 @@ public class CategoryRepository implements IRepository<Category> {
             return categoryDaoWeakReference;
         }
     }
+
+
 }
