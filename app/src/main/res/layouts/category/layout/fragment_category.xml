@@ -7,7 +7,7 @@
     tools:context=".ui.category.CategoryFragment">
 
     <Button
-        android:id="@+id/button_fifth"
+        android:id="@+id/goto_note_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_baseline_settings_24"
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_fifth"
+        app:layout_constraintTop_toBottomOf="@id/goto_note_fragment"
         tools:listitem="@layout/category_card" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

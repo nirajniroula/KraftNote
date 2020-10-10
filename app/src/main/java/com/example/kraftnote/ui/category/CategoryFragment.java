@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.kraftnote.R;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryFragment extends Fragment {
+    private Button gotoNoteFragmentButton;
+    private NavController navController;
     private CategoryViewModel categoryViewModel;
     private CategoryRecyclerView categoryRecyclerView;
     private FloatingActionButton addCategoryFab;
@@ -44,24 +48,31 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        addCategoryFab = view.findViewById(R.id.add_category_fab);
-        categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
-        addEditCategoryDialogFragment = new AddEditCategoryDialogFragment();
-
-        view.findViewById(R.id.button_fifth)
-                .setOnClickListener(view1 -> NavHostFragment.findNavController(CategoryFragment.this)
-                        .navigate(R.id.action_CategoryFragment_to_FirstFragment));
-
+        initializeProperties();
+        findViews(view);
         listenEvents();
     }
 
+    private void initializeProperties() {
+        navController = NavHostFragment.findNavController(this);
+        addEditCategoryDialogFragment = new AddEditCategoryDialogFragment();
+    }
+
+    private void findViews(View view) {
+        gotoNoteFragmentButton = view.findViewById(R.id.goto_note_fragment);
+        addCategoryFab = view.findViewById(R.id.add_category_fab);
+        categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
+    }
+
     private void listenEvents() {
+        gotoNoteFragmentButton.setOnClickListener((View v) -> gotoNoteFragment());
+
         categoryViewModel.getCategoriesWithNotesCount()
                 .observe(getViewLifecycleOwner(), this::categoryWithNotesCountMutated);
 
         categoryRecyclerView.onEditButtonClicked(this::onEditRequest);
         categoryRecyclerView.onDeleteButtonClicked(this::onDeleteRequest);
-        addEditCategoryDialogFragment.onAddRequest(this::onSaveCategory);
+        addEditCategoryDialogFragment.onAddRequest(this::onSaveCategoryRequest);
         addEditCategoryDialogFragment.setCheckUniqueCallback(this::checkCategoryNameIsUnique);
         addCategoryFab.setOnClickListener((View v) -> onCreateRequest());
     }
@@ -84,7 +95,7 @@ public class CategoryFragment extends Fragment {
         return isUnique;
     }
 
-    private void onSaveCategory(Category category) {
+    private void onSaveCategoryRequest(Category category) {
         if (category.getCreatedAt() == null) {
             categoryViewModel.insert(category);
             Toast.makeText(getContext(), R.string.category_added, Toast.LENGTH_SHORT).show();
@@ -135,5 +146,9 @@ public class CategoryFragment extends Fragment {
     private void categoryWithNotesCountMutated(List<CategoryWithNotesCount> categoryWithNotesCounts) {
         this.categoryWithNotesCounts = categoryWithNotesCounts;
         categoryRecyclerView.setCategories(categoryWithNotesCounts);
+    }
+
+    private void gotoNoteFragment() {
+        navController.navigate(R.id.action_CategoryFragment_to_NoteFragment);
     }
 }
