@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -108,11 +106,11 @@ public class CategoryRecyclerView extends RecyclerView {
             holder.toolbar.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.category_toolbar_edit:
-                        if(onEditClickListener != null)
+                        if (onEditClickListener != null)
                             onEditClickListener.onClick(categoryWithNotesCount);
                         return true;
                     case R.id.category_toolbar_delete:
-                        if(onDeleteClickListener != null)
+                        if (onDeleteClickListener != null)
                             onDeleteClickListener.onClick(categoryWithNotesCount);
                         return true;
                     default:

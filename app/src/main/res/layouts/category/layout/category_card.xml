@@ -7,15 +7,14 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/component_label_horizontal_margin"
     android:clipToPadding="false"
-    app:cardBackgroundColor="#f1f1f1"
-    app:cardElevation="2dp"
+    app:cardBackgroundColor="#ede7f6"
+    android:elevation="1dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
 
         <RelativeLayout
             android:id="@+id/category_info"
@@ -42,7 +41,7 @@
                     android:layout_marginTop="@dimen/keyline_4"
                     android:text="@string/text_overline"
                     android:textAppearance="?attr/textAppearanceOverline"
-                    android:textColor="@color/material_on_surface_emphasis_medium" />
+                    android:textColor="#9575cd" />
 
                 <TextView
                     android:id="@+id/category_notes_count"
@@ -52,7 +51,7 @@
                     android:layout_marginTop="@dimen/keyline_1"
                     android:text="10 Notes"
                     android:textAppearance="?attr/textAppearanceSubtitle2"
-                    android:textColor="@color/material_on_surface_emphasis_medium"
+                    android:textColor="#7e57c2"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -73,7 +72,7 @@
             android:paddingBottom="@dimen/keyline_4"
             android:text="@string/text_headline_6"
             android:textAppearance="?attr/textAppearanceHeadline4"
-            android:textColor="@color/colorPrimary"
+            android:textColor="#5e35b1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/category_info" />
 
