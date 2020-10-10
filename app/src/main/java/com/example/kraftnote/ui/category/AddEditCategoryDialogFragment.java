@@ -37,8 +37,8 @@ public class AddEditCategoryDialogFragment extends DialogFragment {
         builder.setView(view)
                 .setTitle(
                         getCategory() == null
-                                ? R.string.add_category_dialog_title
-                                : R.string.update_category_dialog_title
+                                ? R.string.add_category
+                                : R.string.update_category
                 )
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(

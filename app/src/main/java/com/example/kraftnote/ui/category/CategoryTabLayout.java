@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pools;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
@@ -41,7 +40,7 @@ public class CategoryTabLayout extends TabLayout {
 
     private void addFirstTab() {
         Tab allTab = newTab();
-        allTab.setText(R.string.tab_item_all);
+        allTab.setText(R.string.all);
         allTab.setTag(null);
         addTab(allTab);
     }

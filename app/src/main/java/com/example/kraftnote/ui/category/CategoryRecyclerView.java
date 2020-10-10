@@ -52,8 +52,6 @@ public class CategoryRecyclerView extends RecyclerView {
         setAdapter(adapter);
         setLayoutManager(new LinearLayoutManager(context));
         setHasFixedSize(true);
-
-
     }
 
     public void setCategories(List<CategoryWithNotesCount> categories) {
