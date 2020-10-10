@@ -30,7 +30,7 @@ public class CategoryFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
     private CategoryRecyclerView categoryRecyclerView;
     private FloatingActionButton addCategoryFab;
-    private AddEditCategoryDialogFragment addEditCategoryDialogFragment;
+    private SaveCategoryDialogFragment saveCategoryDialogFragment;
     List<CategoryWithNotesCount> categoryWithNotesCounts = new ArrayList<>();
 
     @Nullable
@@ -55,7 +55,7 @@ public class CategoryFragment extends Fragment {
 
     private void initializeProperties() {
         navController = NavHostFragment.findNavController(this);
-        addEditCategoryDialogFragment = new AddEditCategoryDialogFragment();
+        saveCategoryDialogFragment = new SaveCategoryDialogFragment();
     }
 
     private void findViews(View view) {
@@ -72,8 +72,8 @@ public class CategoryFragment extends Fragment {
 
         categoryRecyclerView.onEditButtonClicked(this::onEditRequest);
         categoryRecyclerView.onDeleteButtonClicked(this::onDeleteRequest);
-        addEditCategoryDialogFragment.onAddRequest(this::onSaveCategoryRequest);
-        addEditCategoryDialogFragment.setCheckUniqueCallback(this::checkCategoryNameIsUnique);
+        saveCategoryDialogFragment.onAddRequest(this::onSaveCategoryRequest);
+        saveCategoryDialogFragment.setCheckUniqueCallback(this::checkCategoryNameIsUnique);
         addCategoryFab.setOnClickListener((View v) -> onCreateRequest());
     }
 
@@ -107,17 +107,17 @@ public class CategoryFragment extends Fragment {
     }
 
     private void openAddCategoryDialog() {
-        addEditCategoryDialogFragment.show(getChildFragmentManager(), null);
+        saveCategoryDialogFragment.show(getChildFragmentManager(), null);
     }
 
     private void onCreateRequest() {
-        addEditCategoryDialogFragment.setCategory(null);
+        saveCategoryDialogFragment.setCategory(null);
         openAddCategoryDialog();
     }
 
 
     private void onEditRequest(CategoryWithNotesCount categoryWithNotesCount) {
-        addEditCategoryDialogFragment.setCategory(categoryWithNotesCount.getCategory());
+        saveCategoryDialogFragment.setCategory(categoryWithNotesCount.getCategory());
         openAddCategoryDialog();
     }
 

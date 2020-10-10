@@ -17,7 +17,7 @@ import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class AddEditCategoryDialogFragment extends DialogFragment {
+public class SaveCategoryDialogFragment extends DialogFragment {
     private TextInputEditText nameEditText;
     private Button addButton;
     private AlertDialog dialog;
