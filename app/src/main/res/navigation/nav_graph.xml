@@ -27,7 +27,9 @@
 
         <action
             android:id="@+id/action_AddUpdateNoteFragment_to_NoteFragment"
-            app:destination="@id/NoteFragment" />
+            app:destination="@+id/NoteFragment"
+            app:popUpTo="@+id/NoteFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
