@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,7 @@ import java.util.Objects;
 
 public class CategoryFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
-    private CategoryAdapter categoryAdapter;
+    private CategoryRecyclerView categoryRecyclerView;
 
     @Nullable
     @Override
@@ -45,53 +46,50 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final RecyclerView recyclerView = view.findViewById(R.id.category_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setHasFixedSize(false);
+        categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
 
-        categoryAdapter = new CategoryAdapter();
-        recyclerView.setAdapter(categoryAdapter);
-        categoryAdapter.setOnActionButtonClickedListener(this::onCategoryActionButtonClicked);
-
-        categoryViewModel.getCategoriesWithNotesCount()
-                .observe(getViewLifecycleOwner(), this::categoryWithNotesCountMutated);
+        listenEvents();
 
         view.findViewById(R.id.button_fifth)
                 .setOnClickListener(view1 -> NavHostFragment.findNavController(CategoryFragment.this)
-                        .navigate(R.id.action_CategoryFragment_to_FirstFragment));
+                .navigate(R.id.action_CategoryFragment_to_FirstFragment));
+    }
+
+    private void listenEvents() {
+        categoryViewModel.getCategoriesWithNotesCount()
+                .observe(getViewLifecycleOwner(), this::categoryWithNotesCountMutated);
+
+        categoryRecyclerView.onEditButtonClicked(this::onEditRequest);
+        categoryRecyclerView.onDeleteButtonClicked(this::onDeleteRequest);
+    }
+
+
+    private void onEditRequest(CategoryWithNotesCount categoryWithNotesCount) {
+        categoryViewModel.update(categoryWithNotesCount.getCategory());
+    }
+
+    private void onDeleteRequest(CategoryWithNotesCount categoryWithNotesCount) {
+        if (categoryWithNotesCount.getNotesCount() > 0) {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Cannot perform the action")
+                    .setMessage("Cannot delete category having one or more notes.")
+                    .setNeutralButton("Ok", null)
+                    .show();
+            return;
+        }
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Confirmation Required")
+                .setMessage("Are you sure you want to delete this category? This process cannot be undone.")
+                .setPositiveButton("Confirm", (dialog, which) -> {
+                    categoryViewModel.delete(categoryWithNotesCount.getCategory());
+                    Toast.makeText(getContext(), "Category Deleted" , Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void categoryWithNotesCountMutated(List<CategoryWithNotesCount> categoryWithNotesCounts) {
-        categoryAdapter.setCategories(categoryWithNotesCounts);
-    }
-
-    private void onCategoryActionButtonClicked(CategoryWithNotesCount categoryWithNotesCount, CategoryAdapter.ButtonType buttonType) {
-        switch (buttonType) {
-            case EDIT:
-                categoryViewModel.delete(categoryWithNotesCount.category);
-                break;
-            case DELETE:
-                if (categoryWithNotesCount.notesCount > 0) {
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Cannot perform the action")
-                            .setMessage("Cannot delete category having one or more notes.")
-                            .setNeutralButton("Ok", null)
-                            .show();
-                    return;
-                }
-
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Confirmation Required")
-                        .setMessage("Are you sure you want to delete this category? This process cannot be undone.")
-                        .setPositiveButton("Confirm", (dialog, which) -> {
-                            categoryViewModel.delete(categoryWithNotesCount.category);
-                            Toast.makeText(getContext(), "Category Deleted" , Toast.LENGTH_SHORT).show();
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-                break;
-            default:
-                break;
-        }
+        categoryRecyclerView.setCategories(categoryWithNotesCounts);
     }
 }

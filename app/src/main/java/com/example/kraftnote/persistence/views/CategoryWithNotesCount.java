@@ -10,8 +10,29 @@ import com.example.kraftnote.persistence.entities.Category;
         "LEFT JOIN Notes ON Notes.category_id = Categories.id GROUP BY Categories.id")
 public class CategoryWithNotesCount {
     @Embedded
-    public Category category;
+    private Category category;
 
     @ColumnInfo(name = "notes_count")
-    public int notesCount;
+    private int notesCount;
+
+    public CategoryWithNotesCount(Category category, int notesCount) {
+        this.category = category;
+        this.notesCount = notesCount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public int getNotesCount() {
+        return notesCount;
+    }
+
+    public void setNotesCount(int notesCount) {
+        this.notesCount = notesCount;
+    }
 }
