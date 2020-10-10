@@ -2,8 +2,10 @@ package com.example.kraftnote.ui.category;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Rect;
 import android.icu.text.SimpleDateFormat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +55,11 @@ public class CategoryRecyclerView extends RecyclerView {
         setAdapter(adapter);
         setLayoutManager(new LinearLayoutManager(context));
         setHasFixedSize(true);
+
+        int space = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
+                getResources().getDisplayMetrics());
+
+        addItemDecoration(new FirstLastItemSpacesDecoration(space));
     }
 
     public void setCategories(List<CategoryWithNotesCount> categories) {
@@ -140,6 +148,22 @@ public class CategoryRecyclerView extends RecyclerView {
                 textViewCreatedAt = itemView.findViewById(R.id.category_created_at);
                 toolbar = itemView.findViewById(R.id.category_toolbar);
                 toolbar.inflateMenu(R.menu.category_card_popup_menu);
+            }
+        }
+    }
+
+    private static class FirstLastItemSpacesDecoration extends RecyclerView.ItemDecoration {
+
+        private final int spaces;
+
+        public FirstLastItemSpacesDecoration(int spaces) {
+            this.spaces = spaces;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1) {
+                outRect.bottom = spaces * 10;
             }
         }
     }

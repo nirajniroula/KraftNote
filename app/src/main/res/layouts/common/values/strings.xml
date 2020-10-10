@@ -13,4 +13,6 @@
     <string name="bottom_nav_categories_title">Categories</string>
     <string name="bottom_nav_notes_title">Notes</string>
     <string name="bottom_nav_settings_title">Settings</string>
+    <string name="categories">Categories</string>
+    <string name="my_notes">My Notes</string>
 </resources>

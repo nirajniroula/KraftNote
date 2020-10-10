@@ -7,14 +7,32 @@
     android:fitsSystemWindows="true"
     tools:app=".ui.note.NoteFragment">
 
+    <LinearLayout
+        android:id="@+id/view_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextAppearance.MyTheme.Overline.Heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/keyline_4"
+            android:text="@string/my_notes"
+            app:drawableStartCompat="@drawable/ic_baseline_event_note_24" />
+    </LinearLayout>
+
     <com.example.kraftnote.ui.category.CategoryTabLayout
         android:id="@+id/category_tabs"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:fitsSystemWindows="true"
         app:tabMode="scrollable"
+        android:layout_below="@+id/view_heading"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,8 +42,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="end|bottom"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="72dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="86dp"
         app:backgroundTint="#7e57c2"
         app:fabSize="auto"
         app:srcCompat="@android:drawable/ic_input_add"
