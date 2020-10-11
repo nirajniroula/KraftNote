@@ -2,10 +2,12 @@ package com.example.kraftnote.ui.note;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -18,19 +20,22 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
-import com.example.kraftnote.ui.category.CategoryTabLayout;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddUpdateNoteFragment extends Fragment {
+    private static final String TAG = AddUpdateNoteFragment.class.getSimpleName();
+
     private NavController navController;
     private CategoryViewModel categoryViewModel;
     private MaterialButton closeEditorButton;
     private MaterialButton saveNoteButton;
     private List<Category> categories = new ArrayList<>();
+    private TextInputEditText noteTitleEditText;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
     private
@@ -67,13 +72,17 @@ public class AddUpdateNoteFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         closeEditorButton = view.findViewById(R.id.close_editor_button);
         saveNoteButton = view.findViewById(R.id.save_note_button);
+        noteTitleEditText = view.findViewById(R.id.note_title_input_text);
     }
 
     private void listenEvents() {
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), this::categoriesMutated);
+
         closeEditorButton.setOnClickListener(v -> {
             gotoNoteFragment();
         });
+
+        noteTitleEditText.setOnEditorActionListener((v, actionId, event) -> actionId == 0);
     }
 
     private void categoriesMutated(List<Category> categories) {

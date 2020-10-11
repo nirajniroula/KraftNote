@@ -20,4 +20,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="note_title_field">Note Title</string>
+    <string name="empty" />
+    <string name="awesome_note_title">Awesome note title</string>
+    <string name="body_text">Today, I did something awesome</string>
 </resources>

@@ -9,56 +9,102 @@
         android:id="@+id/editor_header_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/keyline_4"
-        android:paddingVertical="@dimen/keyline_4"
+        android:paddingHorizontal="@dimen/keyline_2"
+        android:paddingVertical="@dimen/keyline_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/close_editor_button"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            style="@style/Widget.App.Button.TextButton.IconOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            app:icon="@drawable/ic_baseline_close_24"
+            app:icon="@drawable/ic_baseline_arrow_back_24"
             app:iconSize="28dp"
             app:iconTint="@color/black_800" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_note_button"
-            style="@style/Widget.App.Button.IconOnly"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            app:icon="@drawable/ic_baseline_save_24"
+            android:text="@string/save"
+            android:textColor="@color/blue_A700"
             app:iconSize="28dp"
+            app:iconTint="@color/blue_A700"
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+    <TextView
+        android:id="@+id/note_title_caption"
+        style="@style/TextAppearance.MyTheme.Overline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/keyline_5"
+        android:text="@string/note_title_field"
+        android:textColor="@color/black_800"
+        app:layout_constraintBottom_toTopOf="@id/note_title_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editor_header_controls"
+        app:layout_constraintTop_toBottomOf="@+id/editor_header_controls" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/note_title_input_layout"
+        style="@style/Widget.MyTheme.TextInputLayout.NoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/keyline_2"
-        android:paddingHorizontal="@dimen/keyline_4"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:background="@drawable/note_editor_background"
+        android:paddingHorizontal="@dimen/keyline_3"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/editor_body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/note_title_caption">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/note_title_input_text"
+            style="@style/ThemeOverlay.MyTheme.TextInputEditText.NoteTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/note_title_field"
-            android:inputType="textCapSentences"
-            android:maxLines="1"
-            android:minLines="1"
-            />
+            android:hint="@string/awesome_note_title"
+            android:lineHeight="@dimen/keyline_5"
+            android:paddingVertical="16dp"
+            android:textColorHint="@color/blueGrey_100"
+            android:imeOptions="actionDone"
+            android:textCursorDrawable="@null" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editor_body"
+        style="@style/Widget.MyTheme.TextInputLayout.NoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/keyline_2"
+        android:paddingHorizontal="@dimen/keyline_5"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/note_title_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/ThemeOverlay.MyTheme.TextInputEditText.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/body_text"
+            android:inputType=""
+            android:minHeight="50dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

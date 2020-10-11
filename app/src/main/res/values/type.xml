@@ -1,4 +1,5 @@
 <resources>
+
     <style name="TextAppearance.MyTheme.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <!--Your custom type style here-->
     </style>
@@ -43,6 +44,12 @@
         <!--Your custom type style here-->
     </style>
 
+    <style name="TextAppearance.MyTheme.NoteEditor.Title" parent="TextAppearance.MaterialComponents.Headline3">
+        <!--        <item name="android:fontFamily">@font/OpenSans-SemiBold</item>-->
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/montserrat_semi_bold</item>
+    </style>
+
     <style name="TextAppearance.MyTheme.Overline.Heading" parent="TextAppearance.MaterialComponents.Overline">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/white_50</item>
@@ -62,6 +69,55 @@
 
     <style name="TextAppearance.MyTheme.Overline" parent="TextAppearance.MaterialComponents.Overline">
         <!--Your custom type style here-->
+    </style>
+
+    <style name="Widget.MyTheme.TextInputLayout.NoteTitle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="enforceMaterialTheme">true</item>
+        <item name="enforceTextAppearance">true</item>
+
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxBackgroundColor">@null</item>
+        <item name="boxCollapsedPaddingTop">0dp</item>
+        <item name="boxStrokeColor">@android:color/transparent</item>
+        <item name="boxStrokeErrorColor">@android:color/transparent</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+
+        <item name="counterTextAppearance">?attr/textAppearanceCaption</item>
+        <item name="counterOverflowTextAppearance">?attr/textAppearanceCaption</item>
+        <item name="errorTextAppearance">?attr/textAppearanceCaption</item>
+        <item name="helperTextTextAppearance">?attr/textAppearanceCaption</item>
+        <!--        <item name="hintTextAppearance">?attr/textAppearanceCaption</item>-->
+        <!--        <item name="placeholderTextAppearance">?attr/textAppearanceSubtitle1</item>-->
+        <item name="prefixTextAppearance">?attr/textAppearanceSubtitle1</item>
+        <item name="suffixTextAppearance">?attr/textAppearanceSubtitle1</item>
+
+        <!-- The color of the label when it is collapsed and the text field is active -->
+        <item name="hintTextColor">@android:color/transparent</item>
+        <!--        <item name="placeholderTextColor">@color/mtrl_indicator_text_color</item>-->
+        <item name="android:textColorHint">@android:color/transparent</item>
+        <item name="shapeAppearance">?attr/shapeAppearanceSmallComponent</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.MyTheme.TextInputEditText.NoteTitle" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:textAppearance">@style/TextAppearance.MyTheme.NoteEditor.Title</item>
+        <item name="android:background">@null</item>
+        <item name="android:maxLines">5</item>
+        <item name="android:minLines">1</item>
+        <item name="android:inputType">textCapSentences|textAutoCorrect|textMultiLine</item>
+        <item name="android:textSize">18sp</item>
+        <item name="hintTextAppearance">@style/TextAppearance.MyTheme.NoteEditor.Title</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.MyTheme.NoteEditor.Title</item>
+        <item name="android:textColor">@color/white_50</item>
+    </style>
+
+    <style name="ThemeOverlay.MyTheme.TextInputEditText.Body" parent="ThemeOverlay.MyTheme.TextInputEditText.NoteTitle">
+        <item name="android:maxLines">1000</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textColor">@color/blueGrey_800</item>
+        <item name="android:background">@drawable/note_editor_background_light</item>
     </style>
 
 </resources>
