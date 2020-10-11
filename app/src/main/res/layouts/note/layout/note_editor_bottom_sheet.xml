@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/note_editor_bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="60dp"
+    app:behavior_skipCollapsed="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/shape_gradient_top_shadow"
+        app:layout_anchor="@id/note_editor_bottom_sheet_content" />
+
+    <LinearLayout
+        android:background="@color/white_50"
+        android:id="@+id/note_editor_bottom_sheet_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/keyline_5">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/open_sans_light"
+            android:textColor="@color/black_800"
+            android:justificationMode="inter_word"
+            android:lineHeight="24dp"
+            android:textSize="18sp"
+            android:text="@string/ipsum"/>
+
+    </LinearLayout>
+
+</LinearLayout>

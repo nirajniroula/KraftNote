@@ -47,7 +47,7 @@
     <style name="TextAppearance.MyTheme.NoteEditor.Title" parent="TextAppearance.MaterialComponents.Headline3">
         <!--        <item name="android:fontFamily">@font/OpenSans-SemiBold</item>-->
         <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/montserrat_semi_bold</item>
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
     </style>
 
     <style name="TextAppearance.MyTheme.Overline.Heading" parent="TextAppearance.MaterialComponents.Overline">
@@ -105,6 +105,7 @@
         <item name="android:background">@null</item>
         <item name="android:maxLines">5</item>
         <item name="android:minLines">1</item>
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:inputType">textCapSentences|textAutoCorrect|textMultiLine</item>
         <item name="android:textSize">18sp</item>
         <item name="hintTextAppearance">@style/TextAppearance.MyTheme.NoteEditor.Title</item>
@@ -115,9 +116,9 @@
     <style name="ThemeOverlay.MyTheme.TextInputEditText.Body" parent="ThemeOverlay.MyTheme.TextInputEditText.NoteTitle">
         <item name="android:maxLines">1000</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/montserrat_regular</item>
-        <item name="android:textColor">@color/blueGrey_800</item>
-        <item name="android:background">@drawable/note_editor_background_light</item>
+        <item name="android:fontFamily">@font/open_sans_regular</item>
+        <item name="android:textColor">@color/black_800</item>
+        <item name="android:background">@null</item>
     </style>
 
 </resources>

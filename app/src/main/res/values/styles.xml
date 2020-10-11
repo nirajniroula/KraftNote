@@ -81,4 +81,10 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
+    <style name="Widget.MyTheme.BottomAppBar.Colored" parent="@style/Widget.MaterialComponents.BottomAppBar.Colored">
+        <item name="itemIconTint">@color/white_50</item>
+        <item name="itemTextColor">@color/white_50</item>
+        <item name="backgroundTint">@color/blue_A700</item>
+    </style>
+
 </resources>

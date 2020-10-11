@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -20,7 +21,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,7 +38,9 @@ public class AddUpdateNoteFragment extends Fragment {
     private MaterialButton closeEditorButton;
     private MaterialButton saveNoteButton;
     private List<Category> categories = new ArrayList<>();
-    private TextInputEditText noteTitleEditText;
+    private FloatingActionButton openBottomSheetFab;
+    private LinearLayout bottomSheet;
+    private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
     private
@@ -72,7 +77,12 @@ public class AddUpdateNoteFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         closeEditorButton = view.findViewById(R.id.close_editor_button);
         saveNoteButton = view.findViewById(R.id.save_note_button);
-        noteTitleEditText = view.findViewById(R.id.note_title_input_text);
+        openBottomSheetFab = view.findViewById(R.id.open_bottom_sheet_fab);
+        bottomSheet = view.findViewById(R.id.note_editor_bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        bottomSheetBehavior.setPeekHeight(0);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     private void listenEvents() {
@@ -82,7 +92,26 @@ public class AddUpdateNoteFragment extends Fragment {
             gotoNoteFragment();
         });
 
-        noteTitleEditText.setOnEditorActionListener((v, actionId, event) -> actionId == 0);
+        openBottomSheetFab.setOnClickListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            openBottomSheetFab.hide();
+        });
+
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    openBottomSheetFab.show();
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+//        bottomSheetBehavior;
     }
 
     private void categoriesMutated(List<Category> categories) {

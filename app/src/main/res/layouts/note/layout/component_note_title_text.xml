@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:parentTag="android.widget.LinearLayout"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/note_title_caption"
+        style="@style/TextAppearance.MyTheme.Overline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/keyline_5"
+        android:text="@string/note_title_field"
+        android:textColor="@color/black_800" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/note_title_input_layout"
+        style="@style/Widget.MyTheme.TextInputLayout.NoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/keyline_2"
+        android:background="@drawable/note_editor_background"
+        android:paddingHorizontal="@dimen/keyline_3"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/note_title_input_text"
+            style="@style/ThemeOverlay.MyTheme.TextInputEditText.NoteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/awesome_note_title"
+            android:imeOptions="actionDone"
+            android:lineHeight="@dimen/keyline_5"
+            android:paddingVertical="16dp"
+            android:textColorHint="@color/blueGrey_100"
+            android:textCursorDrawable="@null" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</merge>
