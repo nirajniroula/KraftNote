@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.example.kraftnote.R;
+import com.example.kraftnote.utils.watchers.TitleTextFormatWatcher;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class NoteTitleText extends LinearLayout {
@@ -47,6 +48,7 @@ public class NoteTitleText extends LinearLayout {
 
     private void listenEvents() {
         noteTitleEditText.setOnEditorActionListener((v, actionId, event) -> actionId == 0);
+        noteTitleEditText.addTextChangedListener(new TitleTextFormatWatcher(noteTitleEditText));
     }
 
     public void setTitle(String title) {

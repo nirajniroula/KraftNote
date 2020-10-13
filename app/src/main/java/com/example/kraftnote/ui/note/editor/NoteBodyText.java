@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.ParcelableSpan;
 import android.text.Spannable;
-import android.text.TextWatcher;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
@@ -22,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.kraftnote.R;
+import com.example.kraftnote.utils.watchers.BodyTextFormatWatcher;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -63,7 +63,7 @@ public class NoteBodyText extends TextInputLayout {
 
     private void listenEvents(Context context) {
         noteBodyTextArea.setCustomSelectionActionModeCallback(actionModeCallback);
-        noteBodyTextArea.addTextChangedListener(new TextFormatWatcher(noteBodyTextArea));
+        noteBodyTextArea.addTextChangedListener(new BodyTextFormatWatcher(noteBodyTextArea));
     }
 
     private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -123,51 +123,4 @@ public class NoteBodyText extends TextInputLayout {
             actionMode = null;
         }
     };
-
-    private class TextFormatWatcher implements TextWatcher {
-        private final TextInputEditText editText;
-
-
-        public TextFormatWatcher(TextInputEditText editText) {
-            this.editText = editText;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            final Editable editable = editText.getText();
-
-            if (editable == null) return;
-
-            editText.removeTextChangedListener(this);
-
-            final Object[] spans = editable.getSpans(0, editable.length() - 1, Object.class);
-
-            for (Object span : spans) {
-                if (span instanceof ParcelableSpan) {
-
-                    if (
-                            span instanceof StyleSpan
-                                    || span instanceof UnderlineSpan
-                                    || span instanceof StrikethroughSpan
-                    ) {
-                        continue;
-                    }
-
-                    editable.removeSpan(span);
-                }
-            }
-
-            editText.addTextChangedListener(this);
-        }
-    }
 }
