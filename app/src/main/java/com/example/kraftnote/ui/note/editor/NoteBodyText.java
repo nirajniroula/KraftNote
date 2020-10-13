@@ -1,13 +1,14 @@
 package com.example.kraftnote.ui.note.editor;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Editable;
+import android.text.ParcelableSpan;
 import android.text.Spannable;
-import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -16,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,14 +25,12 @@ import com.example.kraftnote.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class NoteBodyText extends TextInputLayout {
     private static final String TAG = NoteBodyText.class.getSimpleName();
 
     private TextInputEditText noteBodyTextArea;
     private ActionMode actionMode;
+    private ClipboardManager clipboardManager;
 
     public NoteBodyText(@NonNull Context context) {
         super(context);
@@ -50,6 +48,7 @@ public class NoteBodyText extends TextInputLayout {
     }
 
     private void init(Context context) {
+        clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         final View view = inflate(getContext(), R.layout.component_note_body_text, this);
 
         initializeProperties(view);
@@ -64,6 +63,7 @@ public class NoteBodyText extends TextInputLayout {
 
     private void listenEvents(Context context) {
         noteBodyTextArea.setCustomSelectionActionModeCallback(actionModeCallback);
+        noteBodyTextArea.addTextChangedListener(new TextFormatWatcher(noteBodyTextArea));
     }
 
     private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -101,7 +101,7 @@ public class NoteBodyText extends TextInputLayout {
                 Object[] spans = editable.getSpans(startIndex, endIndex, Object.class);
 
                 for (Object span : spans) {
-                    if(span instanceof StyleSpan || span instanceof StrikethroughSpan || span instanceof UnderlineSpan) {
+                    if (span instanceof ParcelableSpan) {
                         editable.removeSpan(span);
                     }
                 }
@@ -123,4 +123,51 @@ public class NoteBodyText extends TextInputLayout {
             actionMode = null;
         }
     };
+
+    private class TextFormatWatcher implements TextWatcher {
+        private final TextInputEditText editText;
+
+
+        public TextFormatWatcher(TextInputEditText editText) {
+            this.editText = editText;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            final Editable editable = editText.getText();
+
+            if (editable == null) return;
+
+            editText.removeTextChangedListener(this);
+
+            final Object[] spans = editable.getSpans(0, editable.length() - 1, Object.class);
+
+            for (Object span : spans) {
+                if (span instanceof ParcelableSpan) {
+
+                    if (
+                            span instanceof StyleSpan
+                                    || span instanceof UnderlineSpan
+                                    || span instanceof StrikethroughSpan
+                    ) {
+                        continue;
+                    }
+
+                    editable.removeSpan(span);
+                }
+            }
+
+            editText.addTextChangedListener(this);
+        }
+    }
 }

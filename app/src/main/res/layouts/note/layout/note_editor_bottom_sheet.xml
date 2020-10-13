@@ -17,7 +17,7 @@
         android:background="@drawable/shape_gradient_top_shadow"
         app:layout_anchor="@id/note_editor_bottom_sheet_content" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:background="@color/white_50"
         android:id="@+id/note_editor_bottom_sheet_content"
         android:layout_width="match_parent"
@@ -25,16 +25,50 @@
         android:orientation="vertical"
         android:padding="@dimen/keyline_5">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/open_sans_light"
-            android:textColor="@color/black_800"
-            android:justificationMode="inter_word"
-            android:lineHeight="24dp"
-            android:textSize="18sp"
-            android:text="@string/ipsum"/>
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/bottom_sheet_camera"-->
+<!--            style="@style/Widget.App.Button.TextButton.IconOnly"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:icon="@drawable/ic_baseline_photo_camera_24"-->
+<!--            app:iconSize="32dp"-->
+<!--            app:iconTint="@color/black_800" />-->
 
-    </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/bottom_sheet_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:backgroundTint="#7e57c2"
+            app:fabSize="auto"
+            app:srcCompat="@android:drawable/ic_menu_camera"
+            app:tint="#FFFFFF" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/bottom_sheet_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/bottom_sheet_camera"
+            app:layout_constraintTop_toTopOf="parent"
+            app:backgroundTint="#7e57c2"
+            app:fabSize="auto"
+            app:srcCompat="@android:drawable/picture_frame"
+            app:tint="#FFFFFF" />
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/bottom_sheet_image"-->
+<!--            style="@style/Widget.App.Button.TextButton.IconOnly"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/bottom_sheet_camera"-->
+<!--            app:icon="@drawable/ic_baseline_image_24"-->
+<!--            app:iconSize="32dp"-->
+<!--            app:iconTint="@color/black_800" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
