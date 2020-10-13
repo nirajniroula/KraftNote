@@ -1,3 +1,4 @@
+
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
@@ -40,7 +41,7 @@
         <item name="itemTextAppearance">?attr/textAppearanceBody2</item>
     </style>
 
-    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="Widget.MyTheme.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="iconPadding">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
@@ -61,7 +62,7 @@
     </style>
 
 
-    <style name="Widget.App.Button.IconOnly" parent="Widget.MaterialComponents.Button">
+    <style name="Widget.MyTheme.Button.IconOnly" parent="Widget.MaterialComponents.Button">
         <item name="iconPadding">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
@@ -85,6 +86,13 @@
         <item name="itemIconTint">@color/white_50</item>
         <item name="itemTextColor">@color/white_50</item>
         <item name="backgroundTint">@color/blue_A700</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Widget.MyTheme.Button.IconOnly.CircularOutlined" parent="Widget.MyTheme.Button.IconOnly">
+        <!--        -->
+        <item name="iconTint">@color/blue_A700</item>
+        <item name="backgroundTint">@color/grey_50</item>
     </style>
 
 </resources>
