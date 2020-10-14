@@ -11,7 +11,7 @@ import java.util.Date;
 
 public abstract class BaseEntity {
     @PrimaryKey(autoGenerate = true)
-    protected int id;
+    protected Integer id;
 
     @TypeConverters(CreatedAtConverter.class)
     @ColumnInfo(name = "created_at", defaultValue = "CURRENT_TIMESTAMP")
@@ -25,11 +25,11 @@ public abstract class BaseEntity {
         this.createdAt = (createdAt == null) ? new Date() : createdAt;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }

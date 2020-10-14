@@ -47,6 +47,7 @@ public abstract class KraftNoteDatabase extends RoomDatabase {
             synchronized (KraftNoteDatabase.class) {
                 INSTANCE = Room.inMemoryDatabaseBuilder(context.getApplicationContext(),
                         KraftNoteDatabase.class)
+                        .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
                         .addCallback(PersistenceCallback)
                         .build();

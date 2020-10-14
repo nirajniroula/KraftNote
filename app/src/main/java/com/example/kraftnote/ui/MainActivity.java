@@ -3,6 +3,7 @@ package com.example.kraftnote.ui;
 import android.os.Bundle;
 
 import com.example.kraftnote.R;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeProperties() {
+        Places.initialize(this, "AIzaSyCWtPuBC0yB5PeAtqu3YY2_QDWXyo5eYqk");
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 

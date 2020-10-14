@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.kraftnote.persistence.KraftNoteDatabase;
 import com.example.kraftnote.persistence.daos.NoteDao;
+import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.repositories.contracts.IRepository;
 
@@ -26,6 +27,12 @@ public class NoteRepository implements IRepository<Note> {
     @Override
     public void insert(Note note) {
         new InsertTask(noteDao).execute(note);
+    }
+
+    public void addReminder(Note note, LocationReminder reminder) {
+        if (note.getId() == null) {
+//            noteDao.insertAll();
+        }
     }
 
     @Override

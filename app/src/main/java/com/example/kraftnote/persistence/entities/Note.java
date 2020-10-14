@@ -1,6 +1,7 @@
 package com.example.kraftnote.persistence.entities;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -12,13 +13,17 @@ import androidx.room.Ignore;
 public class Note extends BaseEntity {
     private String name;
 
-    private String body;
-
     @ColumnInfo(name = "category_id")
     private int categoryId;
 
     @ColumnInfo(defaultValue = "0")
     private int archived;
+
+    @ColumnInfo(defaultValue = "")
+    private String body;
+
+    @Ignore
+    public Note() {}
 
     public Note(String name, String body, int categoryId) {
         this.name = name;
@@ -50,5 +55,9 @@ public class Note extends BaseEntity {
 
     public String getName() {
         return name;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 }
