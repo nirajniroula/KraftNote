@@ -33,4 +33,11 @@
     <string name="normal">Normal</string>
     <string name="not_set">Not set</string>
     <string name="navigate">Navigate</string>
+    <string name="note">Note</string>
+    <string name="location">Location</string>
+    <string name="images">Images</string>
+    <string name="datetime">Datetime</string>
+    <string name="reminders">Reminders</string>
+    <string name="todos">Todos</string>
+    <string name="recordings">Recordings</string>
 </resources>
