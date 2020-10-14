@@ -100,9 +100,9 @@ public class AddUpdateNoteFragment extends Fragment {
         saveNoteButton = view.findViewById(R.id.save_note_button);
         bottomSheet = view.findViewById(R.id.note_editor_bottom_sheet);
         locationButton = view.findViewById(R.id.bottom_sheet_location);
-        placesCardView = view.findViewById(R.id.places_autosuggest_cardview);
-        locationReminderTextView = view.findViewById(R.id.location_reminder_detail);
-        datetimeReminderTextView = view.findViewById(R.id.datetime_reminder_detail);
+        placesCardView = view.findViewById(R.id.places_auto_suggest_card_view);
+//        locationReminderTextView = view.findViewById(R.id.location_reminder_detail);
+//        datetimeReminderTextView = view.findViewById(R.id.datetime_reminder_detail);
 
         noteMapFragment = (NoteMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.show_google_map_fragment);
@@ -122,12 +122,12 @@ public class AddUpdateNoteFragment extends Fragment {
             placesCardView.setVisibility(View.VISIBLE);
         });
 
-        locationReminderTextView.setOnClickListener(v -> {
-            if(locationReminder == null) return;
-
-            view.findViewById(R.id.map_material_card_view).setVisibility(View.VISIBLE);
-            noteMapFragment.show(locationReminder.getName(), locationReminder.getLatLng());
-        });
+//        locationReminderTextView.setOnClickListener(v -> {
+//            if(locationReminder == null) return;
+//
+//            view.findViewById(R.id.map_material_card_view).setVisibility(View.VISIBLE);
+//            noteMapFragment.show(locationReminder.getName(), locationReminder.getLatLng());
+//        });
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override

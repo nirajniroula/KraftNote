@@ -68,18 +68,18 @@ public class NoteBodyText extends TextInputLayout {
         noteBodyTextArea.setCustomSelectionActionModeCallback(actionModeCallback);
         noteBodyTextArea.addTextChangedListener(new BodyTextFormatWatcher(noteBodyTextArea));
 
-        final int paddingTop = noteBodyTextArea.getPaddingTop();
-        final int paddingBottom =noteBodyTextArea.getPaddingBottom();
-        final int paddingLeft =noteBodyTextArea.getPaddingLeft();
-        final int paddingRight =noteBodyTextArea.getPaddingRight();
-
-        KeyboardVisibilityEvent.setEventListener(((Activity) context), isOpen -> {
-            noteBodyTextArea.setPadding(
-                    paddingLeft,
-                    paddingTop,
-                    paddingRight,
-                    paddingBottom + (isOpen ? 100 : 0));
-        });
+//        final int paddingTop = noteBodyTextArea.getPaddingTop();
+//        final int paddingBottom =noteBodyTextArea.getPaddingBottom();
+//        final int paddingLeft =noteBodyTextArea.getPaddingLeft();
+//        final int paddingRight =noteBodyTextArea.getPaddingRight();
+//
+//        KeyboardVisibilityEvent.setEventListener(((Activity) context), isOpen -> {
+//            noteBodyTextArea.setPadding(
+//                    paddingLeft,
+//                    paddingTop,
+//                    paddingRight,
+//                    paddingBottom + (isOpen ? 100 : 0));
+//        });
     }
 
     private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {

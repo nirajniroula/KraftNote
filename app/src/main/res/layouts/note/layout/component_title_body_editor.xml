@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:parentTag="android.widget.RelativeLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.example.kraftnote.ui.note.editor.NoteTitleText
+        android:id="@+id/note_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:id="@+id/note_reminders_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/note_title"
+        android:layout_marginTop="@dimen/keyline_2"
+        android:background="@color/white_50"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/keyline_5"
+        android:paddingVertical="@dimen/keyline_2">
+
+        <TextView
+            android:id="@+id/location_reminder_text_view"
+            style="@style/TextAppearance.MyTheme.Subtitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/keyline_2"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/not_set"
+            android:textColor="@color/blueGrey_600"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:drawableTint="@color/blueGrey_400"
+            app:fontFamily="@font/open_sans_semi_bold"
+            app:iconSize="2dp" />
+
+        <TextView
+            android:id="@+id/datetime_reminder_text_view"
+            style="@style/TextAppearance.MyTheme.Subtitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_1"
+            android:drawablePadding="@dimen/keyline_2"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/not_set"
+            android:textColor="@color/blueGrey_600"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:drawableTint="@color/blueGrey_400"
+            app:fontFamily="@font/open_sans_semi_bold" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/note_body_caption"
+        style="@style/TextAppearance.MyTheme.Overline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/note_reminders_linear_layout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/keyline_2"
+
+        android:paddingHorizontal="@dimen/keyline_5"
+        android:text="@string/note_body_field"
+        android:textColor="@color/black_800" />
+
+
+    <com.example.kraftnote.ui.note.editor.NoteBodyText
+        android:id="@+id/editor_body_text"
+        style="@style/Widget.MyTheme.TextInputLayout.NoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/note_body_caption"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+
+        android:layout_marginTop="@dimen/keyline_2"
+        android:background="@drawable/note_editor_background_light"
+        android:paddingHorizontal="@dimen/keyline_3"
+        android:paddingVertical="@dimen/keyline_2"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false" />
+</merge>
