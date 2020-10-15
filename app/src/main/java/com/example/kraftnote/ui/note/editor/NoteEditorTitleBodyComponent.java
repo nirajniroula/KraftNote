@@ -2,7 +2,6 @@ package com.example.kraftnote.ui.note.editor;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -10,8 +9,8 @@ import android.widget.TextView;
 
 import com.example.kraftnote.R;
 
-public class TitleBodyEditorComponent extends RelativeLayout {
-    private static final String TAG = TitleBodyEditorComponent.class.getSimpleName();
+public class NoteEditorTitleBodyComponent extends RelativeLayout {
+    private static final String TAG = NoteEditorTitleBodyComponent.class.getSimpleName();
 
     private LinearLayout noteRemindersLinearLayout;
 
@@ -23,22 +22,22 @@ public class TitleBodyEditorComponent extends RelativeLayout {
 
     private View view;
 
-    public TitleBodyEditorComponent(Context context) {
+    public NoteEditorTitleBodyComponent(Context context) {
         super(context);
         init(context);
     }
 
-    public TitleBodyEditorComponent(Context context, AttributeSet attrs) {
+    public NoteEditorTitleBodyComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public TitleBodyEditorComponent(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NoteEditorTitleBodyComponent(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
-    public TitleBodyEditorComponent(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public NoteEditorTitleBodyComponent(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }

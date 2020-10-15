@@ -24,7 +24,8 @@
         android:background="@color/white_50"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/keyline_5"
-        android:paddingVertical="@dimen/keyline_2">
+        android:paddingVertical="@dimen/keyline_2"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/location_reminder_text_view"
