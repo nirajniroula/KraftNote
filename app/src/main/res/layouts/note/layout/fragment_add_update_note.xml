@@ -105,15 +105,25 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-    <com.example.kraftnote.ui.note.editor.NoteEditorTitleBodyComponent
-        android:id="@+id/title_body_editor_component"
+    <LinearLayout
+        android:id="@+id/note_editor_title_body_fragment_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tabs"
-
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/grey_50"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/note_editor_title_body_fragment"
+            android:name="com.example.kraftnote.ui.note.editor.NoteEditorTitleBodyFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/note_editor_reminder_fragment_wrapper"
@@ -128,10 +138,10 @@
         android:visibility="invisible">
 
         <fragment
-            android:name="com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment"
             android:id="@+id/note_editor_reminder_fragment"
+            android:name="com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 

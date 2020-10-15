@@ -21,7 +21,7 @@ import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment;
-import com.example.kraftnote.ui.note.editor.NoteEditorTitleBodyComponent;
+import com.example.kraftnote.ui.note.editor.NoteEditorTitleBodyFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -53,7 +53,7 @@ public class AddUpdateNoteFragment extends Fragment {
     private int activeTab = 0;
 
     //components
-    private NoteEditorTitleBodyComponent noteEditorTitleBodyComponent;
+    private NoteEditorTitleBodyFragment noteEditorTitleBodyFragment;
     private NoteEditorReminderFragment noteEditorReminderFragment;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
@@ -88,7 +88,7 @@ public class AddUpdateNoteFragment extends Fragment {
     private void initializeProperties(@NonNull final View view) {
         note = new Note();
 
-        noteEditorTitleBodyComponent = view.findViewById(R.id.title_body_editor_component);
+        noteEditorTitleBodyFragment = (NoteEditorTitleBodyFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_title_body_fragment);
         noteEditorReminderFragment = (NoteEditorReminderFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_reminder_fragment);
 
         navController = NavHostFragment.findNavController(this);
@@ -97,7 +97,7 @@ public class AddUpdateNoteFragment extends Fragment {
 
         tabLayout = view.findViewById(R.id.tabs);
 
-        tabViews.add(noteEditorTitleBodyComponent);
+        tabViews.add(view.findViewById(R.id.note_editor_title_body_fragment_wrapper));
         tabViews.add(view.findViewById(R.id.note_editor_reminder_fragment_wrapper));
     }
 
