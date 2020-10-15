@@ -23,7 +23,7 @@
         android:id="@+id/AddUpdateNoteFragment"
         android:name="com.example.kraftnote.ui.note.AddEditNoteFragment"
         android:label="@string/save_note_fragment_label"
-        tools:layout="@layout/fragment_add_update_note">
+        tools:layout="@layout/fragment_add_edit_note">
 
         <action
             android:id="@+id/action_AddUpdateNoteFragment_to_NoteFragment"

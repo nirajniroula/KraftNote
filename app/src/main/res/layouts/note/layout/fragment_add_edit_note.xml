@@ -145,4 +145,24 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:id="@+id/note_editor_images_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabs"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/grey_50"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <fragment
+            android:id="@+id/note_editor_images_fragment"
+            android:name="com.example.kraftnote.ui.note.editor.NoteEditorImageFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
 </RelativeLayout>
