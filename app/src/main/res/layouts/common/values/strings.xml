@@ -45,4 +45,6 @@
     <string name="open_map_button">Open Map</string>
     <string name="select_a_location">Select a location</string>
     <string name="title">Title</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
 </resources>

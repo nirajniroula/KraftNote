@@ -28,14 +28,25 @@ public class FileHelper {
         audioDirectory = wrapper.getDir(AUDIO_DIRECTORY_NAME, Context.MODE_PRIVATE);
     }
 
+    public File getImageDirectory() {
+        return imageDirectory;
+    }
+
+    public File getAudioDirectory() {
+        return audioDirectory;
+    }
+
     public void saveImage(Bitmap bitmap, Consumer<String> onComplete) {
         String filename = System.currentTimeMillis() + ".png";
         File file = new File(imageDirectory, filename);
+        bitmap = resizeBitmap(bitmap, 1000, 1000);
+
+        Bitmap finalBitmap = bitmap;
 
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
                 out.flush();
                 out.close();
 
@@ -60,5 +71,40 @@ public class FileHelper {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Bitmap resizeBitmap(Bitmap source, int width, int height) {
+        if (source.getHeight() == height && source.getWidth() == width) return source;
+        int maxLength = Math.min(width, height);
+        try {
+            source = source.copy(source.getConfig(), true);
+            if (source.getHeight() <= source.getWidth()) {
+                if (source.getHeight() <= maxLength) { // if image already smaller than the required height
+                    return source;
+                }
+
+                double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
+                int targetWidth = (int) (maxLength * aspectRatio);
+
+                return Bitmap.createScaledBitmap(source, targetWidth, maxLength, false);
+            } else {
+
+                if (source.getWidth() <= maxLength) { // if image already smaller than the required height
+                    return source;
+                }
+
+                double aspectRatio = ((double) source.getHeight()) / ((double) source.getWidth());
+                int targetHeight = (int) (maxLength * aspectRatio);
+
+                return Bitmap.createScaledBitmap(source, maxLength, targetHeight, false);
+
+            }
+        } catch (Exception e) {
+            return source;
+        }
+    }
+
+    public static String makeImageName() {
+        return System.currentTimeMillis() + ".png";
     }
 }
