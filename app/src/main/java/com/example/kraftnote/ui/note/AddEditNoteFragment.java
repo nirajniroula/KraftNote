@@ -28,8 +28,8 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddUpdateNoteFragment extends Fragment {
-    private static final String TAG = AddUpdateNoteFragment.class.getSimpleName();
+public class AddEditNoteFragment extends Fragment {
+    private static final String TAG = AddEditNoteFragment.class.getSimpleName();
 
     private View root;
 
@@ -61,7 +61,7 @@ public class AddUpdateNoteFragment extends Fragment {
     OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
-            AddUpdateNoteFragment.this.gotoNoteFragment();
+            AddEditNoteFragment.this.gotoNoteFragment();
         }
     };
 

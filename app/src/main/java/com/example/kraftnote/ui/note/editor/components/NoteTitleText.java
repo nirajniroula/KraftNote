@@ -1,4 +1,4 @@
-package com.example.kraftnote.ui.note.editor;
+package com.example.kraftnote.ui.note.editor.components;
 
 import android.content.Context;
 import android.text.Editable;

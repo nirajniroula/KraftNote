@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.kraftnote.ui.note.editor.NoteTitleText
+    <com.example.kraftnote.ui.note.editor.components.NoteTitleText
         android:id="@+id/note_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         android:textColor="@color/black_800" />
 
 
-    <com.example.kraftnote.ui.note.editor.NoteBodyText
+    <com.example.kraftnote.ui.note.editor.components.NoteBodyText
         android:id="@+id/editor_body_text"
         style="@style/Widget.MyTheme.TextInputLayout.NoteTitle"
         android:layout_width="match_parent"

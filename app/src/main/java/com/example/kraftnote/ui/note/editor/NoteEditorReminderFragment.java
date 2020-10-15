@@ -1,6 +1,7 @@
 package com.example.kraftnote.ui.note.editor;
 
 import android.annotation.SuppressLint;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -28,6 +29,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.datepicker.MaterialDatePicker;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class NoteEditorReminderFragment extends Fragment {
     private static final String TAG = NoteEditorReminderFragment.class.getSimpleName();
@@ -45,6 +52,9 @@ public class NoteEditorReminderFragment extends Fragment {
 
     // listeners
     private OnLocationChangedListener onLocationChangedListener;
+
+    // picker
+    private MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
 
     @Nullable
     @Override
@@ -67,12 +77,8 @@ public class NoteEditorReminderFragment extends Fragment {
 
         if (autocompleteSupportFragment != null && autocompleteSupportFragment.getView() != null) {
             autocompleteSupportFragment.getView().setBackgroundColor(Color.WHITE);
+            LocationHelper.forFragment(autocompleteSupportFragment);
         }
-
-        Log.d(TAG, String.valueOf(supportMapFragment));
-        Log.d(TAG, String.valueOf(autocompleteSupportFragment));
-
-        LocationHelper.forFragment(autocompleteSupportFragment);
     }
 
     private void listenEvents() {
@@ -92,8 +98,28 @@ public class NoteEditorReminderFragment extends Fragment {
         binding.closeMapButton.setOnClickListener(v -> closeGoogleMap());
         binding.navigateButton.setOnClickListener(v -> startNavigateIntent());
         binding.locationViewerButton.setOnClickListener(v -> openGoogleMaps());
-
+        binding.dateTimePickerButton.setOnClickListener(v -> pickDateTime());
         supportMapFragment.getMapAsync(this::onMapReady);
+
+        datePicker.addOnPositiveButtonClickListener(date -> {
+            new TimePickerDialog(getContext(), R.style.Theme_MyTheme_Dialog, (picker, hour, minute) -> {
+                LocalDateTime localDateTime = LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(date), ZoneId.systemDefault()
+                ).withHour(hour).withMinute(minute);
+
+                dateTimePicked(localDateTime);
+            }, LocalDateTime.now().getHour(), LocalDateTime.now().getMinute(), true)
+                    .show();
+        });
+    }
+
+    private void dateTimePicked(LocalDateTime localDateTime) {
+        String datetime = localDateTime.format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy hh:mm a"));
+        binding.selectedDateTextView.setText(datetime);
+    }
+
+    private void pickDateTime() {
+        datePicker.show(getChildFragmentManager(), datePicker.toString());
     }
 
     private void openGoogleMaps() {
@@ -171,4 +197,5 @@ public class NoteEditorReminderFragment extends Fragment {
     public interface OnLocationChangedListener {
         void onLocationChanged(LocationReminder locationReminder);
     }
+
 }

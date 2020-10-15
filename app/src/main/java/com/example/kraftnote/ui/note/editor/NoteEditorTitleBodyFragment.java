@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,17 +15,8 @@ import com.example.kraftnote.databinding.FragmentNoteEditorTitleBodyBinding;
 public class NoteEditorTitleBodyFragment extends Fragment {
     private static final String TAG = NoteEditorTitleBodyFragment.class.getSimpleName();
 
-    private LinearLayout noteRemindersLinearLayout;
-
-    private TextView locationReminderTextView;
-    private TextView datetimeReminderTextView;
-
-    private NoteTitleText noteTitleInputTextLayout;
-    private NoteBodyText noteBodyTextInputText;
-
     private View root;
     private FragmentNoteEditorTitleBodyBinding binding;
-
 
     @Nullable
     @Override
@@ -47,11 +36,7 @@ public class NoteEditorTitleBodyFragment extends Fragment {
     }
 
     private void initializeProperties() {
-        noteRemindersLinearLayout = root.findViewById(R.id.note_reminders_linear_layout);
-        locationReminderTextView = root.findViewById(R.id.location_reminder_text_view);
-        datetimeReminderTextView = root.findViewById(R.id.datetime_reminder_text_view);
-        noteTitleInputTextLayout = root.findViewById(R.id.note_title);
-        noteBodyTextInputText = root.findViewById(R.id.editor_body_text);
+
     }
 
     private void listenEvents() {

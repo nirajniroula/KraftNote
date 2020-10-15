@@ -1,6 +1,5 @@
-package com.example.kraftnote.ui.note.editor;
+package com.example.kraftnote.ui.note.editor.components;
 
-import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -26,8 +25,6 @@ import com.example.kraftnote.R;
 import com.example.kraftnote.utils.watchers.BodyTextFormatWatcher;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 public class NoteBodyText extends TextInputLayout {
     private static final String TAG = NoteBodyText.class.getSimpleName();

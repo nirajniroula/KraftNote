@@ -95,4 +95,9 @@
         <item name="backgroundTint">@color/grey_50</item>
     </style>
 
+
+    <style name="Theme.MyTheme.Dialog" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
+<!--        <item name="colorAccent">@color/colorPrimaryDark</item>-->
+    </style>
+
 </resources>
