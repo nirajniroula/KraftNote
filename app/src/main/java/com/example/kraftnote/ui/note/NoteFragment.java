@@ -13,20 +13,22 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.kraftnote.R;
+import com.example.kraftnote.databinding.FragmentNotesBinding;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
-import com.example.kraftnote.ui.category.CategoryTabLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
+import com.example.kraftnote.persistence.views.NoteWithRelation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteFragment extends Fragment {
+    private FragmentNotesBinding binding;
+
     private NavController navController;
-    private CategoryTabLayout categoryTabLayout;
     private CategoryViewModel categoryViewModel;
-    private FloatingActionButton addNoteFab;
-    private List<Category> categories = new ArrayList<>();
+    private NoteViewModel noteViewModel;
+    protected List<NoteWithRelation> notes = new ArrayList<>();
 
     @Override
     public View onCreateView(
@@ -34,15 +36,18 @@ public class NoteFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notes, container, false);
+        View view = inflater.inflate(R.layout.fragment_notes, container, false);
+        binding = FragmentNotesBinding.bind(view);
+
+        return view;
     }
 
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initializeProperties();
-        findViews(view);
         listenEvents();
     }
 
@@ -50,14 +55,15 @@ public class NoteFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
     }
 
-    private void findViews(@NonNull final View view) {
-        categoryTabLayout = view.findViewById(R.id.category_tabs);
-        addNoteFab = view.findViewById(R.id.add_note_fab);
-    }
-
     private void listenEvents() {
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), this::categoriesMutated);
-        addNoteFab.setOnClickListener(this::addNoteRequest);
+        noteViewModel.getAllWithRelation().observe(getViewLifecycleOwner(), this::notesMutated);
+        binding.addNoteFab.setOnClickListener(this::addNoteRequest);
+    }
+
+    private void notesMutated(List<NoteWithRelation> notes) {
+        this.notes = notes;
+        binding.noteRecyclerView.setNotes(notes);
     }
 
     private void addNoteRequest(View view) {
@@ -65,11 +71,6 @@ public class NoteFragment extends Fragment {
     }
 
     private void categoriesMutated(List<Category> categories) {
-        this.categories = categories;
-        categoryTabLayout.sync(categories);
-    }
-
-    private void gotoCategoryFragment() {
-        navController.navigate(R.id.action_NoteFragment_to_CategoryFragment);
+        binding.categoryTabs.sync(categories);
     }
 }

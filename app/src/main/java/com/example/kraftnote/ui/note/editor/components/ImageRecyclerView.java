@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kraftnote.R;
-import com.example.kraftnote.databinding.ImageCardBinding;
+import com.example.kraftnote.databinding.ComponentImageCardBinding;
 import com.example.kraftnote.utils.FileHelper;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class ImageRecyclerView extends RecyclerView {
         @Override
         public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.image_card, parent, false);
+                    .inflate(R.layout.component_image_card, parent, false);
 
             ImageHolder holder = new ImageHolder(itemView);
 
@@ -92,11 +92,11 @@ public class ImageRecyclerView extends RecyclerView {
     }
 
     private static class ImageHolder extends RecyclerView.ViewHolder {
-        private ImageCardBinding binding;
+        private ComponentImageCardBinding binding;
 
         public ImageHolder(@NonNull View itemView) {
             super(itemView);
-            binding = ImageCardBinding.bind(itemView);
+            binding = ComponentImageCardBinding.bind(itemView);
         }
     }
 

@@ -9,7 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.kraftnote.persistence.entities.Note;
-import com.example.kraftnote.persistence.relations.NoteWithBodies;
+import com.example.kraftnote.persistence.views.NoteWithRelation;
 
 import java.util.List;
 
@@ -24,6 +24,14 @@ public interface NoteDao {
     @Delete
     void deleteAll(Note... notes);
 
-    @Query("SELECT * FROM Notes ORDER BY created_at DESC")
+    @Query("SELECT * FROM Notes ORDER BY note_created_at DESC")
     LiveData<List<Note>> getAll();
+
+    @Transaction
+    @Query("SELECT * FROM NoteWithRelation ORDER BY note_created_at DESC")
+    LiveData<List<NoteWithRelation>> getAllWithRelation();
+
+    @Transaction
+    @Query("SELECT * FROM NoteWithRelation WHERE note_id=:id ORDER BY note_created_at DESC")
+    LiveData<List<NoteWithRelation>> getAllWithRelationFor(int id);
 }

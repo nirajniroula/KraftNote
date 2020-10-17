@@ -1,7 +1,5 @@
 package com.example.kraftnote.persistence;
 
-import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -12,17 +10,29 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.kraftnote.persistence.daos.CategoryDao;
+import com.example.kraftnote.persistence.daos.DatetimeReminderDao;
+import com.example.kraftnote.persistence.daos.LocationReminderDao;
 import com.example.kraftnote.persistence.daos.NoteDao;
+import com.example.kraftnote.persistence.daos.NoteFileDao;
 import com.example.kraftnote.persistence.daos.TagDao;
 import com.example.kraftnote.persistence.entities.Category;
+import com.example.kraftnote.persistence.entities.DatetimeReminder;
+import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.entities.Note;
+import com.example.kraftnote.persistence.entities.NoteFile;
 import com.example.kraftnote.persistence.entities.Tag;
+import com.example.kraftnote.persistence.entities.Todo;
 import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
+import com.example.kraftnote.persistence.views.NoteWithRelation;
 
 import java.lang.ref.WeakReference;
 
-@Database(entities = {Category.class, Note.class, Tag.class},
-        views = {CategoryWithNotesCount.class},
+@Database(entities = {
+            Category.class, Note.class, Tag.class,
+            LocationReminder.class, DatetimeReminder.class,
+            NoteFile.class, Todo.class
+        },
+        views = {CategoryWithNotesCount.class, NoteWithRelation.class},
         version = 1
 )
 public abstract class KraftNoteDatabase extends RoomDatabase {
@@ -41,6 +51,12 @@ public abstract class KraftNoteDatabase extends RoomDatabase {
     public abstract NoteDao noteDao();
 
     public abstract TagDao tagDao();
+
+    public abstract NoteFileDao noteFileDao();
+
+    public abstract LocationReminderDao locationReminderDao();
+
+    public abstract DatetimeReminderDao datetimeReminderDao();
 
     public static KraftNoteDatabase getInstance(Context context) {
         if (INSTANCE == null) {

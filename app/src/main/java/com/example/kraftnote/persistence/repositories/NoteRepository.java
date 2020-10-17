@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData;
 
 import com.example.kraftnote.persistence.KraftNoteDatabase;
 import com.example.kraftnote.persistence.daos.NoteDao;
-import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.repositories.contracts.IRepository;
+import com.example.kraftnote.persistence.views.NoteWithRelation;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -29,12 +29,6 @@ public class NoteRepository implements IRepository<Note> {
         new InsertTask(noteDao).execute(note);
     }
 
-    public void addReminder(Note note, LocationReminder reminder) {
-        if (note.getId() == null) {
-//            noteDao.insertAll();
-        }
-    }
-
     @Override
     public void update(Note note) {
         new UpdateTask(noteDao).execute(note);
@@ -48,6 +42,10 @@ public class NoteRepository implements IRepository<Note> {
     @Override
     public LiveData<List<Note>> getAll() {
         return allNotes;
+    }
+
+    public LiveData<List<NoteWithRelation>> getAllWithRelation() {
+        return noteDao.getAllWithRelation();
     }
 
     private static class InsertTask extends NoteMutationTask {

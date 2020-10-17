@@ -22,9 +22,9 @@ public interface TagDao {
     @Delete
     void deleteAll(Tag... tags);
 
-    @Query("SELECT * FROM Tags ORDER BY name")
+    @Query("SELECT * FROM Tags ORDER BY tag_name")
     LiveData<List<Tag>> getAll();
 
-    @Query("SELECT * FROM Tags WHERE name LIKE :name ORDER BY name")
+    @Query("SELECT * FROM Tags WHERE tag_name LIKE :name ORDER BY tag_name ASC")
     LiveData<List<Tag>> searchByName(String name);
 }

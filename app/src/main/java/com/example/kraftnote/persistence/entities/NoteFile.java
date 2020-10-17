@@ -4,18 +4,21 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.example.kraftnote.persistence.converters.CreatedAtConverter;
 import com.example.kraftnote.persistence.converters.FileTypeConverter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity(tableName = "NoteFiles", foreignKeys = {
-        @ForeignKey(entity = Note.class, parentColumns = "id",
-                childColumns = "note_id", onDelete = ForeignKey.CASCADE)
+        @ForeignKey(entity = Note.class, parentColumns = "note_id",
+                childColumns = "note_file_note_id", onDelete = ForeignKey.CASCADE)
 })
-public class NoteFile extends BaseEntity {
+public class NoteFile {
     public enum FileType {
         IMAGE("image"),
         AUDIO("audio");
@@ -42,23 +45,42 @@ public class NoteFile extends BaseEntity {
         }
     }
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "note_file_id")
+    protected Integer id;
 
+    @ColumnInfo(name = "note_file_location")
     private String location;
 
     @TypeConverters(FileTypeConverter.class)
+    @ColumnInfo(name = "note_file_type", index = true)
     private FileType type;
 
-    @ColumnInfo(name = "note_id")
+    @ColumnInfo(name = "note_file_note_id", index = true)
     private Integer noteId;
+
+    @TypeConverters(CreatedAtConverter.class)
+    @ColumnInfo(name = "note_file_created_at", defaultValue = "CURRENT_TIMESTAMP")
+    protected Date createdAt;
 
     @Ignore
     public NoteFile() {
     }
 
-    public NoteFile(String location, FileType type, Integer noteId) {
+    public NoteFile(Integer id, String location, FileType type, Integer noteId, Date createdAt) {
+        this.id = id;
         this.location = location;
         this.type = type;
         this.noteId = noteId;
+        setCreatedAt(createdAt);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getLocation() {
@@ -83,5 +105,23 @@ public class NoteFile extends BaseEntity {
 
     public void setNoteId(Integer noteId) {
         this.noteId = noteId;
+    }
+
+    @Ignore
+    public boolean isImage() {
+        return getType() == FileType.IMAGE;
+    }
+
+    @Ignore
+    public boolean isAudio() {
+        return getType() == FileType.AUDIO;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = (createdAt == null) ? new Date() : createdAt;
     }
 }

@@ -1,0 +1,474 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "947013a305a693ef4760abd10e4e6a57",
+    "entities": [
+      {
+        "tableName": "Categories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`category_id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_name` TEXT, `category_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "category_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "category_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "category_created_at",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "category_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Categories_category_name",
+            "unique": true,
+            "columnNames": [
+              "category_name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Categories_category_name` ON `${TABLE_NAME}` (`category_name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Notes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_id` INTEGER PRIMARY KEY AUTOINCREMENT, `note_name` TEXT, `note_category_id` INTEGER NOT NULL, `note_archived` INTEGER NOT NULL DEFAULT 0, `note_body` TEXT DEFAULT '', `note_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(`note_category_id`) REFERENCES `Categories`(`category_id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "note_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "note_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "note_category_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "archived",
+            "columnName": "note_archived",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "note_body",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "note_created_at",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "note_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Notes_note_category_id",
+            "unique": false,
+            "columnNames": [
+              "note_category_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Notes_note_category_id` ON `${TABLE_NAME}` (`note_category_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Categories",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "note_category_id"
+            ],
+            "referencedColumns": [
+              "category_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Tags",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tag_id` INTEGER PRIMARY KEY AUTOINCREMENT, `tag_name` TEXT, `tag_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "tag_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "tag_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "tag_created_at",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tag_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Tags_tag_name",
+            "unique": true,
+            "columnNames": [
+              "tag_name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Tags_tag_name` ON `${TABLE_NAME}` (`tag_name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "LocationReminders",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`location_reminder_id` INTEGER PRIMARY KEY AUTOINCREMENT, `location_reminder_place_id` TEXT, `location_reminder_name` TEXT, `location_reminder_address` TEXT, `location_reminder_lat` REAL NOT NULL, `location_reminder_lng` REAL NOT NULL, `location_reminder_note_id` INTEGER NOT NULL, `location_reminder_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(`location_reminder_note_id`) REFERENCES `Notes`(`note_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "location_reminder_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "placeId",
+            "columnName": "location_reminder_place_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "location_reminder_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "location_reminder_address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "location_reminder_lat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lng",
+            "columnName": "location_reminder_lng",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noteId",
+            "columnName": "location_reminder_note_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "location_reminder_created_at",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "location_reminder_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_LocationReminders_location_reminder_place_id",
+            "unique": false,
+            "columnNames": [
+              "location_reminder_place_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_LocationReminders_location_reminder_place_id` ON `${TABLE_NAME}` (`location_reminder_place_id`)"
+          },
+          {
+            "name": "index_LocationReminders_location_reminder_note_id",
+            "unique": false,
+            "columnNames": [
+              "location_reminder_note_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_LocationReminders_location_reminder_note_id` ON `${TABLE_NAME}` (`location_reminder_note_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Notes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "location_reminder_note_id"
+            ],
+            "referencedColumns": [
+              "note_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "DatetimeReminders",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`datetime_reminder_id` INTEGER PRIMARY KEY AUTOINCREMENT, `datetime_reminder_datetime` INTEGER, `datetime_reminder_note_id` INTEGER, `datetime_reminder_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(`datetime_reminder_note_id`) REFERENCES `Notes`(`note_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "datetime_reminder_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "datetime",
+            "columnName": "datetime_reminder_datetime",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "noteId",
+            "columnName": "datetime_reminder_note_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "datetime_reminder_created_at",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "datetime_reminder_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_DatetimeReminders_datetime_reminder_note_id",
+            "unique": false,
+            "columnNames": [
+              "datetime_reminder_note_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_DatetimeReminders_datetime_reminder_note_id` ON `${TABLE_NAME}` (`datetime_reminder_note_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Notes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "datetime_reminder_note_id"
+            ],
+            "referencedColumns": [
+              "note_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "NoteFiles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_file_id` INTEGER PRIMARY KEY AUTOINCREMENT, `note_file_location` TEXT, `note_file_type` TEXT, `note_file_note_id` INTEGER, `note_file_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(`note_file_note_id`) REFERENCES `Notes`(`note_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "note_file_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "note_file_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "note_file_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "noteId",
+            "columnName": "note_file_note_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "note_file_created_at",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "note_file_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_NoteFiles_note_file_type",
+            "unique": false,
+            "columnNames": [
+              "note_file_type"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_NoteFiles_note_file_type` ON `${TABLE_NAME}` (`note_file_type`)"
+          },
+          {
+            "name": "index_NoteFiles_note_file_note_id",
+            "unique": false,
+            "columnNames": [
+              "note_file_note_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_NoteFiles_note_file_note_id` ON `${TABLE_NAME}` (`note_file_note_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Notes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "note_file_note_id"
+            ],
+            "referencedColumns": [
+              "note_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Todos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`todo_id` INTEGER PRIMARY KEY AUTOINCREMENT, `todo_task` TEXT, `todo_completed` INTEGER DEFAULT 0, `todo_note_id` INTEGER, `todo_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(`todo_note_id`) REFERENCES `Notes`(`note_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "todo_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "task",
+            "columnName": "todo_task",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "completed",
+            "columnName": "todo_completed",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "noteId",
+            "columnName": "todo_note_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "todo_created_at",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "todo_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Todos_todo_note_id",
+            "unique": false,
+            "columnNames": [
+              "todo_note_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Todos_todo_note_id` ON `${TABLE_NAME}` (`todo_note_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Notes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "todo_note_id"
+            ],
+            "referencedColumns": [
+              "note_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewName": "CategoryWithNotesCount",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT Categories.*, COUNT(Notes.note_id) as notes_count FROM Categories LEFT JOIN Notes ON Notes.note_category_id = Categories.category_id GROUP BY Categories.category_id"
+      },
+      {
+        "viewName": "NoteWithRelation",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT Categories.*, Notes.*, DatetimeReminders.*, LocationReminders.* FROM NOTES JOIN Categories ON Notes.note_category_id = Categories.category_id LEFT JOIN DatetimeReminders ON DatetimeReminders.datetime_reminder_note_id = Notes.note_id LEFT JOIN LocationReminders ON LocationReminders.location_reminder_note_id = Notes.note_id"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '947013a305a693ef4760abd10e4e6a57')"
+    ]
+  }
+}

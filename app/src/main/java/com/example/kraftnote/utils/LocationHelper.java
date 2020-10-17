@@ -1,7 +1,5 @@
 package com.example.kraftnote.utils;
 
-import androidx.fragment.app.Fragment;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.libraries.places.api.model.Place;

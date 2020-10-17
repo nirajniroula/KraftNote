@@ -1,6 +1,5 @@
 package com.example.kraftnote.ui.note.editor.components;
 
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Editable;
@@ -22,14 +21,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.kraftnote.R;
+import com.example.kraftnote.databinding.ComponentNoteBodyTextBinding;
 import com.example.kraftnote.utils.watchers.BodyTextFormatWatcher;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class NoteBodyText extends TextInputLayout {
     private static final String TAG = NoteBodyText.class.getSimpleName();
 
-    private TextInputEditText noteBodyTextArea;
+    private ComponentNoteBodyTextBinding binding;
 
     public NoteBodyText(@NonNull Context context) {
         super(context);
@@ -47,36 +46,21 @@ public class NoteBodyText extends TextInputLayout {
     }
 
     private void init(Context context) {
-        ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         final View view = inflate(getContext(), R.layout.component_note_body_text, this);
+        binding = ComponentNoteBodyTextBinding.bind(view);
 
         initializeProperties(view);
         listenEvents(context);
     }
 
     private void initializeProperties(View view) {
-        noteBodyTextArea = view.findViewById(R.id.body_textarea);
-
-        noteBodyTextArea.setScroller(new Scroller(getContext()));
-        noteBodyTextArea.setVerticalScrollBarEnabled(true);
+        binding.bodyTextarea.setScroller(new Scroller(getContext()));
+        binding.bodyTextarea.setVerticalScrollBarEnabled(true);
     }
 
     private void listenEvents(Context context) {
-        noteBodyTextArea.setCustomSelectionActionModeCallback(actionModeCallback);
-        noteBodyTextArea.addTextChangedListener(new BodyTextFormatWatcher(noteBodyTextArea));
-
-//        final int paddingTop = noteBodyTextArea.getPaddingTop();
-//        final int paddingBottom =noteBodyTextArea.getPaddingBottom();
-//        final int paddingLeft =noteBodyTextArea.getPaddingLeft();
-//        final int paddingRight =noteBodyTextArea.getPaddingRight();
-//
-//        KeyboardVisibilityEvent.setEventListener(((Activity) context), isOpen -> {
-//            noteBodyTextArea.setPadding(
-//                    paddingLeft,
-//                    paddingTop,
-//                    paddingRight,
-//                    paddingBottom + (isOpen ? 100 : 0));
-//        });
+        binding.bodyTextarea.setCustomSelectionActionModeCallback(actionModeCallback);
+        binding.bodyTextarea.addTextChangedListener(new BodyTextFormatWatcher(binding.bodyTextarea));
     }
 
     private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -95,12 +79,12 @@ public class NoteBodyText extends TextInputLayout {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            final Editable editable = noteBodyTextArea.getText();
+            final Editable editable = binding.bodyTextarea.getText();
 
             if (editable == null) return false;
 
-            int startIndex = noteBodyTextArea.getSelectionStart();
-            int endIndex = noteBodyTextArea.getSelectionEnd();
+            int startIndex = binding.bodyTextarea.getSelectionStart();
+            int endIndex = binding.bodyTextarea.getSelectionEnd();
 
             if (startIndex < 0) return false;
 

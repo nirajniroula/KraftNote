@@ -59,13 +59,15 @@ public class NoteEditorReminderFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_note_editor_reminders, container, false);
+        View view = inflater.inflate(R.layout.fragment_note_editor_reminders, container, false);
+        binding = FragmentNoteEditorRemindersBinding.bind(view);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding = FragmentNoteEditorRemindersBinding.bind(view);
 
         initializeProperties();
         listenEvents();
@@ -154,17 +156,16 @@ public class NoteEditorReminderFragment extends Fragment {
         if (position == null) return;
 
         final String url = String.format("google.navigation:q=%f,%f", position.latitude, position.longitude);
-        // Create a Uri from an intent string. Use the result to create an Intent.
-        Uri gmmIntentUri = Uri.parse(url);
 
-        // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        Uri intentUri = Uri.parse(url);
+
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
         // Make the Intent explicit by setting the Google Maps package
         mapIntent.setPackage("com.google.android.apps.maps");
 
-        if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
+        if (mapIntent.resolveActivity(requireContext().getPackageManager()) != null) {
             // Attempt to start an activity that can handle the Intent
-            getContext().startActivity(mapIntent);
+            requireContext().startActivity(mapIntent);
         }
     }
 
