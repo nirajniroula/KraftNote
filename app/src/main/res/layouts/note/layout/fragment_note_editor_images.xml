@@ -69,14 +69,43 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:horizontalSpacing="5dp"
+        android:numColumns="3"
         android:paddingHorizontal="@dimen/keyline_2"
         android:paddingTop="@dimen/keyline_2"
         android:paddingBottom="@dimen/keyline_6"
-        android:stretchMode="columnWidth"
-        android:numColumns="3"
         android:scrollbars="vertical"
+        android:stretchMode="columnWidth"
         android:verticalSpacing="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/images_header" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/image_viewer_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/close_image_viewer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/keyline_2"
+            android:layout_marginTop="@dimen/keyline_2"
+            app:backgroundTint="@color/white_50"
+            app:fabSize="mini"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_close_24"
+            app:tint="@color/red_A400" />
+
+        <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+            android:id="@+id/image_viewer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

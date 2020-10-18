@@ -1,13 +1,13 @@
 package com.example.kraftnote.ui.note.editor;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
@@ -38,8 +38,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,6 +69,8 @@ public class NoteEditorImageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Context applicationContext = requireContext().getApplicationContext();
+
         binding = FragmentNoteEditorImagesBinding.inflate(inflater, container, false);
         root = binding.getRoot();
 
@@ -91,9 +91,16 @@ public class NoteEditorImageFragment extends Fragment {
         fileHelper = new FileHelper(requireContext());
 
         binding.imageGridView.setAdapter(imageAdapter);
+
+        binding.imageViewer
+                .setBackgroundResource(R.color.semi_transparent_black);
     }
 
     private void listenEvents() {
+        binding.closeImageViewerButton.setOnClickListener(v -> {
+            binding.imageViewerWrapper.setVisibility(View.GONE);
+        });
+
         binding.addImageButton.setOnClickListener(v -> addImageFromGalleryRequested());
         binding.addImageCameraButton.setOnClickListener(v -> addImageFromCameraRequested());
         images.observe(getViewLifecycleOwner(), this::imageListMutated);
@@ -236,17 +243,28 @@ public class NoteEditorImageFragment extends Fragment {
         return image;
     }
 
-    public class SquareImageView extends AppCompatImageView {
+    private class SquareImageView extends AppCompatImageView {
+        private NoteFile imageFile;
+        private Bitmap bitmap;
+
         public SquareImageView(Context context) {
             super(context);
+            init(context);
         }
 
         public SquareImageView(Context context, AttributeSet attrs) {
             super(context, attrs);
+            init(context);
         }
 
         public SquareImageView(Context context, AttributeSet attrs, int defStyle) {
             super(context, attrs, defStyle);
+            init(context);
+        }
+
+        private void setImageFile(NoteFile file) {
+            this.imageFile = file;
+            bitmap = fileHelper.readImage(file.getLocation());
         }
 
         @Override
@@ -254,9 +272,20 @@ public class NoteEditorImageFragment extends Fragment {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth()); //Snap to width
         }
+
+        private void init(Context context) {
+            setOnClickListener(v -> {
+                if (bitmap == null) return;
+                Bitmap bitmapClone = bitmap.copy(bitmap.getConfig(), true);
+
+                binding.imageViewer.setImage(ImageSource.bitmap(bitmapClone));
+                binding.imageViewer.resetScaleAndCenter();
+                binding.imageViewerWrapper.setVisibility(View.VISIBLE);
+            });
+        }
     }
 
-    public class ImageAdapter extends BaseAdapter {
+    private class ImageAdapter extends BaseAdapter {
         private List<NoteFile> images = new ArrayList<>();
         private Map<String, Bitmap> bitmaps = new HashMap<>();
 
@@ -293,7 +322,8 @@ public class NoteEditorImageFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             NoteFile file = (NoteFile) getItem(position);
-            ImageView imageView = new SquareImageView(requireContext());
+            SquareImageView imageView = new SquareImageView(requireContext());
+            imageView.setImageFile(file);
 
             int dimen = imageView.getMeasuredWidth();
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -309,4 +339,6 @@ public class NoteEditorImageFragment extends Fragment {
             return imageView;
         }
     }
+
+
 }

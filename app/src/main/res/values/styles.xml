@@ -1,4 +1,3 @@
-
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
@@ -97,7 +96,12 @@
 
 
     <style name="Theme.MyTheme.Dialog" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
-<!--        <item name="colorAccent">@color/colorPrimaryDark</item>-->
+        <!--        <item name="colorAccent">@color/colorPrimaryDark</item>-->
+    </style>
+
+    <style name="Theme.MyTheme.Dialog.WrapContent" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
+        <item name="windowMinWidthMajor">0%</item>
+        <item name="windowMinWidthMinor">0%</item>
     </style>
 
 </resources>
