@@ -23,6 +23,7 @@ import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.ui.note.editor.NoteEditorImageFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorTitleBodyFragment;
+import com.example.kraftnote.ui.note.editor.NoteEditorTodoFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -57,6 +58,7 @@ public class AddEditNoteFragment extends Fragment {
     private NoteEditorTitleBodyFragment noteEditorTitleBodyFragment;
     private NoteEditorReminderFragment noteEditorReminderFragment;
     private NoteEditorImageFragment noteEditorImageFragment;
+    private NoteEditorTodoFragment noteEditorTodoFragment;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
     private
@@ -93,6 +95,7 @@ public class AddEditNoteFragment extends Fragment {
         noteEditorTitleBodyFragment = (NoteEditorTitleBodyFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_title_body_fragment);
         noteEditorReminderFragment = (NoteEditorReminderFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_reminder_fragment);
         noteEditorImageFragment = (NoteEditorImageFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_images_fragment);
+        noteEditorTodoFragment = (NoteEditorTodoFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_todo_fragment);
 
         navController = NavHostFragment.findNavController(this);
         closeEditorButton = view.findViewById(R.id.close_editor_button);
@@ -102,7 +105,8 @@ public class AddEditNoteFragment extends Fragment {
 
         tabViews.add(view.findViewById(R.id.note_editor_title_body_fragment_wrapper));
         tabViews.add(view.findViewById(R.id.note_editor_reminder_fragment_wrapper));
-        tabViews.add(view.findViewById(R.id.note_editor_images_wrapper));
+        tabViews.add(view.findViewById(R.id.note_editor_images_fragment_wrapper));
+        tabViews.add(view.findViewById(R.id.note_editor_todo_fragment_wrapper));
     }
 
     private void listenEvents(@NonNull final View view) {

@@ -93,7 +93,7 @@ public class SaveCategoryDialogFragment extends DialogFragment {
         });
     }
 
-    public void onAddRequest(SaveCategoryCallback saveCategoryCallback) {
+    public void setOnCategoryAddRequest(SaveCategoryCallback saveCategoryCallback) {
         this.saveCategoryCallback = saveCategoryCallback;
     }
 

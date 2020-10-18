@@ -47,17 +47,13 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initializeProperties();
-        findViews(view);
+        initializeProperties(view);
         listenEvents();
     }
 
-    private void initializeProperties() {
+    private void initializeProperties(View view) {
         navController = NavHostFragment.findNavController(this);
         saveCategoryDialogFragment = new SaveCategoryDialogFragment();
-    }
-
-    private void findViews(View view) {
         addCategoryFab = view.findViewById(R.id.add_category_fab);
         categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
     }
@@ -68,7 +64,7 @@ public class CategoryFragment extends Fragment {
 
         categoryRecyclerView.onEditButtonClicked(this::onEditRequest);
         categoryRecyclerView.onDeleteButtonClicked(this::onDeleteRequest);
-        saveCategoryDialogFragment.onAddRequest(this::onSaveCategoryRequest);
+        saveCategoryDialogFragment.setOnCategoryAddRequest(this::onSaveCategoryRequest);
         saveCategoryDialogFragment.setCheckUniqueCallback(this::checkCategoryNameIsUnique);
         addCategoryFab.setOnClickListener((View v) -> onCreateRequest());
     }

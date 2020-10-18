@@ -10,4 +10,5 @@
     <string name="unperformable_action">Cannot perform the action</string>
     <string name="cannot_delete_category_having_notes">Cannot delete category having one or more notes.</string>
     <string name="delete_category_question">Are you sure you want to delete this category? This process cannot be undone.</string>
+    <string name="delete_todo_question">Are you sure you want to delete this todo item? This process cannot be undone.</string>
 </resources>

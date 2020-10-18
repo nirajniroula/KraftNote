@@ -23,8 +23,10 @@ import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 public class CategoryRecyclerView extends RecyclerView {
@@ -130,8 +132,8 @@ public class CategoryRecyclerView extends RecyclerView {
             return categoryWithNotesCounts.size();
         }
 
-        public void syncCategories(List<CategoryWithNotesCount> categoryWithNotesCounts) {
-            this.categoryWithNotesCounts = categoryWithNotesCounts;
+        public void syncCategories(List<CategoryWithNotesCount> categoryWithNotesCountList) {
+            this.categoryWithNotesCounts = categoryWithNotesCountList;
             notifyDataSetChanged();
         }
 

@@ -37,6 +37,12 @@ public class Todo {
     public Todo() {
     }
 
+    @Ignore
+    public Todo(String task) {
+        setTask(task);
+        setCreatedAt(null);
+    }
+
     public Todo(Integer id, String task, Integer completed, Integer noteId, Date createdAt) {
         this.id = id;
         this.task = task;
@@ -68,7 +74,7 @@ public class Todo {
 
     @Ignore
     public boolean isCompleted() {
-        return completed == 1;
+        return completed != null && completed == 1;
     }
 
     public Integer getId() {

@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/keyline_4"
-            android:paddingVertical="@dimen/keyline_3"
+            android:paddingVertical="@dimen/keyline_5"
             android:text="@string/note"
             app:fontFamily="@font/open_sans_light"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -146,7 +146,7 @@
 
 
     <LinearLayout
-        android:id="@+id/note_editor_images_wrapper"
+        android:id="@+id/note_editor_images_fragment_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tabs"
@@ -162,6 +162,26 @@
             android:name="com.example.kraftnote.ui.note.editor.NoteEditorImageFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/note_editor_todo_fragment_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabs"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/grey_50"
+        android:visibility="invisible"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/note_editor_todo_fragment"
+            android:name="com.example.kraftnote.ui.note.editor.NoteEditorTodoFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
 

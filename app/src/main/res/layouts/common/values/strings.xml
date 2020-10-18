@@ -49,4 +49,10 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="image_slide">Image slide</string>
+    <string name="add_todo">Add Todo</string>
+    <string name="update_todo">Update Todo</string>
+    <string name="text">Text</string>
+    <string name="todo_deleted">Todo deleted</string>
+    <string name="todo_added">Todo added</string>
+    <string name="todo_updated">Todo updated</string>
 </resources>

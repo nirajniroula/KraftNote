@@ -1,7 +1,6 @@
 package com.example.kraftnote.ui.note.editor;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -117,7 +115,6 @@ public class NoteEditorImageFragment extends Fragment {
     }
 
     private void imageListMutated(List<NoteFile> files) {
-//        imageRecyclerView.setImages(images.getValue());
         imageAdapter.syncImages(files);
 
         Log.d(TAG, String.valueOf(files));

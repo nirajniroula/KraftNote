@@ -3,6 +3,7 @@ package com.example.kraftnote.persistence.views;
 import androidx.room.ColumnInfo;
 import androidx.room.DatabaseView;
 import androidx.room.Embedded;
+import androidx.room.Ignore;
 
 import com.example.kraftnote.persistence.entities.Category;
 
@@ -18,6 +19,11 @@ public class CategoryWithNotesCount {
     public CategoryWithNotesCount(Category category, int notesCount) {
         this.category = category;
         this.notesCount = notesCount;
+    }
+
+    @Ignore
+    public Integer getId() {
+        return category.getId();
     }
 
     public Category getCategory() {
