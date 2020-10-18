@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -208,6 +210,11 @@ public class NoteEditorImageFragment extends Fragment {
     }
 
     private void persistToStorage(Bitmap image) {
+        WeakReference<View> viewWeakReference = new WeakReference<>(binding.getRoot());
+        binding.progressBarWrapper.setZ(1);
+        binding.progressBarWrapper.setClickable(true);
+        binding.progressBarWrapper.setVisibility(View.VISIBLE);
+
         fileHelper.saveImage(image, fileName -> {
             Log.d(TAG, fileName);
 
@@ -220,6 +227,12 @@ public class NoteEditorImageFragment extends Fragment {
             currentImages.add(NoteFile.newImage(fileName));
 
             images.postValue(currentImages);
+
+            if(viewWeakReference.get() == null) return;
+
+            viewWeakReference.get().post(() -> {
+                binding.progressBarWrapper.setVisibility(View.GONE);
+            });
         });
     }
 
