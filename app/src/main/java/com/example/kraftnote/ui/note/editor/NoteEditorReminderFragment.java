@@ -24,6 +24,7 @@ import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.transformers.PlaceToLocationReminder;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.LocationHelper;
+import com.example.kraftnote.utils.PermissionHelper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,6 +56,9 @@ public class NoteEditorReminderFragment extends Fragment {
     private SupportMapFragment supportMapFragment;
     private AutocompleteSupportFragment autocompleteSupportFragment;
 
+    //helper
+    private PermissionHelper permissionHelper;
+
     // picker
     private MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
 
@@ -76,6 +80,7 @@ public class NoteEditorReminderFragment extends Fragment {
     }
 
     private void initializeProperties() {
+        permissionHelper = new PermissionHelper(getContext());
         locationReminder = new MutableLiveData<>();
         datetimeReminder = new MutableLiveData<>();
 
@@ -172,7 +177,7 @@ public class NoteEditorReminderFragment extends Fragment {
         // Make the Intent explicit by setting the Google Maps package
         mapIntent.setPackage("com.google.android.apps.maps");
 
-        if (mapIntent.resolveActivity(requireContext().getPackageManager()) != null) {
+        if (permissionHelper.isIntentResolvable(mapIntent)) {
             // Attempt to start an activity that can handle the Intent
             requireContext().startActivity(mapIntent);
         }

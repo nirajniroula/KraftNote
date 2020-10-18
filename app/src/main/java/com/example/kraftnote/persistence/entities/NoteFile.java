@@ -86,6 +86,16 @@ public class NoteFile {
         return noteFile;
     }
 
+    public static NoteFile newAudio(String location) {
+        NoteFile noteFile = new NoteFile();
+
+        noteFile.setType(FileType.AUDIO);
+        noteFile.setLocation(location);
+        noteFile.setCreatedAt(null);
+
+        return noteFile;
+    }
+
     public Integer getId() {
         return id;
     }

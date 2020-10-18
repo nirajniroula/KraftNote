@@ -29,6 +29,14 @@ public class FileHelper {
         cacheDirectory = wrapper.getCacheDir();
     }
 
+    public File getAudioOutputFile() {
+        return new File(getAudioDirectory(), makeAudioName());
+    }
+
+    public File getAudioSourceFor(String location) {
+        return new File(getAudioDirectory(), location);
+    }
+
     public File getImageDirectory() {
         return imageDirectory;
     }
@@ -105,7 +113,15 @@ public class FileHelper {
         }
     }
 
+    public static Long makeName() {
+        return System.currentTimeMillis();
+    }
+
     public static String makeImageName() {
-        return System.currentTimeMillis() + ".png";
+        return makeName() + ".png";
+    }
+
+    public static String makeAudioName() {
+        return makeName() + ".mp3";
     }
 }

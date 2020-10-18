@@ -107,6 +107,7 @@ public class AddEditNoteFragment extends Fragment {
         tabViews.add(view.findViewById(R.id.note_editor_reminder_fragment_wrapper));
         tabViews.add(view.findViewById(R.id.note_editor_images_fragment_wrapper));
         tabViews.add(view.findViewById(R.id.note_editor_todo_fragment_wrapper));
+        tabViews.add(view.findViewById(R.id.note_editor_recordings_fragment_wrapper));
     }
 
     private void listenEvents(@NonNull final View view) {

@@ -60,13 +60,13 @@ public class NoteEditorTodoFragment extends Fragment {
             todo.setCompleted(isChecked);
             todos.setValue(todos.getValue());
             binding.todoRecyclerView.updateTodo(todo);
-            Toast.makeText(getContext(), R.string.todo_updated, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), R.string.todo_updated, Toast.LENGTH_SHORT).show();
         });
 
         saveTodoDialogFragment.setOnSaveTodoListener(todo -> {
             if(saveTodoDialogFragment.getTodo() == null) {
                 binding.todoRecyclerView.addTodo(addTodo(todo));
-                Toast.makeText(getContext(), R.string.todo_added, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), R.string.todo_added, Toast.LENGTH_SHORT).show();
             } else {
                 binding.todoRecyclerView.updateTodo(
                         saveTodoDialogFragment.getTodo()
@@ -97,12 +97,10 @@ public class NoteEditorTodoFragment extends Fragment {
                 .setPositiveButton(R.string.confirm, (dialog, which) -> {
                     binding.todoRecyclerView.removeTodo(todo);
                     removeTodo(todo);
-                    Toast.makeText(getContext(), R.string.todo_deleted, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), R.string.todo_deleted, Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
-
-
     }
 
     private Todo addTodo(String text) {

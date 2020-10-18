@@ -1,10 +1,8 @@
 package com.example.kraftnote.ui.note.editor;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -32,6 +30,7 @@ import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.FileHelper;
+import com.example.kraftnote.utils.PermissionHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,6 +61,7 @@ public class NoteEditorImageFragment extends Fragment {
 
     //helper
     private FileHelper fileHelper;
+    private PermissionHelper permissionHelper;
 
     //temp data
     File capturedImage;
@@ -89,6 +89,7 @@ public class NoteEditorImageFragment extends Fragment {
         images = new MutableLiveData<>(new ArrayList<>());
         imageAdapter = new ImageAdapter();
         fileHelper = new FileHelper(requireContext());
+        permissionHelper = new PermissionHelper(getContext());
 
         binding.imageGridView.setAdapter(imageAdapter);
 
@@ -134,10 +135,8 @@ public class NoteEditorImageFragment extends Fragment {
     }
 
     private void addImageFromCameraRequested() {
-        int granted = requireContext().checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (granted != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        if(!permissionHelper.isWriteExternalStoragePermissionGranted()) {
+            PermissionHelper.requestWriteExternalStoragePermission(this);
             return;
         }
 
@@ -155,7 +154,7 @@ public class NoteEditorImageFragment extends Fragment {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImage);
 
-        if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
+        if (permissionHelper.isIntentResolvable(intent)) {
             // Attempt to start an activity that can handle the Intent
             startActivityForResult(intent, CAMERA_REQUEST);
         }
@@ -349,6 +348,4 @@ public class NoteEditorImageFragment extends Fragment {
             return imageView;
         }
     }
-
-
 }

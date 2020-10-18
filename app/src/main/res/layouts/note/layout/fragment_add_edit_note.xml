@@ -185,4 +185,25 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:id="@+id/note_editor_recordings_fragment_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabs"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/grey_50"
+        android:visibility="invisible"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/note_editor_recording_fragment"
+            android:name="com.example.kraftnote.ui.note.editor.NoteEditorRecordingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+
 </RelativeLayout>
