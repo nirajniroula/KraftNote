@@ -14,9 +14,11 @@ public class TitleTextFormatWatcher implements TextWatcher {
     private static final String TAG = TitleTextFormatWatcher.class.getSimpleName();
 
     private final TextInputEditText editText;
+    private final OnTextChangedListener listener;
 
-    public TitleTextFormatWatcher(TextInputEditText editText) {
+    public TitleTextFormatWatcher(TextInputEditText editText, OnTextChangedListener listener) {
         this.editText = editText;
+        this.listener = listener;
     }
 
     @Override
@@ -56,6 +58,10 @@ public class TitleTextFormatWatcher implements TextWatcher {
             editText.setSelection(cursor);
 
             Log.d(TAG, String.format("New Line found - cursor at %d", cursor));
+        }
+
+        if(listener != null) {
+            listener.onChanged(editText.getText().toString());
         }
 
         editText.addTextChangedListener(this);

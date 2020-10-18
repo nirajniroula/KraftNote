@@ -37,6 +37,11 @@ public class DatetimeReminder {
     public DatetimeReminder() {
     }
 
+    @Ignore
+    public DatetimeReminder(Date datetime) {
+        this.datetime = datetime;
+    }
+
     public DatetimeReminder(Integer id, Date datetime, Integer noteId, Date createdAt) {
         this.id = id;
         this.datetime = datetime;

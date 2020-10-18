@@ -2,43 +2,50 @@ package com.example.kraftnote.ui.note.editor;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
+import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
-import com.example.kraftnote.persistence.viewmodels.notes.editor.ImageViewModel;
-import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
-import com.example.kraftnote.ui.note.editor.components.ImageRecyclerView;
+import com.example.kraftnote.persistence.entities.NoteFile;
+import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.FileHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Executors;
+import java.util.Map;
 
 public class NoteEditorImageFragment extends Fragment {
     private static final String TAG = NoteEditorImageFragment.class.getSimpleName();
@@ -50,18 +57,16 @@ public class NoteEditorImageFragment extends Fragment {
     private FragmentNoteEditorImagesBinding binding;
 
     //views
-    ImageRecyclerView imageRecyclerView;
+    ImageAdapter imageAdapter;
 
     // data
-    ImageViewModel viewModel;
-    List<String> images = new ArrayList<>();
+    private MutableLiveData<List<NoteFile>> images;
 
     //helper
     private FileHelper fileHelper;
 
     //temp data
     File capturedImage;
-    private String mCurrentPhotoPath;
 
     @Nullable
     @Override
@@ -81,29 +86,40 @@ public class NoteEditorImageFragment extends Fragment {
     }
 
     private void initializeProperties() {
-        viewModel = new ViewModelProvider(this).get(ImageViewModel.class);
+        images = new MutableLiveData<>(new ArrayList<>());
+        imageAdapter = new ImageAdapter();
         fileHelper = new FileHelper(requireContext());
-        imageRecyclerView = binding.imageRecyclerView;
+
+        binding.imageGridView.setAdapter(imageAdapter);
     }
 
     private void listenEvents() {
         binding.addImageButton.setOnClickListener(v -> addImageFromGalleryRequested());
         binding.addImageCameraButton.setOnClickListener(v -> addImageFromCameraRequested());
-        viewModel.getImages()
-                .observe(getViewLifecycleOwner(), this::imageListMutated);
+        images.observe(getViewLifecycleOwner(), this::imageListMutated);
     }
 
-    private void imageListMutated(List<String> strings) {
-        images = strings;
-        imageRecyclerView.setImages(images);
+    public void setImages(List<NoteFile> images) {
+        this.images.setValue(images);
+    }
 
-        Log.d(TAG, String.valueOf(images));
+    public LiveData<List<NoteFile>> getImages() {
+        return images;
+    }
+
+    private void imageListMutated(List<NoteFile> files) {
+//        imageRecyclerView.setImages(images.getValue());
+        imageAdapter.syncImages(files);
+
+        Log.d(TAG, String.valueOf(files));
     }
 
     private void addImageFromGalleryRequested() {
         Intent intent = new Intent(
                 Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        Log.d(TAG, intent.toString());
 
         if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
             // Attempt to start an activity that can handle the Intent
@@ -187,13 +203,21 @@ public class NoteEditorImageFragment extends Fragment {
     private void persistToStorage(Bitmap image) {
         fileHelper.saveImage(image, fileName -> {
             Log.d(TAG, fileName);
-            viewModel.addImageFromBackgroundThread(fileName);
+
+            List<NoteFile> currentImages = images.getValue();
+
+            if (currentImages == null) {
+                currentImages = new ArrayList<>();
+            }
+
+            currentImages.add(NoteFile.newImage(fileName));
+
+            images.postValue(currentImages);
         });
     }
 
     private File createImageFile() throws IOException {
-        String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String fileName = "KraftNote_" + timeStamp + "_";
+        String fileName = DateHelper.toFileNameFormat("KraftNote_", "_");
         File storageDirectory = requireContext().getFilesDir();
 
         Log.d(TAG, storageDirectory.getAbsolutePath());
@@ -205,10 +229,84 @@ public class NoteEditorImageFragment extends Fragment {
                 storageDirectory
         );
 
-        this.mCurrentPhotoPath = image.getAbsolutePath();
+        String mCurrentPhotoPath = image.getAbsolutePath();
 
         Log.d(TAG, "Path: " + mCurrentPhotoPath);
 
         return image;
+    }
+
+    public class SquareImageView extends AppCompatImageView {
+        public SquareImageView(Context context) {
+            super(context);
+        }
+
+        public SquareImageView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public SquareImageView(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth()); //Snap to width
+        }
+    }
+
+    public class ImageAdapter extends BaseAdapter {
+        private List<NoteFile> images = new ArrayList<>();
+        private Map<String, Bitmap> bitmaps = new HashMap<>();
+
+        public void syncImages(List<NoteFile> files) {
+            images = new ArrayList<>();
+
+            for (NoteFile file : files) {
+                if (!file.isImage()) continue;
+
+                images.add(file);
+            }
+
+            // latest to the top
+            Collections.reverse(images);
+
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return images.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return images.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            NoteFile file = (NoteFile) getItem(position);
+            ImageView imageView = new SquareImageView(requireContext());
+
+            int dimen = imageView.getMeasuredWidth();
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            if (!bitmaps.containsKey(file.getLocation())) {
+                Bitmap bitmap = fileHelper.readImage(file.getLocation());
+                bitmap = fileHelper.resizeBitmap(bitmap, dimen, dimen);
+                bitmaps.put(file.getLocation(), bitmap);
+            }
+
+            imageView.setImageBitmap(bitmaps.get(file.getLocation()));
+
+            return imageView;
+        }
     }
 }

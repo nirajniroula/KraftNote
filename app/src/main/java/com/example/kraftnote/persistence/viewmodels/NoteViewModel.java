@@ -7,8 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.kraftnote.persistence.entities.Note;
-import com.example.kraftnote.persistence.entities.NoteFile;
-import com.example.kraftnote.persistence.repositories.NoteFileRepository;
 import com.example.kraftnote.persistence.repositories.NoteRepository;
 import com.example.kraftnote.persistence.viewmodels.contracts.IViewModel;
 import com.example.kraftnote.persistence.views.NoteWithRelation;

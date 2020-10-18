@@ -6,9 +6,10 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/fragment_header"
+        android:id="@+id/images_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/note_editor_background"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/keyline_4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +25,7 @@
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:text="@string/images"
-            android:textColor="@color/black_800" />
+            android:textColor="@color/white_50" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_image_camera_button"
@@ -32,15 +33,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/keyline_2"
-            android:layout_toStartOf="@+id/add_image_button"
             android:text="@string/camera"
+            android:textColor="@color/white_50"
             android:textSize="12sp"
             android:visibility="gone"
             app:icon="@drawable/ic_baseline_photo_camera_24"
             app:iconSize="16dp"
-            app:iconTint="@color/colorPrimaryDark"
+            app:iconTint="@color/white_50"
             tools:ignore="RelativeOverlap" />
 
         <com.google.android.material.button.MaterialButton
@@ -53,21 +55,28 @@
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:text="@string/add"
+            android:textColor="@color/white_50"
             android:textSize="12sp"
             app:icon="@drawable/ic_baseline_image_24"
             app:iconSize="16dp"
-            app:iconTint="@color/colorPrimaryDark"
+            app:iconTint="@color/white_50"
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
-    <com.example.kraftnote.ui.note.editor.components.ImageRecyclerView
-        android:id="@+id/image_recycler_view"
+    <GridView
+        android:id="@+id/image_grid_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/keyline_2"
-        android:paddingVertical="@dimen/keyline_2"
+        android:gravity="center"
+        android:horizontalSpacing="5dp"
+        android:paddingHorizontal="@dimen/keyline_2"
+        android:paddingTop="@dimen/keyline_2"
+        android:paddingBottom="@dimen/keyline_6"
+        android:stretchMode="columnWidth"
+        android:numColumns="3"
+        android:scrollbars="vertical"
+        android:verticalSpacing="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/component_image_card"
-        app:layout_constraintTop_toBottomOf="@id/fragment_header" />
+        app:layout_constraintTop_toBottomOf="@id/images_header" />
 </androidx.constraintlayout.widget.ConstraintLayout>

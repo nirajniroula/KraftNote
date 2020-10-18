@@ -7,13 +7,17 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
+import com.example.kraftnote.databinding.ComponentNoteTitleTextBinding;
 import com.example.kraftnote.utils.watchers.TitleTextFormatWatcher;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class NoteTitleText extends LinearLayout {
-    private TextInputEditText noteTitleEditText;
+    private ComponentNoteTitleTextBinding binding;
+    private MutableLiveData<String> title;
 
     public NoteTitleText(Context context) {
         super(context);
@@ -37,27 +41,29 @@ public class NoteTitleText extends LinearLayout {
 
     private void init(Context context) {
         final View view = inflate(getContext(), R.layout.component_note_title_text, this);
+        binding = ComponentNoteTitleTextBinding.bind(view);
 
-        initializeProperties(view);
+        initializeProperties();
         listenEvents();
     }
 
-    private void initializeProperties(View view) {
-        noteTitleEditText = view.findViewById(R.id.note_title_input_text);
+    private void initializeProperties() {
+        title = new MutableLiveData<>("");
     }
 
     private void listenEvents() {
-        noteTitleEditText.setOnEditorActionListener((v, actionId, event) -> actionId == 0);
-        noteTitleEditText.addTextChangedListener(new TitleTextFormatWatcher(noteTitleEditText));
+        binding.noteTitleInputText.setOnEditorActionListener((v, actionId, event) -> actionId == 0);
+
+        binding.noteTitleInputText.addTextChangedListener(new TitleTextFormatWatcher(binding.noteTitleInputText, title -> {
+            this.title.setValue(title);
+        }));
     }
 
     public void setTitle(String title) {
-        noteTitleEditText.setText(title);
+        binding.noteTitleInputText.setText(title);
     }
 
-    public String getTitle() {
-        final Editable text = noteTitleEditText.getText();
-
-        return text != null ? text.toString() : "";
+    public LiveData<String> getTitle() {
+        return title;
     }
 }

@@ -8,15 +8,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTitleBodyBinding;
+import com.example.kraftnote.persistence.entities.Note;
 
 public class NoteEditorTitleBodyFragment extends Fragment {
     private static final String TAG = NoteEditorTitleBodyFragment.class.getSimpleName();
 
-    private View root;
     private FragmentNoteEditorTitleBodyBinding binding;
+    private MutableLiveData<Note> note;
 
     @Nullable
     @Override
@@ -27,19 +30,31 @@ public class NoteEditorTitleBodyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         binding = FragmentNoteEditorTitleBodyBinding.bind(view);
-        root = binding.getRoot();
 
         initializeProperties();
         listenEvents();
     }
 
     private void initializeProperties() {
-
+        note = new MutableLiveData<>(new Note());
     }
 
     private void listenEvents() {
+        binding.editorBodyText.getBody().observe(getViewLifecycleOwner(), body -> {
 
+            if (note.getValue() == null) note.setValue(new Note());
+
+            note.getValue().setBody(body);
+            note.setValue(note.getValue());
+        });
+
+        binding.noteTitle.getTitle().observe(getViewLifecycleOwner(), name -> {
+
+            if (note.getValue() == null) note.setValue(new Note());
+
+            note.getValue().setName(name);
+            note.setValue(note.getValue());
+        });
     }
 }

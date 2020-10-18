@@ -28,7 +28,7 @@ public class NoteFragment extends Fragment {
     private NavController navController;
     private CategoryViewModel categoryViewModel;
     private NoteViewModel noteViewModel;
-    protected List<NoteWithRelation> notes = new ArrayList<>();
+    private List<NoteWithRelation> notes = new ArrayList<>();
 
     @Override
     public View onCreateView(

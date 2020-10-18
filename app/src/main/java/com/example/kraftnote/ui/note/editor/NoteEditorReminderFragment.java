@@ -10,15 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorRemindersBinding;
+import com.example.kraftnote.persistence.entities.DatetimeReminder;
 import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.transformers.PlaceToLocationReminder;
+import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.LocationHelper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,11 +34,12 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class NoteEditorReminderFragment extends Fragment {
     private static final String TAG = NoteEditorReminderFragment.class.getSimpleName();
@@ -42,16 +47,13 @@ public class NoteEditorReminderFragment extends Fragment {
     private FragmentNoteEditorRemindersBinding binding;
 
     // data
-    private LocationReminder locationReminder;
-    private LatLng position;
+    private MutableLiveData<LocationReminder> locationReminder;
+    private MutableLiveData<DatetimeReminder> datetimeReminder;
     private GoogleMap googleMap;
 
     //child fragments
     private SupportMapFragment supportMapFragment;
     private AutocompleteSupportFragment autocompleteSupportFragment;
-
-    // listeners
-    private OnLocationChangedListener onLocationChangedListener;
 
     // picker
     private MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
@@ -74,86 +76,93 @@ public class NoteEditorReminderFragment extends Fragment {
     }
 
     private void initializeProperties() {
+        locationReminder = new MutableLiveData<>();
+        datetimeReminder = new MutableLiveData<>();
+
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
         autocompleteSupportFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.places_autocomplete_fragment);
 
-        if (autocompleteSupportFragment != null && autocompleteSupportFragment.getView() != null) {
-            autocompleteSupportFragment.getView().setBackgroundColor(Color.WHITE);
-            LocationHelper.forFragment(autocompleteSupportFragment);
-        }
+        assert autocompleteSupportFragment != null;
+        assert autocompleteSupportFragment.getView() != null;
+
+        autocompleteSupportFragment.getView().setBackgroundColor(Color.WHITE);
+        LocationHelper.forFragment(autocompleteSupportFragment);
     }
 
     private void listenEvents() {
-        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                LocationReminder locationReminder = PlaceToLocationReminder.make(place);
-                locationReminderUpdated(locationReminder);
-            }
-
-            @Override
-            public void onError(@NonNull Status status) {
-                Log.d(TAG, String.valueOf(status));
-            }
-        });
-
+        binding.showMapButton.setOnClickListener(v -> openGoogleMaps());
         binding.closeMapButton.setOnClickListener(v -> closeGoogleMap());
-        binding.navigateButton.setOnClickListener(v -> startNavigateIntent());
-        binding.locationViewerButton.setOnClickListener(v -> openGoogleMaps());
-        binding.dateTimePickerButton.setOnClickListener(v -> pickDateTime());
+
+        binding.navigateButton.setOnClickListener(v -> dispatchMapNavigationIntent());
+        binding.dateTimePickerButton.setOnClickListener(v -> showDatetimePicker());
         supportMapFragment.getMapAsync(this::onMapReady);
 
-        datePicker.addOnPositiveButtonClickListener(date -> {
-            new TimePickerDialog(getContext(), R.style.Theme_MyTheme_Dialog, (picker, hour, minute) -> {
-                LocalDateTime localDateTime = LocalDateTime.ofInstant(
-                        Instant.ofEpochMilli(date), ZoneId.systemDefault()
-                ).withHour(hour).withMinute(minute);
+        autocompleteSupportFragment.setOnPlaceSelectedListener(placeSelectionListener);
+        datePicker.addOnPositiveButtonClickListener(onDateSelectionListener);
 
-                dateTimePicked(localDateTime);
-            }, LocalDateTime.now().getHour(), LocalDateTime.now().getMinute(), true)
-                    .show();
-        });
+        datetimeReminder.observe(getViewLifecycleOwner(), reminder -> onDatetimeSelected());
+        locationReminder.observe(getViewLifecycleOwner(), reminder -> onLocationSelected());
     }
 
-    private void dateTimePicked(LocalDateTime localDateTime) {
-        String datetime = localDateTime.format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy hh:mm a"));
-        binding.selectedDateTextView.setText(datetime);
+    private void onDatetimeSelected() {
+        String text;
+
+        if (datetimeReminder.getValue() == null) {
+            text = getResources().getString(R.string.select_a_date_and_time);
+        } else {
+            text = DateHelper.toFormattedString(datetimeReminder.getValue().getDatetime());
+        }
+
+        binding.selectedDateTextView.setText(text);
     }
 
-    private void pickDateTime() {
-        datePicker.show(getChildFragmentManager(), datePicker.toString());
-    }
-
-    private void openGoogleMaps() {
-        if (googleMap == null || position == null || locationReminder == null) return;
-        binding.googleMapCardView.setVisibility(View.VISIBLE);
-    }
-
-    public void setLocationReminder(LocationReminder locationReminder) {
-        this.locationReminder = locationReminder;
-
-        if (locationReminder == null) {
+    private void onLocationSelected() {
+        if (googleMap == null || locationReminder.getValue() == null) {
             binding.selectedLocationTextView.setText(R.string.select_a_location);
             return;
         }
 
-        position = locationReminder.getLatLng();
-        binding.selectedLocationTextView.setText(locationReminder.getFullAddress());
+        String fullAddress = locationReminder.getValue().getFullAddress();
+        String locationName = locationReminder.getValue().getName();
+        LatLng position = locationReminder.getValue().getLatLng();
 
-        updateGoogleMapCamera();
+        binding.selectedLocationTextView.setText(fullAddress);
+
+        googleMap.clear();
+
+        final MarkerOptions markerOptions = new MarkerOptions()
+                .position(position)
+                .title(locationName);
+
+        googleMap.addMarker(markerOptions);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(12.5f));
     }
 
-    private void locationReminderUpdated(LocationReminder locationReminder) {
-        if (onLocationChangedListener != null) {
-            onLocationChangedListener.onLocationChanged(locationReminder);
+    private void showDatetimePicker() {
+        datePicker.show(getChildFragmentManager(), datePicker.toString());
+    }
+
+    private void openGoogleMaps() {
+        if (locationReminder.getValue() == null || locationReminder.getValue().getLatLng() == null) {
+            Toast.makeText(getContext(), R.string.select_a_location, Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        setLocationReminder(locationReminder);
+        if (googleMap == null) return;
+
+        binding.googleMapCardView.setVisibility(View.VISIBLE);
+    }
+
+    private void closeGoogleMap() {
+        binding.googleMapCardView.setVisibility(View.GONE);
     }
 
     @SuppressLint("DefaultLocale")
-    private void startNavigateIntent() {
-        if (position == null) return;
+    private void dispatchMapNavigationIntent() {
+        if (locationReminder.getValue() == null) return;
+
+        LatLng position = locationReminder.getValue().getLatLng();
 
         final String url = String.format("google.navigation:q=%f,%f", position.latitude, position.longitude);
 
@@ -169,34 +178,42 @@ public class NoteEditorReminderFragment extends Fragment {
         }
     }
 
-    private void updateGoogleMapCamera() {
-        if (googleMap == null || position == null || locationReminder == null) return;
-
-        final MarkerOptions markerOptions = new MarkerOptions()
-                .position(position)
-                .title(locationReminder.getName());
-
-        googleMap.clear();
-        googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(10.5f));
-    }
-
     private void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        updateGoogleMapCamera();
+        onLocationSelected();
     }
 
-    private void closeGoogleMap() {
-        binding.googleMapCardView.setVisibility(View.INVISIBLE);
-    }
+    private PlaceSelectionListener placeSelectionListener = new PlaceSelectionListener() {
+        @Override
+        public void onPlaceSelected(@NonNull Place place) {
+            LocationReminder reminder = PlaceToLocationReminder.make(place);
+            locationReminder.setValue(reminder);
+        }
 
-    public void setOnLocationChangedListener(OnLocationChangedListener onLocationChangedListener) {
-        this.onLocationChangedListener = onLocationChangedListener;
-    }
+        @Override
+        public void onError(@NonNull Status status) {
+            Log.d(TAG, String.valueOf(status));
+        }
+    };
 
-    public interface OnLocationChangedListener {
-        void onLocationChanged(LocationReminder locationReminder);
-    }
+    private MaterialPickerOnPositiveButtonClickListener<Long> onDateSelectionListener = new MaterialPickerOnPositiveButtonClickListener<Long>() {
+        @Override
+        public void onPositiveButtonClick(Long timestamp) {
 
+            TimePickerDialog timePickerDialog = new TimePickerDialog(
+                    getContext(), R.style.Theme_MyTheme_Dialog,
+
+                    (picker, hour, minute) -> {
+                        Date date = DateHelper.timestampToDate(timestamp, hour, minute);
+                        datetimeReminder.setValue(new DatetimeReminder(date));
+                    },
+
+                    DateHelper.getCurrentHour(),
+                    DateHelper.getCurrentMinute(),
+                    false
+            );
+
+            timePickerDialog.show();
+        }
+    };
 }

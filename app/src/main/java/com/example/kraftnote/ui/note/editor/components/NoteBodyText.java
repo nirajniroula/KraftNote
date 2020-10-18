@@ -19,9 +19,12 @@ import android.widget.Scroller;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.ComponentNoteBodyTextBinding;
+import com.example.kraftnote.utils.HtmlParser;
 import com.example.kraftnote.utils.watchers.BodyTextFormatWatcher;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -29,6 +32,9 @@ public class NoteBodyText extends TextInputLayout {
     private static final String TAG = NoteBodyText.class.getSimpleName();
 
     private ComponentNoteBodyTextBinding binding;
+
+    //data
+    private MutableLiveData<String> body;
 
     public NoteBodyText(@NonNull Context context) {
         super(context);
@@ -54,13 +60,21 @@ public class NoteBodyText extends TextInputLayout {
     }
 
     private void initializeProperties(View view) {
+        body = new MutableLiveData<>("");
+
         binding.bodyTextarea.setScroller(new Scroller(getContext()));
         binding.bodyTextarea.setVerticalScrollBarEnabled(true);
     }
 
     private void listenEvents(Context context) {
         binding.bodyTextarea.setCustomSelectionActionModeCallback(actionModeCallback);
-        binding.bodyTextarea.addTextChangedListener(new BodyTextFormatWatcher(binding.bodyTextarea));
+        binding.bodyTextarea.addTextChangedListener(new BodyTextFormatWatcher(binding.bodyTextarea, bodyHtml -> {
+            this.body.setValue(bodyHtml);
+        }));
+    }
+
+    public LiveData<String> getBody() {
+        return body;
     }
 
     private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -111,6 +125,8 @@ public class NoteBodyText extends TextInputLayout {
                 editable.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 Log.d(TAG, "UNDERLINE");
             }
+
+            body.setValue(HtmlParser.toHtml(editable));
 
             return false;
         }

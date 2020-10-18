@@ -1,4 +1,4 @@
-package com.example.kraftnote.ui.note;
+package com.example.kraftnote.ui.note.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -23,7 +23,7 @@
             app:drawableStartCompat="@drawable/ic_baseline_category_24" />
     </LinearLayout>
 
-    <com.example.kraftnote.ui.category.CategoryRecyclerView
+    <com.example.kraftnote.ui.category.components.CategoryRecyclerView
         android:id="@+id/category_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

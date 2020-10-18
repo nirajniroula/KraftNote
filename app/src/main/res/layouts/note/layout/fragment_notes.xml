@@ -25,7 +25,7 @@
             app:drawableStartCompat="@drawable/ic_baseline_event_note_24" />
     </LinearLayout>
 
-    <com.example.kraftnote.ui.category.CategoryTabLayout
+    <com.example.kraftnote.ui.category.components.CategoryTabLayout
         android:id="@+id/category_tabs"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -35,7 +35,7 @@
         android:fitsSystemWindows="true"
         app:tabMode="scrollable" />
 
-    <com.example.kraftnote.ui.note.NoteRecyclerView
+    <com.example.kraftnote.ui.note.components.NoteRecyclerView
         android:id="@+id/note_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

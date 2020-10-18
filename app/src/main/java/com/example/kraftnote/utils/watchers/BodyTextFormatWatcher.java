@@ -1,20 +1,26 @@
 package com.example.kraftnote.utils.watchers;
 
 import android.text.Editable;
+import android.text.Html;
 import android.text.ParcelableSpan;
 import android.text.TextWatcher;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 
+import androidx.core.text.HtmlCompat;
+
+import com.example.kraftnote.utils.HtmlParser;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class BodyTextFormatWatcher implements TextWatcher {
     private final TextInputEditText editText;
+    private final OnTextChangedListener listener;
 
 
-    public BodyTextFormatWatcher(TextInputEditText editText) {
+    public BodyTextFormatWatcher(TextInputEditText editText, OnTextChangedListener listener) {
         this.editText = editText;
+        this.listener = listener;
     }
 
     @Override
@@ -50,6 +56,10 @@ public class BodyTextFormatWatcher implements TextWatcher {
 
                 editable.removeSpan(span);
             }
+        }
+
+        if (listener != null) {
+            listener.onChanged(HtmlParser.toHtml(editText.getText()));
         }
 
         editText.addTextChangedListener(this);

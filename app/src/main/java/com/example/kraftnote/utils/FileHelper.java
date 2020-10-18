@@ -20,12 +20,14 @@ public class FileHelper {
 
     private final File imageDirectory;
     private final File audioDirectory;
+    private final File cacheDirectory;
 
     public FileHelper(Context context) {
         ContextWrapper wrapper = new ContextWrapper(context.getApplicationContext());
 
         imageDirectory = wrapper.getDir(IMAGE_DIRECTORY_NAME, Context.MODE_PRIVATE);
         audioDirectory = wrapper.getDir(AUDIO_DIRECTORY_NAME, Context.MODE_PRIVATE);
+        cacheDirectory = wrapper.getCacheDir();
     }
 
     public File getImageDirectory() {
