@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:paddingTop="@dimen/keyline_3"
     android:layout_height="match_parent">
 
     <com.example.kraftnote.ui.note.editor.components.NoteTitleText
@@ -73,7 +74,6 @@
         android:paddingHorizontal="@dimen/keyline_5"
         android:text="@string/note_body_field"
         android:textColor="@color/black_800" />
-
 
     <com.example.kraftnote.ui.note.editor.components.NoteBodyText
         android:id="@+id/editor_body_text"

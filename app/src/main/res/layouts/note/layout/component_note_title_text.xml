@@ -33,7 +33,7 @@
             style="@style/ThemeOverlay.MyTheme.TextInputEditText.NoteTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/awesome_note_title"
+            android:hint="@string/untitled_note"
             android:imeOptions="actionDone"
             android:lineHeight="@dimen/keyline_5"
             android:paddingVertical="16dp"

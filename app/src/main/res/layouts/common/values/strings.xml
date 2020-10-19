@@ -21,14 +21,14 @@
     <string name="no">No</string>
     <string name="note_title_field">Note Title</string>
     <string name="empty" />
-    <string name="awesome_note_title">Awesome note title</string>
-    <string name="body_text">Begin something special…</string>
+    <string name="untitled_note">Untitled note document</string>
+    <string name="body_text">Write note contents here…</string>
     <string name="note_body_field">Body</string>
     <string name="ipsum">Leaders, the advised dissolute on and relations went because incurred and perfecting there unavoidable, cut managers, for the ever the it feedback implemented noone safely former side her the before he sighed. Judgment, touched in to five acquiesce up the day out. Undertaking, thin the has, conflict- for their the times, but back would at one afloat, beginning high many you to him sides him the her then, clarinet deep the workers, certainly economics versus hall and his warned for invitation the this never introduced I excessive either table insurance the explain for wasn\'t of would his and parents attend</string>
     <string name="bold">Bold</string>
     <string name="italic">Italic</string>
     <string name="underline">Underline</string>
-    <string name="strikethrough">Strikethrough</string>
+    <string name="strikethrough">Strike-through</string>
     <string name="insert_link">Insert Link</string>
     <string name="normal">Normal</string>
     <string name="not_set">Not set</string>
@@ -56,7 +56,7 @@
     <string name="todo_added">Todo added</string>
     <string name="todo_updated">Todo updated</string>
     <string name="audio_source_unreadable">Audio source unreadable</string>
-    <string name="persmission_not_granted">Permission not granted</string>
+    <string name="permission_not_granted">Permission not granted</string>
     <string name="record">Record</string>
     <string name="stop">Stop</string>
     <string name="start">Start</string>

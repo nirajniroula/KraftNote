@@ -207,7 +207,7 @@ public class NoteEditorRecordingFragment extends Fragment {
 
         if (requestCode == PermissionHelper.RECORD_AUDIO_PERMISSION_CODE) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getContext(), R.string.persmission_not_granted, Toast.LENGTH_SHORT)
+                Toast.makeText(getContext(), R.string.permission_not_granted, Toast.LENGTH_SHORT)
                         .show();
                 return;
             }

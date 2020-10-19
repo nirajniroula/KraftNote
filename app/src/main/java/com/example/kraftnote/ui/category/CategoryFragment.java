@@ -118,7 +118,7 @@ public class CategoryFragment extends Fragment {
 
         if (categoryWithNotesCount.getNotesCount() > 0) {
             builder
-                    .setTitle(R.string.unperformable_action)
+                    .setTitle(R.string.cannot_perform_action)
                     .setMessage(R.string.cannot_delete_category_having_notes)
                     .setNeutralButton(R.string.ok, null)
                     .show();

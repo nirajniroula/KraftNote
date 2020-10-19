@@ -2,10 +2,10 @@ package com.example.kraftnote.ui.note;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -14,51 +14,31 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.kraftnote.R;
+import com.example.kraftnote.databinding.FragmentAddEditNoteBinding;
 import com.example.kraftnote.persistence.entities.Category;
-import com.example.kraftnote.persistence.entities.LocationReminder;
-import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.ui.note.editor.NoteEditorImageFragment;
+import com.example.kraftnote.ui.note.editor.NoteEditorRecordingFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorTitleBodyFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorTodoFragment;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddEditNoteFragment extends Fragment {
     private static final String TAG = AddEditNoteFragment.class.getSimpleName();
 
-    private View root;
+    private FragmentAddEditNoteBinding binding;
 
     private NavController navController;
     private CategoryViewModel categoryViewModel;
-    private MaterialButton closeEditorButton;
-    private MaterialButton saveNoteButton;
-    private List<Category> categories = new ArrayList<>();
-
-    //meta
-    private TextView locationReminderTextView;
-    private TextView datetimeReminderTextView;
-
-    // state
-    private Note note;
-    private LocationReminder locationReminder;
-    private List<View> tabViews = new ArrayList<>();
-
-    //tabs
-    private TabLayout tabLayout;
-    private int activeTab = 0;
-
-    //components
-    private NoteEditorTitleBodyFragment noteEditorTitleBodyFragment;
-    private NoteEditorReminderFragment noteEditorReminderFragment;
-    private NoteEditorImageFragment noteEditorImageFragment;
-    private NoteEditorTodoFragment noteEditorTodoFragment;
+    private FragmentCollectionAdapter fragmentCollectionAdapter;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
     private
@@ -79,71 +59,38 @@ public class AddEditNoteFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher()
                 .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
-        return inflater.inflate(R.layout.fragment_add_edit_note, container, false);
+        View root = inflater.inflate(R.layout.fragment_add_edit_note, container, false);
+        binding = FragmentAddEditNoteBinding.bind(root);
+
+        return root;
     }
 
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initializeProperties(view);
-        listenEvents(view);
+        initializeProperties();
+        listenEvents();
     }
 
-    private void initializeProperties(@NonNull final View view) {
-        note = new Note();
-
-        noteEditorTitleBodyFragment = (NoteEditorTitleBodyFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_title_body_fragment);
-        noteEditorReminderFragment = (NoteEditorReminderFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_reminder_fragment);
-        noteEditorImageFragment = (NoteEditorImageFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_images_fragment);
-        noteEditorTodoFragment = (NoteEditorTodoFragment) getChildFragmentManager().findFragmentById(R.id.note_editor_todo_fragment);
-
+    private void initializeProperties() {
+        fragmentCollectionAdapter = new FragmentCollectionAdapter(this);
         navController = NavHostFragment.findNavController(this);
-        closeEditorButton = view.findViewById(R.id.close_editor_button);
-        saveNoteButton = view.findViewById(R.id.save_note_button);
 
-        tabLayout = view.findViewById(R.id.tabs);
+        binding.viewpager.setAdapter(fragmentCollectionAdapter);
 
-        tabViews.add(view.findViewById(R.id.note_editor_title_body_fragment_wrapper));
-        tabViews.add(view.findViewById(R.id.note_editor_reminder_fragment_wrapper));
-        tabViews.add(view.findViewById(R.id.note_editor_images_fragment_wrapper));
-        tabViews.add(view.findViewById(R.id.note_editor_todo_fragment_wrapper));
-        tabViews.add(view.findViewById(R.id.note_editor_recordings_fragment_wrapper));
+        new TabLayoutMediator(
+                binding.tabs, binding.viewpager,
+                (tab, position) -> tab.setText(fragmentCollectionAdapter.getFragmentTitle(position))
+        ).attach();
     }
 
-    private void listenEvents(@NonNull final View view) {
+    private void listenEvents() {
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), this::categoriesMutated);
-        closeEditorButton.setOnClickListener(v -> gotoNoteFragment());
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (activeTab == tab.getPosition()) return;
-
-                for (View entry : tabViews) {
-//                    Log.d(TAG, String.valueOf(entry));
-                    entry.setVisibility(View.INVISIBLE);
-                }
-
-                activeTab = tab.getPosition();
-
-                if (activeTab < tabViews.size())
-                    tabViews.get(activeTab).setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        binding.closeEditorButton.setOnClickListener(v -> gotoNoteFragment());
     }
 
     private void categoriesMutated(List<Category> categories) {
-        this.categories = categories;
+        Log.d(TAG, "Category Mutated " + categories.size());
     }
 
     private void gotoNoteFragment() {
@@ -156,5 +103,44 @@ public class AddEditNoteFragment extends Fragment {
                 .setNegativeButton(R.string.no, null)
                 .setPositiveButton(R.string.yes, (dialog, which) -> navController.navigate(R.id.action_AddUpdateNoteFragment_to_NoteFragment))
                 .show();
+    }
+
+    private static final class FragmentCollectionAdapter extends FragmentStateAdapter {
+        private Map<Integer, Fragment> fragmentMap = new HashMap<>();
+        private final int[] titles = new int[]{
+                R.string.note,
+                R.string.reminders,
+                R.string.images,
+                R.string.todos,
+                R.string.recordings
+        };
+
+        public FragmentCollectionAdapter(@NonNull Fragment fragment) {
+            super(fragment);
+            fragmentMap.put(0, new NoteEditorTitleBodyFragment());
+            fragmentMap.put(1, new NoteEditorReminderFragment());
+            fragmentMap.put(2, new NoteEditorImageFragment());
+            fragmentMap.put(3, new NoteEditorTodoFragment());
+            fragmentMap.put(4, new NoteEditorRecordingFragment());
+        }
+
+        public int getFragmentTitle(int position) {
+            return titles[position];
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            Fragment fragment = fragmentMap.get(position);
+
+            if (fragment != null) return fragment;
+
+            return new Fragment();
+        }
+
+        @Override
+        public int getItemCount() {
+            return fragmentMap.size();
+        }
     }
 }
