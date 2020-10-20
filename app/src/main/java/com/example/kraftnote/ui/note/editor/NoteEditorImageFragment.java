@@ -1,6 +1,7 @@
 package com.example.kraftnote.ui.note.editor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -97,28 +98,32 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     private void listenEvents() {
         noteFileViewModel.getAll().observe(getViewLifecycleOwner(), this::imageListMutated);
 
-        binding.closeImageViewerButton.setOnClickListener(v -> {
-            binding.imageViewerWrapper.setVisibility(View.GONE);
-
-            allowViewPagerSwipeGesture = true;
-            updateViewPagerScrollBehaviour(true);
-        });
-
-        binding.deleteImageButton.setOnClickListener(v -> {
-
-            if(currentOpenedImage != null) {
-                noteFileViewModel.delete(currentOpenedImage);
-            }
-
-            currentOpenedImage = null;
-
-            binding.imageViewerWrapper.setVisibility(View.GONE);
-
-            allowViewPagerSwipeGesture = true;
-            updateViewPagerScrollBehaviour(true);
-        });
-
+        binding.closeImageViewerButton.setOnClickListener(v -> closeImageViewer());
+        binding.deleteImageButton.setOnClickListener(v -> onImageDeleteRequest());
         binding.addImageButton.setOnClickListener(v -> addImageFromGalleryRequested());
+    }
+
+    private void onImageDeleteRequest() {
+        if (currentOpenedImage == null) return;
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+
+        builder.setTitle(R.string.confirmation_required)
+                .setMessage(R.string.delete_image_question)
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                    noteFileViewModel.delete(currentOpenedImage);
+                    Toast.makeText(getContext(), R.string.image_deleted, Toast.LENGTH_SHORT).show();
+                    closeImageViewer();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void closeImageViewer() {
+        currentOpenedImage = null;
+        binding.imageViewerWrapper.setVisibility(View.GONE);
+        allowViewPagerSwipeGesture = true;
+        updateViewPagerScrollBehaviour(true);
     }
 
     private void imageListMutated(List<NoteFile> files) {
@@ -195,7 +200,7 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
             viewWeakReference.get().post(() -> {
                 binding.progressBarWrapper.setVisibility(View.GONE);
 
-                if(contextWeakReference.get() != null) {
+                if (contextWeakReference.get() != null) {
                     Toast.makeText(contextWeakReference.get(), R.string.image_added, Toast.LENGTH_SHORT).show();
                 }
 
