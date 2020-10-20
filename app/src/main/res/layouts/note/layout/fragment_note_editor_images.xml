@@ -116,10 +116,25 @@
             android:layout_marginTop="@dimen/keyline_2"
             app:backgroundTint="@color/white_50"
             app:fabSize="mini"
+            app:elevation="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_close_24"
-            app:tint="@color/red_A400" />
+            app:tint="@color/black_800" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/delete_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/keyline_2"
+            android:layout_marginTop="@dimen/keyline_2"
+            app:backgroundTint="@color/red_400"
+            app:fabSize="mini"
+            app:elevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_delete_forever_24"
+            app:tint="@color/white_50" />
 
         <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             android:id="@+id/image_viewer"

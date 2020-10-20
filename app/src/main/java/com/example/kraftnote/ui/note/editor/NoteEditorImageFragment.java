@@ -62,6 +62,7 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     // state
     private File capturedImage;
     private boolean allowViewPagerSwipeGesture = true;
+    private NoteFile currentOpenedImage;
 
     @Nullable
     @Override
@@ -97,6 +98,20 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
         noteFileViewModel.getAll().observe(getViewLifecycleOwner(), this::imageListMutated);
 
         binding.closeImageViewerButton.setOnClickListener(v -> {
+            binding.imageViewerWrapper.setVisibility(View.GONE);
+
+            allowViewPagerSwipeGesture = true;
+            updateViewPagerScrollBehaviour(true);
+        });
+
+        binding.deleteImageButton.setOnClickListener(v -> {
+
+            if(currentOpenedImage != null) {
+                noteFileViewModel.delete(currentOpenedImage);
+            }
+
+            currentOpenedImage = null;
+
             binding.imageViewerWrapper.setVisibility(View.GONE);
 
             allowViewPagerSwipeGesture = true;
@@ -223,6 +238,7 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
                 if (bitmap == null) return;
                 Bitmap bitmapClone = bitmap.copy(bitmap.getConfig(), true);
 
+                currentOpenedImage = imageFile;
                 binding.imageViewer.setImage(ImageSource.bitmap(bitmapClone));
                 binding.imageViewer.resetScaleAndCenter();
                 binding.imageViewerWrapper.setVisibility(View.VISIBLE);
