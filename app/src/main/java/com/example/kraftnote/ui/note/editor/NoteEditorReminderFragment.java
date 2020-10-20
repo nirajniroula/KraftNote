@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.kraftnote.R;
@@ -22,10 +21,9 @@ import com.example.kraftnote.databinding.FragmentNoteEditorRemindersBinding;
 import com.example.kraftnote.persistence.entities.DatetimeReminder;
 import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.transformers.PlaceToLocationReminder;
-import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.viewmodels.DatetimeReminderViewModel;
 import com.example.kraftnote.persistence.viewmodels.LocationReminderViewModel;
-import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildFragmentBase;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.LocationHelper;
 import com.example.kraftnote.utils.PermissionHelper;
@@ -43,7 +41,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 
 import java.util.Date;
 
-public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
+public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
     private static final String TAG = NoteEditorReminderFragment.class.getSimpleName();
 
     private FragmentNoteEditorRemindersBinding binding;

@@ -15,15 +15,15 @@ import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTodoBinding;
 import com.example.kraftnote.persistence.entities.Todo;
 import com.example.kraftnote.persistence.viewmodels.TodoViewModel;
-import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
-import com.example.kraftnote.ui.note.editor.components.SaveTodoDialogFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildFragmentBase;
+import com.example.kraftnote.ui.note.editor.components.dialog.SaveTodoDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class NoteEditorTodoFragment extends NoteEditorChildBaseFragment {
+public class NoteEditorTodoFragment extends NoteEditorChildFragmentBase {
     private static final String TAG = NoteEditorTodoFragment.class.getSimpleName();
 
     private FragmentNoteEditorTodoBinding binding;

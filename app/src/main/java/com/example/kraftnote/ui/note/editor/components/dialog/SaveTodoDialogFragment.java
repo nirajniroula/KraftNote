@@ -1,4 +1,4 @@
-package com.example.kraftnote.ui.note.editor.components;
+package com.example.kraftnote.ui.note.editor.components.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

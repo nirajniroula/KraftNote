@@ -13,6 +13,7 @@ public class HtmlParser {
     }
 
     public static Spanned toSpanned(String html) {
-        return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH);
+        return HtmlCompat.fromHtml(
+                html == null ? "" : html, HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH);
     }
 }

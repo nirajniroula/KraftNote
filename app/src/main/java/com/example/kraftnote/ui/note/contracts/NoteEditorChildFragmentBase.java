@@ -9,7 +9,7 @@ import com.example.kraftnote.persistence.entities.Note;
 
 import java.lang.ref.WeakReference;
 
-public abstract class NoteEditorChildBaseFragment extends Fragment {
+public abstract class NoteEditorChildFragmentBase extends Fragment {
     private WeakReference<ViewPager2> viewPagerWeakRef;
     private Note note;
 
@@ -32,11 +32,11 @@ public abstract class NoteEditorChildBaseFragment extends Fragment {
         getViewPagerWeakRef().get().setUserInputEnabled(allowViewChangeOnSwipeGesture);
     }
 
-    public void setNote(Note note) {
+    public final void setNote(Note note) {
         this.note = note;
     }
 
-    public Note getNote() {
+    public final Note getNote() {
         return note;
     }
 }

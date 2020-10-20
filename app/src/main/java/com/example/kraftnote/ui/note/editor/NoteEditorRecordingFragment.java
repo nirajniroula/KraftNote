@@ -19,7 +19,7 @@ import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorRecordingBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
 import com.example.kraftnote.persistence.viewmodels.NoteFileViewModel;
-import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildFragmentBase;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
 import com.visualizer.amplitude.AudioRecordView;
@@ -34,7 +34,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 
-public class NoteEditorRecordingFragment extends NoteEditorChildBaseFragment {
+public class NoteEditorRecordingFragment extends NoteEditorChildFragmentBase {
     private static final String TAG = NoteEditorRecordingFragment.class.getSimpleName();
 
     private Timer visualizerTimer;

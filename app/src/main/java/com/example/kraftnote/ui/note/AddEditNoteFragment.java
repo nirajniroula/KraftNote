@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -23,7 +24,7 @@ import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
-import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildFragmentBase;
 import com.example.kraftnote.ui.note.editor.NoteEditorImageFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorRecordingFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment;
@@ -109,9 +110,25 @@ public class AddEditNoteFragment extends Fragment {
         ).attach();
 
         binding.viewpager.registerOnPageChangeCallback(onPageChangeCallback);
+
+        binding.saveNoteButton.setOnClickListener(v -> {
+            final NoteEditorTitleBodyFragment fragment =
+                    fragmentCollectionAdapter.getNoteEditorTitleBodyFragment();
+
+            getNote().setName(fragment.getName());
+            getNote().setBody(fragment.getBody());
+            getNote().setDraft(0);
+            getNote().setCreatedAt(null);
+
+            noteViewModel.update(getNote());
+
+            Toast.makeText(getContext(), R.string.note_saved, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private Note getNote() {
+        if (note != null) return note;
+
         Note note = Note.newDraft();
 
         Bundle bundle = getArguments();
@@ -141,6 +158,16 @@ public class AddEditNoteFragment extends Fragment {
     }
 
     private void gotoNoteFragment() {
+        NoteEditorTitleBodyFragment fragment = fragmentCollectionAdapter.getNoteEditorTitleBodyFragment();
+
+        if (!getNote().isDraft()
+                && getNote().getName().equals(fragment.getName())
+                && getNote().getBody().equals(fragment.getBody())
+        ) {
+            navController.navigate(R.id.action_AddUpdateNoteFragment_to_NoteFragment);
+            return;
+        }
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
         builder
@@ -177,17 +204,21 @@ public class AddEditNoteFragment extends Fragment {
             }
         }
 
+        public NoteEditorTitleBodyFragment getNoteEditorTitleBodyFragment() {
+            return (NoteEditorTitleBodyFragment) getFragment(0);
+        }
+
         public int getFragmentName(int position) {
             return nameAndFragmentTupleList[position].getNameResId();
         }
 
         @NonNull
         @Override
-        public NoteEditorChildBaseFragment createFragment(int position) {
+        public NoteEditorChildFragmentBase createFragment(int position) {
             return getFragment(position);
         }
 
-        public NoteEditorChildBaseFragment getFragment(int position) {
+        public NoteEditorChildFragmentBase getFragment(int position) {
             return nameAndFragmentTupleList[position].getFragment();
         }
 
@@ -205,9 +236,9 @@ public class AddEditNoteFragment extends Fragment {
 
     private final static class NameAndFragmentTuple {
         private final int nameResId;
-        private final NoteEditorChildBaseFragment fragment;
+        private final NoteEditorChildFragmentBase fragment;
 
-        public NameAndFragmentTuple(int nameResId, NoteEditorChildBaseFragment fragment) {
+        public NameAndFragmentTuple(int nameResId, NoteEditorChildFragmentBase fragment) {
             this.nameResId = nameResId;
             this.fragment = fragment;
         }
@@ -216,7 +247,7 @@ public class AddEditNoteFragment extends Fragment {
             return nameResId;
         }
 
-        public final NoteEditorChildBaseFragment getFragment() {
+        public final NoteEditorChildFragmentBase getFragment() {
             return fragment;
         }
     }

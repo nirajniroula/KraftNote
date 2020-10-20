@@ -19,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class NoteTitleText extends LinearLayout {
     private ComponentNoteTitleTextBinding binding;
-    private MutableLiveData<String> title;
 
     public NoteTitleText(Context context) {
         super(context);
@@ -45,20 +44,12 @@ public class NoteTitleText extends LinearLayout {
         final View view = inflate(getContext(), R.layout.component_note_title_text, this);
         binding = ComponentNoteTitleTextBinding.bind(view);
 
-        initializeProperties();
         listenEvents();
     }
 
-    private void initializeProperties() {
-        title = new MutableLiveData<>("");
-    }
-
     private void listenEvents() {
+        // prevent line break character
         binding.noteTitleInputText.setOnEditorActionListener((v, actionId, event) -> actionId == 0);
-
-        binding.noteTitleInputText.addTextChangedListener(new TitleTextFormatWatcher(binding.noteTitleInputText, title -> {
-            this.title.setValue(title);
-        }));
     }
 
 
@@ -70,7 +61,9 @@ public class NoteTitleText extends LinearLayout {
         binding.noteTitleInputText.setText(title);
     }
 
-    public LiveData<String> getTitle() {
-        return title;
+    public String getTitle() {
+        Editable text = binding.noteTitleInputText.getText();
+
+        return text == null ? "" : text.toString();
     }
 }

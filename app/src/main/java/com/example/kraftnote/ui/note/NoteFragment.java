@@ -1,9 +1,11 @@
 package com.example.kraftnote.ui.note;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,8 @@ import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
 import com.example.kraftnote.persistence.views.NoteWithRelation;
+
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,9 @@ public class NoteFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        hideKeyboardIfOpen();
+
         initializeProperties();
         listenEvents();
     }
@@ -72,5 +79,16 @@ public class NoteFragment extends Fragment {
 
     private void categoriesMutated(List<Category> categories) {
         binding.categoryTabs.sync(categories);
+    }
+
+    private void hideKeyboardIfOpen() {
+        View v = requireActivity().getCurrentFocus();
+
+        if(v ==  null) return;
+
+        InputMethodManager imm = (InputMethodManager) requireActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }

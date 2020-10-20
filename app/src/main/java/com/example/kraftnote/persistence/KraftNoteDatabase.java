@@ -89,7 +89,7 @@ public abstract class KraftNoteDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
             if (databaseWeakReference.get() == null) return null;
 
-            Category hidden = new Category("Draft Category");
+            Category hidden = new Category("Uncategorised");
             hidden.setHidden(1);
 
             databaseWeakReference.get().categoryDao().insertAll(

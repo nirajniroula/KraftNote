@@ -28,7 +28,7 @@ import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
 import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.entities.NoteFile;
 import com.example.kraftnote.persistence.viewmodels.NoteFileViewModel;
-import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildFragmentBase;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
 
@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
+public class NoteEditorImageFragment extends NoteEditorChildFragmentBase {
     private static final String TAG = NoteEditorImageFragment.class.getSimpleName();
 
     public static final int GALLERY_REQUEST = 188;

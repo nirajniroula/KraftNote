@@ -33,9 +33,6 @@ public class NoteBodyText extends TextInputLayout {
 
     private ComponentNoteBodyTextBinding binding;
 
-    //data
-    private MutableLiveData<String> body;
-
     public NoteBodyText(@NonNull Context context) {
         super(context);
         init(context);
@@ -60,7 +57,6 @@ public class NoteBodyText extends TextInputLayout {
     }
 
     private void initializeProperties(View view) {
-        body = new MutableLiveData<>("");
 
         binding.bodyTextarea.setScroller(new Scroller(getContext()));
         binding.bodyTextarea.setVerticalScrollBarEnabled(true);
@@ -68,13 +64,14 @@ public class NoteBodyText extends TextInputLayout {
 
     private void listenEvents(Context context) {
         binding.bodyTextarea.setCustomSelectionActionModeCallback(actionModeCallback);
-        binding.bodyTextarea.addTextChangedListener(new BodyTextFormatWatcher(binding.bodyTextarea, bodyHtml -> {
-            this.body.setValue(bodyHtml);
-        }));
     }
 
-    public LiveData<String> getBody() {
-        return body;
+    public void setBody(String body) {
+        binding.bodyTextarea.setText(HtmlParser.toSpanned(body));
+    }
+
+    public String getBody() {
+        return HtmlParser.toHtml(binding.bodyTextarea.getText());
     }
 
     private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -125,8 +122,6 @@ public class NoteBodyText extends TextInputLayout {
                 editable.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 Log.d(TAG, "UNDERLINE");
             }
-
-            body.setValue(HtmlParser.toHtml(editable));
 
             return false;
         }
