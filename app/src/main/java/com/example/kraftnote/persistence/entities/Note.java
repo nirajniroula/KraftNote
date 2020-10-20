@@ -23,13 +23,16 @@ public class Note {
     private String name;
 
     @ColumnInfo(name = "note_category_id", index = true)
-    private int categoryId;
+    private Integer categoryId;
 
     @ColumnInfo(name = "note_archived", defaultValue = "0")
     private int archived;
 
     @ColumnInfo(name = "note_body", defaultValue = "")
     private String body;
+
+    @ColumnInfo(name = "note_is_draft", defaultValue = "0")
+    private int draft;
 
     @TypeConverters(CreatedAtConverter.class)
     @ColumnInfo(name = "note_created_at", defaultValue = "CURRENT_TIMESTAMP")
@@ -46,6 +49,15 @@ public class Note {
         this.archived = archived;
         this.body = body;
         setCreatedAt(createdAt);
+    }
+
+    public static Note newDraft() {
+        Note note = new Note();
+        note.draft = 1;
+        note.categoryId = 1;
+        note.setCreatedAt(null);
+
+        return note;
     }
 
     public Integer getId() {
@@ -68,7 +80,7 @@ public class Note {
         return body;
     }
 
-    public int getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
@@ -82,7 +94,28 @@ public class Note {
 
     @Ignore
     public boolean isArchived() {
-        return archived == 0;
+        return archived == 1;
+    }
+
+    @Ignore
+    public boolean isDraft() {
+        return draft == 1;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setArchived(Integer archived) {
+        this.archived = archived;
+    }
+
+    public Integer getDraft() {
+        return draft;
+    }
+
+    public void setDraft(Integer draft) {
+        this.draft = draft;
     }
 
     public String getName() {
@@ -99,5 +132,19 @@ public class Note {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = (createdAt == null) ? new Date() : createdAt;
+    }
+
+    @Ignore
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", categoryId=" + categoryId +
+                ", archived=" + archived +
+                ", body='" + body + '\'' +
+                ", draft=" + draft +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

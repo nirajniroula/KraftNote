@@ -21,6 +21,9 @@ public class Category {
     @ColumnInfo(name = "category_name")
     private String name;
 
+    @ColumnInfo(name = "category_hidden", defaultValue = "0")
+    private int hidden;
+
     @TypeConverters(CreatedAtConverter.class)
     @ColumnInfo(name = "category_created_at", defaultValue = "CURRENT_TIMESTAMP")
     protected Date createdAt;
@@ -37,6 +40,7 @@ public class Category {
     public Category(Integer id, String name, Date createdAt) {
         this.id = id;
         this.name = name;
+        setHidden(0);
         setCreatedAt(createdAt);
     }
 
@@ -62,5 +66,13 @@ public class Category {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = (createdAt == null) ? new Date() : createdAt;
+    }
+
+    public Integer getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Integer hidden) {
+        this.hidden = hidden;
     }
 }

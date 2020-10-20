@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "947013a305a693ef4760abd10e4e6a57",
+    "identityHash": "8d97d29c76f083cd6783d497d55120cf",
     "entities": [
       {
         "tableName": "Categories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`category_id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_name` TEXT, `category_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`category_id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_name` TEXT, `category_hidden` INTEGER NOT NULL DEFAULT 0, `category_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP)",
         "fields": [
           {
             "fieldPath": "id",
@@ -19,6 +19,13 @@
             "columnName": "category_name",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "hidden",
+            "columnName": "category_hidden",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "createdAt",
@@ -48,7 +55,7 @@
       },
       {
         "tableName": "Notes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_id` INTEGER PRIMARY KEY AUTOINCREMENT, `note_name` TEXT, `note_category_id` INTEGER NOT NULL, `note_archived` INTEGER NOT NULL DEFAULT 0, `note_body` TEXT DEFAULT '', `note_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(`note_category_id`) REFERENCES `Categories`(`category_id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_id` INTEGER PRIMARY KEY AUTOINCREMENT, `note_name` TEXT, `note_category_id` INTEGER, `note_archived` INTEGER NOT NULL DEFAULT 0, `note_body` TEXT DEFAULT '', `note_is_draft` INTEGER NOT NULL DEFAULT 0, `note_created_at` INTEGER DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(`note_category_id`) REFERENCES `Categories`(`category_id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -66,7 +73,7 @@
             "fieldPath": "categoryId",
             "columnName": "note_category_id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "archived",
@@ -81,6 +88,13 @@
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "''"
+          },
+          {
+            "fieldPath": "draft",
+            "columnName": "note_is_draft",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "createdAt",
@@ -468,7 +482,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '947013a305a693ef4760abd10e4e6a57')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8d97d29c76f083cd6783d497d55120cf')"
     ]
   }
 }

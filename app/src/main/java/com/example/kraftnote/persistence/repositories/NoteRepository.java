@@ -26,7 +26,8 @@ public class NoteRepository implements IRepository<Note> {
 
     @Override
     public void insert(Note note) {
-        new InsertTask(noteDao).execute(note);
+        noteDao.insertAll(note);
+        //new InsertTask(noteDao).execute(note);
     }
 
     @Override
@@ -46,6 +47,18 @@ public class NoteRepository implements IRepository<Note> {
 
     public LiveData<List<NoteWithRelation>> getAllWithRelation() {
         return noteDao.getAllWithRelation();
+    }
+
+    public Note findById(int id) {
+        return noteDao.findById(id);
+    }
+
+    public Note getLatestDraft() {
+        return noteDao.getLatestDraft();
+    }
+
+    public LiveData<List<Note>> getAll(boolean includeDraft) {
+        return noteDao.getAll(includeDraft ? 1 : 0);
     }
 
     private static class InsertTask extends NoteMutationTask {

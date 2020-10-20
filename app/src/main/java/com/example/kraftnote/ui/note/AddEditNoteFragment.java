@@ -20,8 +20,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentAddEditNoteBinding;
 import com.example.kraftnote.persistence.entities.Category;
+import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
-import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
+import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorImageFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorRecordingFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment;
@@ -30,6 +32,7 @@ import com.example.kraftnote.ui.note.editor.NoteEditorTodoFragment;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddEditNoteFragment extends Fragment {
@@ -39,7 +42,11 @@ public class AddEditNoteFragment extends Fragment {
 
     private NavController navController;
     private CategoryViewModel categoryViewModel;
+    private NoteViewModel noteViewModel;
     private FragmentCollectionAdapter fragmentCollectionAdapter;
+    private List<Category> categories = new ArrayList<>();
+    private List<Note> notes = new ArrayList<>();
+    private Note note;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
     private final
@@ -67,6 +74,7 @@ public class AddEditNoteFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
 
         requireActivity().getOnBackPressedDispatcher()
                 .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
@@ -85,8 +93,12 @@ public class AddEditNoteFragment extends Fragment {
     }
 
     private void initializeProperties() {
+        note = getNote();
+
         fragmentCollectionAdapter = new FragmentCollectionAdapter(this);
         navController = NavHostFragment.findNavController(this);
+
+        fragmentCollectionAdapter.supplyNoteForChildFragments(note);
 
         binding.viewpager.setAdapter(fragmentCollectionAdapter);
 
@@ -99,8 +111,27 @@ public class AddEditNoteFragment extends Fragment {
         binding.viewpager.registerOnPageChangeCallback(onPageChangeCallback);
     }
 
+    private Note getNote() {
+        Note note = Note.newDraft();
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null && bundle.getInt("note_id", -1) != -1) {
+            int id = bundle.getInt("note_id");
+            return noteViewModel.findById(id);
+        }
+
+        noteViewModel.insert(note);
+
+        return noteViewModel.getLatestDraft();
+    }
+
     private void listenEvents() {
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), this::categoriesMutated);
+        noteViewModel.getAllWithDraft().observe(getViewLifecycleOwner(), allNotes -> {
+            Log.d(TAG, allNotes.get(0).toString());
+            Log.d(TAG, allNotes.toString() + " " + allNotes.size());
+        });
 
         binding.closeEditorButton.setOnClickListener(v -> gotoNoteFragment());
     }
@@ -117,7 +148,13 @@ public class AddEditNoteFragment extends Fragment {
                 .setMessage(R.string.do_you_want_to_discard_the_changes)
                 .setCancelable(false)
                 .setNegativeButton(R.string.no, null)
-                .setPositiveButton(R.string.yes, (dialog, which) -> navController.navigate(R.id.action_AddUpdateNoteFragment_to_NoteFragment))
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    if (note != null && note.isDraft()) {
+                        noteViewModel.delete(note);
+                    }
+
+                    navController.navigate(R.id.action_AddUpdateNoteFragment_to_NoteFragment);
+                })
                 .show();
     }
 
@@ -146,11 +183,11 @@ public class AddEditNoteFragment extends Fragment {
 
         @NonNull
         @Override
-        public ViewPagerControlledFragment createFragment(int position) {
+        public NoteEditorChildBaseFragment createFragment(int position) {
             return getFragment(position);
         }
 
-        public ViewPagerControlledFragment getFragment(int position) {
+        public NoteEditorChildBaseFragment getFragment(int position) {
             return nameAndFragmentTupleList[position].getFragment();
         }
 
@@ -158,13 +195,19 @@ public class AddEditNoteFragment extends Fragment {
         public int getItemCount() {
             return nameAndFragmentTupleList.length;
         }
+
+        public void supplyNoteForChildFragments(Note note) {
+            for (NameAndFragmentTuple tuple : nameAndFragmentTupleList) {
+                tuple.getFragment().setNote(note);
+            }
+        }
     }
 
     private final static class NameAndFragmentTuple {
         private final int nameResId;
-        private final ViewPagerControlledFragment fragment;
+        private final NoteEditorChildBaseFragment fragment;
 
-        public NameAndFragmentTuple(int nameResId, ViewPagerControlledFragment fragment) {
+        public NameAndFragmentTuple(int nameResId, NoteEditorChildBaseFragment fragment) {
             this.nameResId = nameResId;
             this.fragment = fragment;
         }
@@ -173,7 +216,7 @@ public class AddEditNoteFragment extends Fragment {
             return nameResId;
         }
 
-        public final ViewPagerControlledFragment getFragment() {
+        public final NoteEditorChildBaseFragment getFragment() {
             return fragment;
         }
     }

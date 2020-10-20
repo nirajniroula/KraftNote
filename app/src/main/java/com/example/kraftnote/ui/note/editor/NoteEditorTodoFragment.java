@@ -9,20 +9,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTodoBinding;
 import com.example.kraftnote.persistence.entities.Todo;
 import com.example.kraftnote.persistence.viewmodels.TodoViewModel;
-import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
 import com.example.kraftnote.ui.note.editor.components.SaveTodoDialogFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class NoteEditorTodoFragment extends ViewPagerControlledFragment {
+public class NoteEditorTodoFragment extends NoteEditorChildBaseFragment {
     private static final String TAG = NoteEditorTodoFragment.class.getSimpleName();
 
     private FragmentNoteEditorTodoBinding binding;

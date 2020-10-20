@@ -15,12 +15,14 @@ import java.util.List;
 
 public class NoteViewModel extends AndroidViewModel implements IViewModel<Note> {
     private final NoteRepository noteRepository;
+    private LiveData<List<Note>> notes;
     private LiveData<List<Note>> allNotes;
 
     public NoteViewModel(@NonNull Application application) {
         super(application);
         noteRepository = new NoteRepository(application);
-        allNotes = noteRepository.getAll();
+        notes = noteRepository.getAll();
+        allNotes = noteRepository.getAll(true);
     }
 
     @Override
@@ -38,12 +40,24 @@ public class NoteViewModel extends AndroidViewModel implements IViewModel<Note> 
         noteRepository.delete(note);
     }
 
+    public  Note findById(int id) {
+        return noteRepository.findById(id);
+    }
+
     @Override
     public LiveData<List<Note>> getAll() {
-        return allNotes;
+        return notes;
     }
 
     public LiveData<List<NoteWithRelation>> getAllWithRelation() {
         return noteRepository.getAllWithRelation();
+    }
+
+    public Note getLatestDraft() {
+        return noteRepository.getLatestDraft();
+    }
+
+    public LiveData<List<Note>> getAllWithDraft() {
+        return allNotes;
     }
 }

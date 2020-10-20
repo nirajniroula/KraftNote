@@ -13,11 +13,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTitleBodyBinding;
 import com.example.kraftnote.persistence.entities.Note;
-import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
 
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-
-public class NoteEditorTitleBodyFragment extends ViewPagerControlledFragment {
+public class NoteEditorTitleBodyFragment extends NoteEditorChildBaseFragment {
     private static final String TAG = NoteEditorTitleBodyFragment.class.getSimpleName();
 
     private FragmentNoteEditorTitleBodyBinding binding;

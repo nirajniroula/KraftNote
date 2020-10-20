@@ -21,7 +21,7 @@ import com.example.kraftnote.databinding.FragmentNoteEditorRemindersBinding;
 import com.example.kraftnote.persistence.entities.DatetimeReminder;
 import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.transformers.PlaceToLocationReminder;
-import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
+import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.LocationHelper;
 import com.example.kraftnote.utils.PermissionHelper;
@@ -39,7 +39,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 
 import java.util.Date;
 
-public class NoteEditorReminderFragment extends ViewPagerControlledFragment {
+public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
     private static final String TAG = NoteEditorReminderFragment.class.getSimpleName();
 
     private FragmentNoteEditorRemindersBinding binding;

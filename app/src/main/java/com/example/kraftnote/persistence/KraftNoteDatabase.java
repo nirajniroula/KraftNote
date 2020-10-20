@@ -64,8 +64,8 @@ public abstract class KraftNoteDatabase extends RoomDatabase {
     public static KraftNoteDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (KraftNoteDatabase.class) {
-                INSTANCE = Room.inMemoryDatabaseBuilder(context.getApplicationContext(),
-                        KraftNoteDatabase.class)
+                INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                        KraftNoteDatabase.class, "database.db")
                         .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
                         .addCallback(PersistenceCallback)
@@ -89,7 +89,11 @@ public abstract class KraftNoteDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
             if (databaseWeakReference.get() == null) return null;
 
+            Category hidden = new Category("Draft Category");
+            hidden.setHidden(1);
+
             databaseWeakReference.get().categoryDao().insertAll(
+                    hidden,
                     new Category("Personal"),
                     new Category("Work"),
                     new Category("Study"),
