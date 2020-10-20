@@ -32,7 +32,6 @@ import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -52,7 +51,6 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
 
     private NoteFileViewModel noteFileViewModel;
 
-    private View root;
     private FragmentNoteEditorImagesBinding binding;
 
     //views
@@ -63,7 +61,6 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
     private PermissionHelper permissionHelper;
 
     // state
-    private File capturedImage;
     private boolean allowViewPagerSwipeGesture = true;
     private NoteFile currentOpenedImage;
 
@@ -73,9 +70,8 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
 
         noteFileViewModel = new ViewModelProvider(this).get(NoteFileViewModel.class);
         binding = FragmentNoteEditorImagesBinding.inflate(inflater, container, false);
-        root = binding.getRoot();
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -138,7 +134,7 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
                 files.stream()
                         .filter(NoteFile::isImage)
                         .filter(noteFile -> Objects.equals(note.getId(), noteFile.getNoteId()))
-                        .collect(Collectors.toCollection(ArrayList<NoteFile>::new))
+                        .collect(Collectors.toCollection(ArrayList::new))
         );
 
         Log.d(TAG, String.valueOf(files));
@@ -217,6 +213,13 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
         });
     }
 
+    @Override
+    public void onFragmentVisible() {
+        super.onFragmentVisible();
+
+        updateViewPagerScrollBehaviour(allowViewPagerSwipeGesture);
+    }
+
     private class SquareImageView extends AppCompatImageView {
         private NoteFile imageFile;
         private Bitmap bitmap;
@@ -260,13 +263,6 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
                 updateViewPagerScrollBehaviour(false);
             });
         }
-    }
-
-    @Override
-    public void onFragmentVisible() {
-        super.onFragmentVisible();
-
-        updateViewPagerScrollBehaviour(allowViewPagerSwipeGesture);
     }
 
     private class ImageAdapter extends BaseAdapter {

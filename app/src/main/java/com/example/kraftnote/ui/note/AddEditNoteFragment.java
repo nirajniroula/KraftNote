@@ -121,9 +121,9 @@ public class AddEditNoteFragment extends Fragment {
             return noteViewModel.findById(id);
         }
 
-        noteViewModel.insert(note);
+        note.setId(noteViewModel.insertSingle(note));
 
-        return noteViewModel.getLatestDraft();
+        return note;
     }
 
     private void listenEvents() {

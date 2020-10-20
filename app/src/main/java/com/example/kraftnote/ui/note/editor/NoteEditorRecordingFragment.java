@@ -79,6 +79,7 @@ public class NoteEditorRecordingFragment extends NoteEditorChildBaseFragment {
                 .filter(NoteFile::isAudio)
                 .filter(noteFile -> Objects.equals(getNote().getId(), noteFile.getNoteId()))
                 .collect(Collectors.toCollection(ArrayList<NoteFile>::new));
+
         binding.recordingRecyclerView.setRecordings(recordings);
     }
 
@@ -183,8 +184,7 @@ public class NoteEditorRecordingFragment extends NoteEditorChildBaseFragment {
 
     private void addRecording(NoteFile audio) {
         binding.recordingRecyclerView.addRecording(audio);
-
-        noteFileViewModel.insert(audio);
+        audio.setId(noteFileViewModel.insertSingle(audio));
     }
 
     @Override

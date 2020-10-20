@@ -58,63 +58,11 @@ public class RecordingRecyclerView extends RecyclerView {
     }
 
     public void setRecordings(List<NoteFile> recordings) {
+        if(this.recordings != null) return;
+
         this.recordings = recordings;
 
         adapter.notifyDataSetChanged();
-    }
-
-    private void diffSync(List<NoteFile> recordings) {
-
-        List<NoteFile> toDelete = new ArrayList<>();
-        List<NoteFile> toAdd = new ArrayList<>();
-
-        for (NoteFile recordLocal : this.recordings) {
-            boolean existsInNewRecords = false;
-
-            for (NoteFile recordNew : recordings) {
-                if (recordLocal.getLocation().equals(recordNew.getLocation())) {
-                    existsInNewRecords = true;
-                    if (!Objects.equals(recordLocal.getId(), recordNew.getId())) {
-                        recordLocal.setId(recordNew.getId());
-                        existsInNewRecords = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!existsInNewRecords) {
-                toDelete.add(recordLocal);
-            }
-        }
-
-        for (NoteFile recordNew : recordings) {
-            for (NoteFile recordLocal : this.recordings) {
-                if (recordLocal.getLocation().equals(recordNew.getLocation())) {
-                    break;
-                }
-
-                toAdd.add(recordNew);
-            }
-        }
-
-        int i = 0;
-        for (NoteFile d : toDelete) {
-            postDelayed(() -> {
-                int idx = this.recordings.indexOf(d);
-                this.recordings.remove(d);
-                adapter.notifyItemRemoved(idx);
-            }, i * 150);
-        }
-
-        for (NoteFile a : toAdd) {
-            postDelayed(() -> {
-                this.recordings.add(0, a);
-            }, i * 150);
-        }
-
-        postDelayed(() -> {
-            this.recordings = new ArrayList<>(recordings);
-        }, (i + 1) * 150);
     }
 
     public void addRecording(NoteFile recording) {
