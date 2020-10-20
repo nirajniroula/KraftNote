@@ -46,4 +46,8 @@ public class LocationReminderRepository implements IRepository<LocationReminder>
     public LiveData<List<LocationReminder>> getAll() {
         return locationReminders;
     }
+
+    public LocationReminder findByNoteId(int noteId) {
+        return locationReminderDao.findByNoteId(noteId);
+    }
 }

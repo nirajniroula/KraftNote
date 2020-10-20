@@ -27,4 +27,7 @@ public interface LocationReminderDao {
 
     @Insert
     long insertSingle(LocationReminder locationReminder);
+
+    @Query("SELECT * FROM LocationReminders WHERE location_reminder_note_id = :noteId LIMIT 1")
+    LocationReminder findByNoteId(int noteId);
 }

@@ -45,4 +45,8 @@ public class DatetimeReminderRepository implements IRepository<DatetimeReminder>
     public LiveData<List<DatetimeReminder>> getAll() {
         return datetimeReminders;
     }
+
+    public DatetimeReminder findByNoteId(int noteId) {
+        return datetimeReminderDao.findByNoteId(noteId);
+    }
 }

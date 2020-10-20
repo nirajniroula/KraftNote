@@ -27,4 +27,7 @@ public interface DatetimeReminderDao {
 
     @Insert
     long insertSingle(DatetimeReminder reminder);
+
+    @Query("SELECT * FROM DatetimeReminders WHERE datetime_reminder_note_id = :noteId LIMIT 1")
+    DatetimeReminder findByNoteId(int noteId);
 }

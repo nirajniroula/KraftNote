@@ -45,4 +45,8 @@ public class LocationReminderViewModel extends AndroidViewModel implements IView
     public LiveData<List<LocationReminder>> getAll() {
         return locationReminders;
     }
+
+    public LocationReminder findByNoteId(int noteId) {
+        return repository.findByNoteId(noteId);
+    }
 }

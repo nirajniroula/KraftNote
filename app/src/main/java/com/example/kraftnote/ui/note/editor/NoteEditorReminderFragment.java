@@ -15,12 +15,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorRemindersBinding;
 import com.example.kraftnote.persistence.entities.DatetimeReminder;
 import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.transformers.PlaceToLocationReminder;
+import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
+import com.example.kraftnote.persistence.viewmodels.DatetimeReminderViewModel;
+import com.example.kraftnote.persistence.viewmodels.LocationReminderViewModel;
 import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.LocationHelper;
@@ -45,8 +49,8 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
     private FragmentNoteEditorRemindersBinding binding;
 
     // data
-    private MutableLiveData<LocationReminder> locationReminder;
-    private MutableLiveData<DatetimeReminder> datetimeReminder;
+    private LocationReminder locationReminder;
+    private DatetimeReminder datetimeReminder;
     private GoogleMap googleMap;
 
     //child fragments
@@ -55,6 +59,10 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
 
     //helper
     private PermissionHelper permissionHelper;
+
+    // view model
+    private DatetimeReminderViewModel datetimeReminderViewModel;
+    private LocationReminderViewModel locationReminderViewModel;
 
     // picker
     private MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
@@ -65,6 +73,9 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        datetimeReminderViewModel = new ViewModelProvider(this).get(DatetimeReminderViewModel.class);
+        locationReminderViewModel = new ViewModelProvider(this).get(LocationReminderViewModel.class);
+
         View view = inflater.inflate(R.layout.fragment_note_editor_reminders, container, false);
         binding = FragmentNoteEditorRemindersBinding.bind(view);
 
@@ -80,9 +91,10 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
     }
 
     private void initializeProperties() {
+        locationReminder = locationReminderViewModel.findByNoteId(getNote().getId());
+        datetimeReminder = datetimeReminderViewModel.findByNoteId(getNote().getId());
+
         permissionHelper = new PermissionHelper(getContext());
-        locationReminder = new MutableLiveData<>();
-        datetimeReminder = new MutableLiveData<>();
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
         autocompleteSupportFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.places_autocomplete_fragment);
@@ -104,32 +116,29 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
 
         autocompleteSupportFragment.setOnPlaceSelectedListener(placeSelectionListener);
         datePicker.addOnPositiveButtonClickListener(onDateSelectionListener);
-
-        datetimeReminder.observe(getViewLifecycleOwner(), reminder -> onDatetimeSelected());
-        locationReminder.observe(getViewLifecycleOwner(), reminder -> onLocationSelected());
     }
 
     private void onDatetimeSelected() {
         String text;
 
-        if (datetimeReminder.getValue() == null) {
+        if (datetimeReminder == null) {
             text = getResources().getString(R.string.select_a_date_and_time);
         } else {
-            text = DateHelper.toFormattedString(datetimeReminder.getValue().getDatetime());
+            text = DateHelper.toFormattedString(datetimeReminder.getDatetime());
         }
 
         binding.selectedDateTextView.setText(text);
     }
 
     private void onLocationSelected() {
-        if (googleMap == null || locationReminder.getValue() == null) {
+        if (googleMap == null || locationReminder == null) {
             binding.selectedLocationTextView.setText(R.string.select_a_location);
             return;
         }
 
-        String fullAddress = locationReminder.getValue().getFullAddress();
-        String locationName = locationReminder.getValue().getName();
-        LatLng position = locationReminder.getValue().getLatLng();
+        String fullAddress = locationReminder.getFullAddress();
+        String locationName = locationReminder.getName();
+        LatLng position = locationReminder.getLatLng();
 
         binding.selectedLocationTextView.setText(fullAddress);
 
@@ -149,7 +158,7 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
     }
 
     private void openGoogleMaps() {
-        if (locationReminder.getValue() == null || locationReminder.getValue().getLatLng() == null) {
+        if (locationReminder == null || locationReminder.getLatLng() == null) {
             Toast.makeText(getContext(), R.string.select_a_location, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -166,7 +175,6 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
 
     private void closeGoogleMap() {
         binding.googleMapCardView.setVisibility(View.GONE);
-        Log.d(TAG, "MAPS CLOSE");
 
         allowViewPagerSwipeGesture = true;
         updateViewPagerScrollBehaviour(true);
@@ -174,9 +182,9 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
 
     @SuppressLint("DefaultLocale")
     private void dispatchMapNavigationIntent() {
-        if (locationReminder.getValue() == null) return;
+        if (locationReminder == null) return;
 
-        LatLng position = locationReminder.getValue().getLatLng();
+        LatLng position = locationReminder.getLatLng();
 
         final String url = String.format("google.navigation:q=%f,%f", position.latitude, position.longitude);
 
@@ -200,8 +208,27 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
     private PlaceSelectionListener placeSelectionListener = new PlaceSelectionListener() {
         @Override
         public void onPlaceSelected(@NonNull Place place) {
-            LocationReminder reminder = PlaceToLocationReminder.make(place);
-            locationReminder.setValue(reminder);
+            LocationReminder reminder = PlaceToLocationReminder.make(place, getNote().getId());
+
+            if (locationReminder == null) {
+                reminder.setId(locationReminderViewModel.insertSingle(reminder));
+
+                Toast.makeText(getContext(), R.string.location_reminder_set, Toast.LENGTH_SHORT)
+                        .show();
+
+                locationReminder = reminder;
+
+            } else {
+
+                reminder.setId(locationReminder.getId());
+                locationReminderViewModel.update(reminder);
+                locationReminder = reminder;
+
+                Toast.makeText(getContext(), R.string.location_reminder_updated, Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            onLocationSelected();
         }
 
         @Override
@@ -219,7 +246,24 @@ public class NoteEditorReminderFragment extends NoteEditorChildBaseFragment {
 
                     (picker, hour, minute) -> {
                         Date date = DateHelper.timestampToDate(timestamp, hour, minute);
-                        datetimeReminder.setValue(new DatetimeReminder(date));
+
+                        if (datetimeReminder == null) {
+                            datetimeReminder = new DatetimeReminder(date);
+                            datetimeReminder.setNoteId(getNote().getId());
+                            datetimeReminder.setId(datetimeReminderViewModel.insertSingle(datetimeReminder));
+
+                            Toast.makeText(getContext(), R.string.datetime_reminder_set, Toast.LENGTH_SHORT)
+                                    .show();
+                        } else {
+                            datetimeReminder.setNoteId(getNote().getId());
+                            datetimeReminder.setDatetime(date);
+                            datetimeReminderViewModel.update(datetimeReminder);
+
+                            Toast.makeText(getContext(), R.string.datetime_reminder_updated, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+
+                        onDatetimeSelected();
                     },
 
                     DateHelper.getCurrentHour(),

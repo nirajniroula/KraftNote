@@ -64,4 +64,8 @@
     <string name="start">Start</string>
     <string name="press_start_to_begin_recording">Press start to begin recording</string>
     <string name="recording_deleted">Recording deleted</string>
+    <string name="datetime_reminder_updated">Datetime reminder updated</string>
+    <string name="datetime_reminder_set">Datetime reminder set</string>
+    <string name="location_reminder_set">Location reminder set</string>
+    <string name="location_reminder_updated">Location reminder updated</string>
 </resources>

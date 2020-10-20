@@ -45,4 +45,8 @@ public class DatetimeReminderViewModel extends AndroidViewModel implements IView
     public LiveData<List<DatetimeReminder>> getAll() {
         return reminders;
     }
+
+    public DatetimeReminder findByNoteId(int noteId) {
+        return repository.findByNoteId(noteId);
+    }
 }
