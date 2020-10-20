@@ -2,19 +2,20 @@ package com.example.kraftnote.ui.note.editor;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTodoBinding;
 import com.example.kraftnote.persistence.entities.Todo;
+import com.example.kraftnote.persistence.viewmodels.TodoViewModel;
 import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
 import com.example.kraftnote.ui.note.editor.components.SaveTodoDialogFragment;
 
@@ -25,12 +26,14 @@ public class NoteEditorTodoFragment extends ViewPagerControlledFragment {
     private static final String TAG = NoteEditorTodoFragment.class.getSimpleName();
 
     private FragmentNoteEditorTodoBinding binding;
-    private MutableLiveData<List<Todo>> todos;
     private SaveTodoDialogFragment saveTodoDialogFragment;
+    private TodoViewModel todoViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        todoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
+
         return inflater.inflate(R.layout.fragment_note_editor_todo, container, false);
     }
 
@@ -45,35 +48,25 @@ public class NoteEditorTodoFragment extends ViewPagerControlledFragment {
     }
 
     private void initializeProperties() {
-        todos = new MutableLiveData<>(new ArrayList<>());
         saveTodoDialogFragment = new SaveTodoDialogFragment();
-        binding.todoRecyclerView.addTodos(todos.getValue());
-
-        todos.observe(getViewLifecycleOwner(), (t) -> {
-            Log.d(TAG, "TODO LENGTH - " + t.size());
-        });
     }
 
     private void listenEvents() {
+        todoViewModel.getAll().observe(getViewLifecycleOwner(), this::todosMutated);
 
         binding.todoRecyclerView.setOnTodoCheckChangedListener((todo, isChecked) -> {
             todo.setCompleted(isChecked);
-            todos.setValue(todos.getValue());
+            todoViewModel.update(todo);
             binding.todoRecyclerView.updateTodo(todo);
-//            Toast.makeText(getContext(), R.string.todo_updated, Toast.LENGTH_SHORT).show();
         });
 
         saveTodoDialogFragment.setOnSaveTodoListener(todo -> {
-            if(saveTodoDialogFragment.getTodo() == null) {
-                binding.todoRecyclerView.addTodo(addTodo(todo));
-//                Toast.makeText(getContext(), R.string.todo_added, Toast.LENGTH_SHORT).show();
-            } else {
-                binding.todoRecyclerView.updateTodo(
-                        saveTodoDialogFragment.getTodo()
-                );
-//                Toast.makeText(getContext(), R.string.todo_updated, Toast.LENGTH_SHORT).show();
-                notifyTodoUpdated();
+            if (saveTodoDialogFragment.getTodo() == null) {
+                createTodo(todo);
+                return;
             }
+
+            updateTodo(saveTodoDialogFragment.getTodo());
         });
 
         binding.todoRecyclerView.setOnToolBarMenuEditClicked(todo -> {
@@ -89,57 +82,34 @@ public class NoteEditorTodoFragment extends ViewPagerControlledFragment {
         });
     }
 
+    private void updateTodo(Todo todo) {
+        todoViewModel.update(todo);
+        binding.todoRecyclerView.updateTodo(todo);
+        Toast.makeText(getContext(), R.string.todo_updated, Toast.LENGTH_SHORT).show();
+    }
+
+    private void createTodo(String text) {
+        Todo todo = new Todo(text);
+        todoViewModel.insert(todo);
+        binding.todoRecyclerView.addTodo(todo);
+        Toast.makeText(getContext(), R.string.todo_added, Toast.LENGTH_SHORT).show();
+    }
+
+    private void todosMutated(List<Todo> todos) {
+        binding.todoRecyclerView.setTodos(todos);
+    }
+
     private void todoDeletionRequested(Todo todo) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
         builder.setTitle(R.string.confirmation_required)
                 .setMessage(R.string.delete_todo_question)
                 .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                    todoViewModel.delete(todo);
                     binding.todoRecyclerView.removeTodo(todo);
-                    removeTodo(todo);
-//                    Toast.makeText(getContext(), R.string.todo_deleted, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.todo_deleted, Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
-    }
-
-    private Todo addTodo(String text) {
-        final Todo todo = new Todo(text);
-
-        addTodo(todo);
-
-        return todo;
-    }
-
-    private void addTodo(Todo todo) {
-        List<Todo> todoList = todos.getValue();
-
-        if (todoList == null) {
-            todoList = new ArrayList<>();
-        }
-
-        todoList.add(todo);
-
-        todos.setValue(todoList);
-    }
-
-    private void removeTodo(Todo todo) {
-        List<Todo> todoList = todos.getValue();
-
-        if (todoList == null) {
-            todos.setValue(new ArrayList<>());
-            return;
-        }
-
-        todoList.remove(todo);
-        todos.setValue(todoList);
-    }
-
-    private void notifyTodoUpdated() {
-        todos.setValue(todos.getValue());
-    }
-
-    public LiveData<List<Todo>> getTodos() {
-        return todos;
     }
 }

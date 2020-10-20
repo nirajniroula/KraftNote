@@ -15,6 +15,7 @@ import com.example.kraftnote.persistence.daos.LocationReminderDao;
 import com.example.kraftnote.persistence.daos.NoteDao;
 import com.example.kraftnote.persistence.daos.NoteFileDao;
 import com.example.kraftnote.persistence.daos.TagDao;
+import com.example.kraftnote.persistence.daos.TodoDao;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.entities.DatetimeReminder;
 import com.example.kraftnote.persistence.entities.LocationReminder;
@@ -51,6 +52,8 @@ public abstract class KraftNoteDatabase extends RoomDatabase {
     public abstract NoteDao noteDao();
 
     public abstract TagDao tagDao();
+
+    public abstract TodoDao todoDao();
 
     public abstract NoteFileDao noteFileDao();
 

@@ -26,6 +26,7 @@ public class TodoRecyclerView extends RecyclerView {
     private OnTodoCheckChangedListener onTodoCheckChangedListener;
     private OnToolBarMenuItemClicked onToolBarMenuEditClicked;
     private OnToolBarMenuItemClicked onToolBarMenuDeleteClicked;
+    private boolean initialized = false;
 
     public TodoRecyclerView(@NonNull Context context) {
         super(context);
@@ -50,10 +51,11 @@ public class TodoRecyclerView extends RecyclerView {
         setHasFixedSize(false);
     }
 
-    public void addTodos(List<Todo> todoList) {
-        if (todoList != null) {
-            adapter.syncTodos(todoList);
-        }
+    public void setTodos(List<Todo> todoList) {
+        if (todoList == null || initialized) return;
+
+        initialized = true;
+        adapter.syncTodos(todoList);
     }
 
     public void addTodo(Todo todo) {
