@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
+import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.entities.NoteFile;
 import com.example.kraftnote.persistence.viewmodels.NoteFileViewModel;
 import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
@@ -41,6 +42,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
@@ -112,6 +114,7 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
                 .setMessage(R.string.delete_image_question)
                 .setPositiveButton(R.string.confirm, (dialog, which) -> {
                     noteFileViewModel.delete(currentOpenedImage);
+                    fileHelper.deleteImage(currentOpenedImage);
                     Toast.makeText(getContext(), R.string.image_deleted, Toast.LENGTH_SHORT).show();
                     closeImageViewer();
                 })
@@ -127,10 +130,14 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
     }
 
     private void imageListMutated(List<NoteFile> files) {
+        Note note = getNote();
+
+        if(note == null) return;
 
         imageAdapter.syncImages(
                 files.stream()
                         .filter(NoteFile::isImage)
+                        .filter(noteFile -> Objects.equals(note.getId(), noteFile.getNoteId()))
                         .collect(Collectors.toCollection(ArrayList<NoteFile>::new))
         );
 
@@ -190,12 +197,14 @@ public class NoteEditorImageFragment extends NoteEditorChildBaseFragment {
         binding.progressBarWrapper.setClickable(true);
         binding.progressBarWrapper.setVisibility(View.VISIBLE);
 
+        if(getNote() == null) return;
+
         fileHelper.saveImage(image, fileName -> {
             Log.d(TAG, fileName);
 
             if (viewWeakReference.get() == null) return;
 
-            noteFileViewModel.insert(NoteFile.newImage(fileName));
+            noteFileViewModel.insert(NoteFile.newImage(fileName, getNote().getId()));
 
             viewWeakReference.get().post(() -> {
                 binding.progressBarWrapper.setVisibility(View.GONE);

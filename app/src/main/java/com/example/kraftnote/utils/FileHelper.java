@@ -5,6 +5,8 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.kraftnote.persistence.entities.NoteFile;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -47,6 +49,10 @@ public class FileHelper {
 
     public File getAudioDirectoryFile(String location) {
         return new File(getAudioDirectory(), location);
+    }
+
+    public File getImageDirectoryFile(String location) {
+        return new File(getImageDirectory(), location);
     }
 
     public void saveImage(Bitmap bitmap, Consumer<String> onComplete) {
@@ -127,5 +133,24 @@ public class FileHelper {
 
     public static String makeAudioName() {
         return makeName() + ".mp3";
+    }
+
+    public void deleteImage(NoteFile image) {
+        deleteFile(getImageDirectoryFile(image.getLocation()));
+    }
+
+    public void deleteAudio(NoteFile image) {
+        deleteFile(getImageDirectoryFile(image.getLocation()));
+    }
+
+    public void deleteFile(File toDeleteFile) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            if (toDeleteFile.exists()) {
+                try {
+                    toDeleteFile.delete();
+                } catch (Exception ignored) {
+                }
+            }
+        });
     }
 }

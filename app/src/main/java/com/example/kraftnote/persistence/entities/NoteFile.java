@@ -76,12 +76,13 @@ public class NoteFile {
     }
 
     @Ignore
-    public static NoteFile newImage(String location) {
+    public static NoteFile newImage(String location, Integer noteId) {
         NoteFile noteFile = new NoteFile();
 
         noteFile.setType(FileType.IMAGE);
         noteFile.setLocation(location);
         noteFile.setCreatedAt(null);
+        noteFile.setNoteId(noteId);
 
         return noteFile;
     }
