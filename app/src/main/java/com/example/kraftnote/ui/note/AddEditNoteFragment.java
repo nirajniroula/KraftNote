@@ -56,6 +56,7 @@ public class AddEditNoteFragment extends Fragment {
         public void onPageSelected(int position) {
             super.onPageSelected(position);
             binding.viewpager.setUserInputEnabled(true);
+            binding.viewpager.setOffscreenPageLimit(5);
             fragmentCollectionAdapter.getFragment(position).onFragmentVisible();
         }
     };
