@@ -1,17 +1,14 @@
 package com.example.kraftnote.ui.note.editor.components;
 
 import android.content.Context;
-import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -124,16 +121,16 @@ public class RecordingRecyclerView extends RecyclerView {
             super(itemView);
             binding = ComponentRecordingItemBinding.bind(itemView);
 
-            binding.toolbar
-                    .getMenu()
-                    .add(Menu.NONE, R.id.toolbar_delete, Menu.NONE, R.string.delete);
-
             listenEvents();
         }
 
         private void listenEvents() {
             Log.d("NoteEditor", "initialized");
-            binding.toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
+            binding.deleteButton.setOnClickListener(v -> {
+                if (onDeleteClicked != null) {
+                    onDeleteClicked.onClick(recording);
+                }
+            });
         }
 
         public void setRecording(NoteFile recording) {
@@ -142,14 +139,6 @@ public class RecordingRecyclerView extends RecyclerView {
             binding.audioPlayer.setAudioTarget(
                     fileHelper.getAudioDirectoryFile(recording.getLocation()).getAbsolutePath());
         }
-
-        private Toolbar.OnMenuItemClickListener onMenuItemClickListener = item -> {
-            if (item.getItemId() == R.id.toolbar_delete && onDeleteClicked != null) {
-                onDeleteClicked.onClick(recording);
-            }
-
-            return true;
-        };
     }
 
     public interface OnComponentItemClickListener {

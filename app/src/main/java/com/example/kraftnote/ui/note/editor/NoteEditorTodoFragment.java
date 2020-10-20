@@ -16,6 +16,7 @@ import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTodoBinding;
 import com.example.kraftnote.persistence.entities.Todo;
 import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
+import com.example.kraftnote.ui.note.editor.components.SaveTodoDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
