@@ -6,23 +6,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTodoBinding;
 import com.example.kraftnote.persistence.entities.Todo;
-import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
+import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteEditorTodoFragment extends ViewPagerFragment {
+public class NoteEditorTodoFragment extends ViewPagerControlledFragment {
     private static final String TAG = NoteEditorTodoFragment.class.getSimpleName();
 
     private FragmentNoteEditorTodoBinding binding;

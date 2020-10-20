@@ -13,13 +13,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorRecordingBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
-import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
+import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
 import com.visualizer.amplitude.AudioRecordView;
@@ -32,7 +31,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class NoteEditorRecordingFragment extends ViewPagerFragment {
+public class NoteEditorRecordingFragment extends ViewPagerControlledFragment {
     private static final String TAG = NoteEditorRecordingFragment.class.getSimpleName();
 
     private MediaPlayer player;
@@ -70,7 +69,9 @@ public class NoteEditorRecordingFragment extends ViewPagerFragment {
     private void listenEvents() {
         binding.startButton.setOnClickListener(v -> startRecording());
         binding.stopButton.setOnClickListener(v -> stopRecording());
+        binding.recordingRecyclerView.setOnDeleteClickedListener(v -> {
 
+        });
 
     }
 

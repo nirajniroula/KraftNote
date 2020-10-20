@@ -13,7 +13,7 @@
     app:hintEnabled="false"
     tools:parentTag="com.google.android.material.textfield.TextInputLayout">
 
-    <com.google.android.material.textfield.TextInputEditText
+    <com.example.kraftnote.ui.note.editor.components.InputText
         android:id="@+id/body_textarea"
         style="@style/ThemeOverlay.MyTheme.TextInputEditText.Body"
         android:layout_width="match_parent"

@@ -16,7 +16,7 @@
     <string name="categories">Categories</string>
     <string name="my_notes">My Notes</string>
     <string name="save">Save</string>
-    <string name="do_you_want_to_discard_the_changes">Do you want to discard all the changes you have made?</string>
+    <string name="do_you_want_to_discard_the_changes">Any changes you may have made will be discarded?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="note_title_field">Note Title</string>

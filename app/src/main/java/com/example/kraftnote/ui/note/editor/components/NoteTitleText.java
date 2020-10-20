@@ -4,7 +4,9 @@ import android.content.Context;
 import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -57,6 +59,11 @@ public class NoteTitleText extends LinearLayout {
         binding.noteTitleInputText.addTextChangedListener(new TitleTextFormatWatcher(binding.noteTitleInputText, title -> {
             this.title.setValue(title);
         }));
+    }
+
+
+    public TextInputEditText getTextInputEditText() {
+        return binding.noteTitleInputText;
     }
 
     public void setTitle(String title) {

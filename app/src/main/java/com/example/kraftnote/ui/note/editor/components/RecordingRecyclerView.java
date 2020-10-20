@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,9 +27,8 @@ import java.util.List;
 public class RecordingRecyclerView extends RecyclerView {
     private FileHelper fileHelper;
     private RecordingAdapter adapter;
-    private OnComponentItemClickListener onEditClicked;
     private OnComponentItemClickListener onDeleteClicked;
-    private OnComponentItemClickListener onPlayClicked;
+
     private List<NoteFile> recordings = new ArrayList<>();
 
     public RecordingRecyclerView(@NonNull Context context) {
@@ -53,6 +53,10 @@ public class RecordingRecyclerView extends RecyclerView {
         setAdapter(adapter);
         setLayoutManager(new LinearLayoutManager(context));
         setHasFixedSize(true);
+    }
+
+    public void setOnDeleteClickedListener(OnComponentItemClickListener onDeleteClicked) {
+        this.onDeleteClicked = onDeleteClicked;
     }
 
     public void setRecordings(List<NoteFile> recordings) {
@@ -109,18 +113,20 @@ public class RecordingRecyclerView extends RecyclerView {
             Log.d("NoteEditor Recording Size", "" + recordings.size());
             return recordings.size();
         }
-
-
     }
 
     private class RecordingHolder extends RecyclerView.ViewHolder {
         private ComponentRecordingItemBinding binding;
         private NoteFile recording;
 
+
         public RecordingHolder(@NonNull View itemView) {
             super(itemView);
             binding = ComponentRecordingItemBinding.bind(itemView);
-            binding.toolbar.inflateMenu(R.menu.generic_item_menu);
+
+            binding.toolbar
+                    .getMenu()
+                    .add(Menu.NONE, R.id.toolbar_delete, Menu.NONE, R.string.delete);
 
             listenEvents();
         }
@@ -138,17 +144,8 @@ public class RecordingRecyclerView extends RecyclerView {
         }
 
         private Toolbar.OnMenuItemClickListener onMenuItemClickListener = item -> {
-            switch (item.getItemId()) {
-                case R.id.toolbar_edit:
-                    if (onEditClicked != null) {
-                        onEditClicked.onClick(recording);
-                    }
-                    break;
-                case R.id.toolbar_delete:
-                    if (onDeleteClicked != null) {
-                        onDeleteClicked.onClick(recording);
-                    }
-                    break;
+            if (item.getItemId() == R.id.toolbar_delete && onDeleteClicked != null) {
+                onDeleteClicked.onClick(recording);
             }
 
             return true;

@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import java.lang.ref.WeakReference;
 
-public abstract class ViewPagerFragment extends Fragment {
+public abstract class ViewPagerControlledFragment extends Fragment {
     private WeakReference<ViewPager2> viewPagerWeakRef;
 
     public final void setViewPagerWeakRef(WeakReference<ViewPager2> viewPagerWeakRef) {

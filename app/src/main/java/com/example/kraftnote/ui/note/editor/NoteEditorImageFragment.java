@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,7 +27,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
-import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
+import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
@@ -45,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NoteEditorImageFragment extends ViewPagerFragment {
+public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     private static final String TAG = NoteEditorImageFragment.class.getSimpleName();
 
     public static final int GALLERY_REQUEST = 188;

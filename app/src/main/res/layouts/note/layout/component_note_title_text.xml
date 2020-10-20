@@ -28,7 +28,7 @@
         app:hintAnimationEnabled="false"
         app:hintEnabled="false">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.kraftnote.ui.note.editor.components.InputText
             android:id="@+id/note_title_input_text"
             style="@style/ThemeOverlay.MyTheme.TextInputEditText.NoteTitle"
             android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:imeOptions="actionDone"
             android:lineHeight="@dimen/keyline_5"
             android:paddingVertical="16dp"
-            android:textColorHint="@color/blueGrey_100"
+            android:textColorHint="@color/semi_transparent_white"
             android:textCursorDrawable="@null" />
 
     </com.google.android.material.textfield.TextInputLayout>

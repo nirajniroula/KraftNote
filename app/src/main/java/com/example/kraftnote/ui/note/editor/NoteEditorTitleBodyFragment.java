@@ -1,26 +1,31 @@
 package com.example.kraftnote.ui.note.editor;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTitleBodyBinding;
 import com.example.kraftnote.persistence.entities.Note;
-import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
+import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
 
-public class NoteEditorTitleBodyFragment extends ViewPagerFragment {
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+
+public class NoteEditorTitleBodyFragment extends ViewPagerControlledFragment {
     private static final String TAG = NoteEditorTitleBodyFragment.class.getSimpleName();
 
     private FragmentNoteEditorTitleBodyBinding binding;
     private MutableLiveData<Note> note;
+
+    // state
+    private boolean isTitleEditTextFocused = false;
+    private boolean isBodyEditTextFocused = false;
 
     @Nullable
     @Override
@@ -57,6 +62,27 @@ public class NoteEditorTitleBodyFragment extends ViewPagerFragment {
             note.getValue().setName(name);
             note.setValue(note.getValue());
         });
+
+        binding.noteTitle.getTextInputEditText()
+                .setOnFocusChangeListener((v, hasFocus) -> {
+                    isTitleEditTextFocused = hasFocus;
+                    binding.getRoot().post(this::onEditTextFocusChanged);
+                });
+        binding.editorBodyText.setOnFocusChangeListener((v, hasFocus) -> {
+            isBodyEditTextFocused = hasFocus;
+            binding.getRoot().post(this::onEditTextFocusChanged);
+        });
+
+        binding.editorBodyText.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            Log.d(TAG, "SCROLLING");
+        });
+    }
+
+    private void onEditTextFocusChanged() {
+        updateViewPagerScrollBehaviour(
+                !isTitleEditTextFocused
+                        && !isBodyEditTextFocused
+        );
     }
 
     public Note getNote() {

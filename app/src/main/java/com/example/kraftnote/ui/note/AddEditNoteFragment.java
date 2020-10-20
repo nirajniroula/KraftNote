@@ -21,7 +21,7 @@ import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentAddEditNoteBinding;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
-import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
+import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorImageFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorRecordingFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment;
@@ -91,7 +91,8 @@ public class AddEditNoteFragment extends Fragment {
 
         new TabLayoutMediator(
                 binding.tabs, binding.viewpager,
-                (tab, position) -> tab.setText(fragmentCollectionAdapter.getFragmentName(position))
+                (tab, position) ->
+                        tab.setText(fragmentCollectionAdapter.getFragmentName(position))
         ).attach();
 
         binding.viewpager.registerOnPageChangeCallback(onPageChangeCallback);
@@ -120,11 +121,11 @@ public class AddEditNoteFragment extends Fragment {
     }
 
     private final class FragmentCollectionAdapter extends FragmentStateAdapter {
-        private NameAndFragmentTuple[] nameAndFragmentTupleList = new NameAndFragmentTuple[] {
+        private NameAndFragmentTuple[] nameAndFragmentTupleList = new NameAndFragmentTuple[]{
                 new NameAndFragmentTuple(R.string.note, new NoteEditorTitleBodyFragment()),
+                new NameAndFragmentTuple(R.string.todos, new NoteEditorTodoFragment()),
                 new NameAndFragmentTuple(R.string.images, new NoteEditorImageFragment()),
                 new NameAndFragmentTuple(R.string.reminders, new NoteEditorReminderFragment()),
-                new NameAndFragmentTuple(R.string.todos, new NoteEditorTodoFragment()),
                 new NameAndFragmentTuple(R.string.recordings, new NoteEditorRecordingFragment()),
         };
 
@@ -144,11 +145,11 @@ public class AddEditNoteFragment extends Fragment {
 
         @NonNull
         @Override
-        public ViewPagerFragment createFragment(int position) {
+        public ViewPagerControlledFragment createFragment(int position) {
             return getFragment(position);
         }
 
-        public ViewPagerFragment getFragment(int position) {
+        public ViewPagerControlledFragment getFragment(int position) {
             return nameAndFragmentTupleList[position].getFragment();
         }
 
@@ -160,9 +161,9 @@ public class AddEditNoteFragment extends Fragment {
 
     private final static class NameAndFragmentTuple {
         private final int nameResId;
-        private final ViewPagerFragment fragment;
+        private final ViewPagerControlledFragment fragment;
 
-        private NameAndFragmentTuple(int nameResId, ViewPagerFragment fragment) {
+        public NameAndFragmentTuple(int nameResId, ViewPagerControlledFragment fragment) {
             this.nameResId = nameResId;
             this.fragment = fragment;
         }
@@ -171,7 +172,7 @@ public class AddEditNoteFragment extends Fragment {
             return nameResId;
         }
 
-        public final ViewPagerFragment getFragment() {
+        public final ViewPagerControlledFragment getFragment() {
             return fragment;
         }
     }
