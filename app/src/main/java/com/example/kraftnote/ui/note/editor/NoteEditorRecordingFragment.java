@@ -1,7 +1,7 @@
 package com.example.kraftnote.ui.note.editor;
 
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,11 +13,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorRecordingBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
+import com.example.kraftnote.persistence.viewmodels.NoteFileViewModel;
 import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
@@ -30,18 +31,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class NoteEditorRecordingFragment extends ViewPagerControlledFragment {
     private static final String TAG = NoteEditorRecordingFragment.class.getSimpleName();
 
-    private MediaPlayer player;
     private Timer visualizerTimer;
     private FileHelper fileHelper;
     private MediaRecorder recorder;
     private File currentRecordingSource;
     private PermissionHelper permissionHelper;
     private FragmentNoteEditorRecordingBinding binding;
-    private MutableLiveData<List<NoteFile>> recordings;
+    private List<NoteFile> recordings = new ArrayList<>();
+    private NoteFileViewModel noteFileViewModel;
 
     @Nullable
     @Override
@@ -52,6 +54,7 @@ public class NoteEditorRecordingFragment extends ViewPagerControlledFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        noteFileViewModel = new ViewModelProvider(this).get(NoteFileViewModel.class);
         binding = FragmentNoteEditorRecordingBinding.bind(view);
 
         initializeProperties();
@@ -59,20 +62,38 @@ public class NoteEditorRecordingFragment extends ViewPagerControlledFragment {
     }
 
     private void initializeProperties() {
-        recordings = new MutableLiveData<>(new ArrayList<>());
         fileHelper = new FileHelper(requireContext().getApplicationContext());
         permissionHelper = new PermissionHelper(getContext());
-
-        binding.recordingRecyclerView.setRecordings(recordings.getValue());
     }
 
     private void listenEvents() {
+        noteFileViewModel.getAll().observe(getViewLifecycleOwner(), this::noteFileMutated);
         binding.startButton.setOnClickListener(v -> startRecording());
         binding.stopButton.setOnClickListener(v -> stopRecording());
-        binding.recordingRecyclerView.setOnDeleteClickedListener(v -> {
+        binding.recordingRecyclerView.setOnDeleteClickedListener(this::onDeleteRecordingRequest);
+    }
 
-        });
+    private void noteFileMutated(List<NoteFile> noteFiles) {
+        recordings = noteFiles.stream().filter(NoteFile::isAudio).collect(Collectors.toCollection(ArrayList<NoteFile>::new));
+        binding.recordingRecyclerView.setRecordings(recordings);
+    }
 
+    public void deleteRecording(NoteFile recording) {
+        noteFileViewModel.delete(recording);
+        Toast.makeText(getContext(), R.string.recording_deleted, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onDeleteRecordingRequest(NoteFile recoding) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+
+        builder.setTitle(R.string.confirmation_required)
+                .setMessage(R.string.delete_recording_question)
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                    binding.recordingRecyclerView.removeRecording(recoding);
+                    deleteRecording(recoding);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private void startRecording() {
@@ -148,56 +169,15 @@ public class NoteEditorRecordingFragment extends ViewPagerControlledFragment {
         recorder.release();
         recorder = null;
 
-        List<NoteFile> allRecordings = recordings.getValue() != null
-                ? recordings.getValue()
-                : new ArrayList<>();
-
-        allRecordings.add(NoteFile.newAudio(currentRecordingSource.getName()));
         addRecording(NoteFile.newAudio(currentRecordingSource.getName()));
 
         currentRecordingSource = null;
-
-        recordings.setValue(allRecordings);
-    }
-
-    private void startPlaying(NoteFile noteFile) {
-        final File source = fileHelper.getAudioSourceFor(noteFile.getLocation());
-
-        if (!source.exists() || !source.canRead()) {
-            Toast.makeText(getContext(), R.string.audio_source_unreadable, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        player = new MediaPlayer();
-
-        try {
-            player.setDataSource(source.getAbsolutePath());
-            player.prepare();
-            player.start();
-        } catch (IOException e) {
-            Log.d(TAG, "Error playing " + source.getAbsolutePath() + " file");
-            e.printStackTrace();
-        }
     }
 
     private void addRecording(NoteFile audio) {
-        List<NoteFile> recordingsValue = recordings.getValue();
-
-        if(recordingsValue == null) {
-            recordingsValue = new ArrayList<>();
-        }
-
-        recordingsValue.add(audio);
-
         binding.recordingRecyclerView.addRecording(audio);
-    }
 
-    private void stopPlaying() {
-        if (player == null) return;
-
-        player.stop();
-        player.release();
-        player = null;
+        noteFileViewModel.insert(audio);
     }
 
     @Override
@@ -205,13 +185,9 @@ public class NoteEditorRecordingFragment extends ViewPagerControlledFragment {
         super.onStop();
 
         if (recorder != null) {
+            recorder.reset();
             recorder.release();
             recorder = null;
-        }
-
-        if (player != null) {
-            player.release();
-            player = null;
         }
 
         if (visualizerTimer != null) {

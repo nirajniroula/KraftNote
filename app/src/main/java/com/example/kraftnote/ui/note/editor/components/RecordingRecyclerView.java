@@ -26,7 +26,7 @@ public class RecordingRecyclerView extends RecyclerView {
     private RecordingAdapter adapter;
     private OnComponentItemClickListener onDeleteClicked;
 
-    private List<NoteFile> recordings = new ArrayList<>();
+    private List<NoteFile> recordings;
 
     public RecordingRecyclerView(@NonNull Context context) {
         super(context);
@@ -57,11 +57,17 @@ public class RecordingRecyclerView extends RecyclerView {
     }
 
     public void setRecordings(List<NoteFile> recordings) {
+        if (this.recordings != null) return;
+
         this.recordings = new ArrayList<>(recordings);
         adapter.notifyDataSetChanged();
     }
 
     public void addRecording(NoteFile recording) {
+        if (recordings == null) {
+            recordings = new ArrayList<>();
+        }
+
         post(() -> {
             recordings.add(recording);
             adapter.notifyItemInserted(adapter.getItemCount() - 1);
@@ -69,6 +75,8 @@ public class RecordingRecyclerView extends RecyclerView {
     }
 
     public void removeRecording(NoteFile recording) {
+        if (recordings == null) return;
+
         int idx = recordings.indexOf(recording);
 
         if (idx < 0) return;
@@ -76,17 +84,6 @@ public class RecordingRecyclerView extends RecyclerView {
         post(() -> {
             recordings.remove(recording);
             adapter.notifyItemRemoved(idx);
-        });
-    }
-
-    public void updateRecording(NoteFile recording) {
-        int idx = recordings.indexOf(recording);
-
-        if (idx < 0) return;
-
-        post(() -> {
-            recordings.set(idx, recording);
-            adapter.notifyItemChanged(idx);
         });
     }
 
@@ -107,7 +104,8 @@ public class RecordingRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            Log.d("NoteEditor Recording Size", "" + recordings.size());
+            if (recordings == null) return 0;
+
             return recordings.size();
         }
     }
