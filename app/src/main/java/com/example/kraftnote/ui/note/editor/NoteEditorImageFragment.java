@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
@@ -15,26 +14,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.FileProvider;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
+import com.example.kraftnote.persistence.viewmodels.NoteFileViewModel;
 import com.example.kraftnote.ui.note.contracts.ViewPagerControlledFragment;
-import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -43,21 +40,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     private static final String TAG = NoteEditorImageFragment.class.getSimpleName();
 
     public static final int GALLERY_REQUEST = 188;
-    public static final int CAMERA_REQUEST = 189;
+
+    private NoteFileViewModel noteFileViewModel;
 
     private View root;
     private FragmentNoteEditorImagesBinding binding;
 
     //views
     ImageAdapter imageAdapter;
-
-    // view model
-    private MutableLiveData<List<NoteFile>> images;
 
     //helper
     private FileHelper fileHelper;
@@ -70,8 +66,8 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Context applicationContext = requireContext().getApplicationContext();
 
+        noteFileViewModel = new ViewModelProvider(this).get(NoteFileViewModel.class);
         binding = FragmentNoteEditorImagesBinding.inflate(inflater, container, false);
         root = binding.getRoot();
 
@@ -87,7 +83,6 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     }
 
     private void initializeProperties() {
-        images = new MutableLiveData<>(new ArrayList<>());
         imageAdapter = new ImageAdapter();
         fileHelper = new FileHelper(requireContext());
         permissionHelper = new PermissionHelper(getContext());
@@ -99,6 +94,8 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     }
 
     private void listenEvents() {
+        noteFileViewModel.getAll().observe(getViewLifecycleOwner(), this::imageListMutated);
+
         binding.closeImageViewerButton.setOnClickListener(v -> {
             binding.imageViewerWrapper.setVisibility(View.GONE);
 
@@ -107,60 +104,27 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
         });
 
         binding.addImageButton.setOnClickListener(v -> addImageFromGalleryRequested());
-        binding.addImageCameraButton.setOnClickListener(v -> addImageFromCameraRequested());
-        images.observe(getViewLifecycleOwner(), this::imageListMutated);
-    }
-
-    public void setImages(List<NoteFile> images) {
-        this.images.setValue(images);
-    }
-
-    public LiveData<List<NoteFile>> getImages() {
-        return images;
     }
 
     private void imageListMutated(List<NoteFile> files) {
-        imageAdapter.syncImages(files);
+
+        imageAdapter.syncImages(
+                files.stream()
+                        .filter(NoteFile::isImage)
+                        .collect(Collectors.toCollection(ArrayList<NoteFile>::new))
+        );
 
         Log.d(TAG, String.valueOf(files));
     }
 
     private void addImageFromGalleryRequested() {
-        Intent intent = new Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         Log.d(TAG, intent.toString());
 
-        if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
-            // Attempt to start an activity that can handle the Intent
-            startActivityForResult(intent, GALLERY_REQUEST);
-        }
-    }
-
-    private void addImageFromCameraRequested() {
-        if(!permissionHelper.isWriteExternalStoragePermissionGranted()) {
-            PermissionHelper.requestWriteExternalStoragePermission(this);
-            return;
-        }
-
-        try {
-            capturedImage = createImageFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        Uri imageUri = FileProvider.getUriForFile(requireContext(),
-                "com.example.kraftnote.fileProvider",
-                capturedImage);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImage);
-
         if (permissionHelper.isIntentResolvable(intent)) {
             // Attempt to start an activity that can handle the Intent
-            startActivityForResult(intent, CAMERA_REQUEST);
+            startActivityForResult(intent, GALLERY_REQUEST);
         }
     }
 
@@ -176,17 +140,7 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
 
         if (requestCode == GALLERY_REQUEST) {
             addImageFromGallery(data);
-        } else if (requestCode == CAMERA_REQUEST) {
-            addImageFromCamera(data);
         }
-
-    }
-
-    private void addImageFromCamera(Intent data) {
-        if (capturedImage == null) return;
-
-        Bitmap image = (Bitmap) BitmapFactory.decodeFile(capturedImage.getAbsolutePath());
-        persistToStorage(image);
     }
 
     private void addImageFromGallery(Intent data) {
@@ -210,6 +164,7 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
     }
 
     private void persistToStorage(Bitmap image) {
+        WeakReference<Context> contextWeakReference = new WeakReference<>(getContext());
         WeakReference<View> viewWeakReference = new WeakReference<>(binding.getRoot());
         binding.progressBarWrapper.setZ(1);
         binding.progressBarWrapper.setClickable(true);
@@ -218,42 +173,19 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
         fileHelper.saveImage(image, fileName -> {
             Log.d(TAG, fileName);
 
-            List<NoteFile> currentImages = images.getValue();
+            if (viewWeakReference.get() == null) return;
 
-            if (currentImages == null) {
-                currentImages = new ArrayList<>();
-            }
-
-            currentImages.add(NoteFile.newImage(fileName));
-
-            images.postValue(currentImages);
-
-            if(viewWeakReference.get() == null) return;
+            noteFileViewModel.insert(NoteFile.newImage(fileName));
 
             viewWeakReference.get().post(() -> {
                 binding.progressBarWrapper.setVisibility(View.GONE);
+
+                if(contextWeakReference.get() != null) {
+                    Toast.makeText(contextWeakReference.get(), R.string.image_added, Toast.LENGTH_SHORT).show();
+                }
+
             });
         });
-    }
-
-    private File createImageFile() throws IOException {
-        String fileName = DateHelper.toFileNameFormat("KraftNote_", "_");
-        File storageDirectory = requireContext().getFilesDir();
-
-        Log.d(TAG, storageDirectory.getAbsolutePath());
-        Log.d(TAG, storageDirectory.getCanonicalPath());
-
-        File image = File.createTempFile(
-                fileName,
-                ".png",
-                storageDirectory
-        );
-
-        String mCurrentPhotoPath = image.getAbsolutePath();
-
-        Log.d(TAG, "Path: " + mCurrentPhotoPath);
-
-        return image;
     }
 
     private class SquareImageView extends AppCompatImageView {
@@ -262,17 +194,17 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
 
         public SquareImageView(Context context) {
             super(context);
-            init(context);
+            init();
         }
 
         public SquareImageView(Context context, AttributeSet attrs) {
             super(context, attrs);
-            init(context);
+            init();
         }
 
         public SquareImageView(Context context, AttributeSet attrs, int defStyle) {
             super(context, attrs, defStyle);
-            init(context);
+            init();
         }
 
         private void setImageFile(NoteFile file) {
@@ -286,7 +218,7 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
             setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth()); //Snap to width
         }
 
-        private void init(Context context) {
+        private void init() {
             setOnClickListener(v -> {
                 if (bitmap == null) return;
                 Bitmap bitmapClone = bitmap.copy(bitmap.getConfig(), true);
@@ -312,13 +244,7 @@ public class NoteEditorImageFragment extends ViewPagerControlledFragment {
         private Map<String, Bitmap> bitmaps = new HashMap<>();
 
         public void syncImages(List<NoteFile> files) {
-            images = new ArrayList<>();
-
-            for (NoteFile file : files) {
-                if (!file.isImage()) continue;
-
-                images.add(file);
-            }
+            images = files;
 
             // latest to the top
             Collections.reverse(images);

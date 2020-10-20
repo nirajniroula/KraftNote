@@ -55,6 +55,8 @@
     <string name="todo_deleted">Todo deleted</string>
     <string name="todo_added">Todo added</string>
     <string name="todo_updated">Todo updated</string>
+    <string name="image_added">Image added</string>
+    <string name="image_deleted">Image deleted</string>
     <string name="audio_source_unreadable">Audio source unreadable</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="record">Record</string>
