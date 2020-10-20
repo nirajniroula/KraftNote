@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.example.kraftnote.persistence.entities.NoteFile;
 
@@ -139,12 +140,14 @@ public class FileHelper {
         deleteFile(getImageDirectoryFile(image.getLocation()));
     }
 
-    public void deleteAudio(NoteFile image) {
-        deleteFile(getImageDirectoryFile(image.getLocation()));
+    public void deleteAudio(NoteFile recording) {
+        deleteFile(getAudioDirectoryFile(recording.getLocation()));
     }
 
     public void deleteFile(File toDeleteFile) {
         Executors.newSingleThreadExecutor().execute(() -> {
+            Log.d("Note File is ", toDeleteFile.getAbsolutePath());
+
             if (toDeleteFile.exists()) {
                 try {
                     toDeleteFile.delete();

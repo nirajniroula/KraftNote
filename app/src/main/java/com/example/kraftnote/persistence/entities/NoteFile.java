@@ -87,12 +87,13 @@ public class NoteFile {
         return noteFile;
     }
 
-    public static NoteFile newAudio(String location) {
+    public static NoteFile newAudio(String location, Integer noteId) {
         NoteFile noteFile = new NoteFile();
 
         noteFile.setType(FileType.AUDIO);
         noteFile.setLocation(location);
         noteFile.setCreatedAt(null);
+        noteFile.setNoteId(noteId);
 
         return noteFile;
     }
@@ -145,5 +146,16 @@ public class NoteFile {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = (createdAt == null) ? new Date() : createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "NoteFile{" +
+                "id=" + id +
+                ", location='" + location + '\'' +
+                ", type=" + type +
+                ", noteId=" + noteId +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

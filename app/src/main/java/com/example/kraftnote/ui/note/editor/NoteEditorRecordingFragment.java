@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
@@ -74,12 +75,17 @@ public class NoteEditorRecordingFragment extends NoteEditorChildBaseFragment {
     }
 
     private void noteFileMutated(List<NoteFile> noteFiles) {
-        recordings = noteFiles.stream().filter(NoteFile::isAudio).collect(Collectors.toCollection(ArrayList<NoteFile>::new));
+        recordings = noteFiles.stream()
+                .filter(NoteFile::isAudio)
+                .filter(noteFile -> Objects.equals(getNote().getId(), noteFile.getNoteId()))
+                .collect(Collectors.toCollection(ArrayList<NoteFile>::new));
         binding.recordingRecyclerView.setRecordings(recordings);
     }
 
     public void deleteRecording(NoteFile recording) {
+        Log.d(TAG, "deleteRecording: " + recording.toString());
         noteFileViewModel.delete(recording);
+        fileHelper.deleteAudio(recording);
         Toast.makeText(getContext(), R.string.recording_deleted, Toast.LENGTH_SHORT).show();
     }
 
@@ -99,6 +105,7 @@ public class NoteEditorRecordingFragment extends NoteEditorChildBaseFragment {
     private void startRecording() {
         if (!permissionHelper.isRecordAudioPermissionGranted()) {
             PermissionHelper.requestRecordAudioPermission(this);
+            return;
         }
 
         binding.startRecordingHint.setVisibility(View.INVISIBLE);
@@ -169,7 +176,7 @@ public class NoteEditorRecordingFragment extends NoteEditorChildBaseFragment {
         recorder.release();
         recorder = null;
 
-        addRecording(NoteFile.newAudio(currentRecordingSource.getName()));
+        addRecording(NoteFile.newAudio(currentRecordingSource.getName(), getNote().getId()));
 
         currentRecordingSource = null;
     }
