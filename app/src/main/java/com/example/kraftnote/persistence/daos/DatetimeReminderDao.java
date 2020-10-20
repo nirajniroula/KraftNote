@@ -24,4 +24,7 @@ public interface DatetimeReminderDao {
 
     @Query("SELECT * FROM DatetimeReminders ORDER BY datetime_reminder_created_at DESC")
     LiveData<List<DatetimeReminder>> getAll();
+
+    @Insert
+    long insertSingle(DatetimeReminder reminder);
 }

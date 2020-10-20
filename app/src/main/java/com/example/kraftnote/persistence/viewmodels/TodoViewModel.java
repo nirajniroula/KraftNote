@@ -22,6 +22,10 @@ public class TodoViewModel extends AndroidViewModel implements IViewModel<Todo> 
         todoLiveData = repository.getAll();
     }
 
+    public int insertSingle(Todo todo) {
+        return (int) repository.insertSingle(todo);
+    }
+
     @Override
     public void insert(Todo todo) {
         repository.insert(todo);

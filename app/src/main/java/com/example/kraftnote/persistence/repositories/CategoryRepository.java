@@ -27,6 +27,11 @@ public class CategoryRepository implements IRepository<Category> {
     }
 
     @Override
+    public int insertSingle(Category category) {
+        return (int) categoryDao.insertSingle(category);
+    }
+
+    @Override
     public void insert(Category category) {
         new InsertTask(categoryDao).execute(category);
     }

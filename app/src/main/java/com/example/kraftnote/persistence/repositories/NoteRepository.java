@@ -25,6 +25,11 @@ public class NoteRepository implements IRepository<Note> {
     }
 
     @Override
+    public int insertSingle(Note note) {
+        return (int) noteDao.insertSingle(note);
+    }
+
+    @Override
     public void insert(Note note) {
         noteDao.insertAll(note);
         //new InsertTask(noteDao).execute(note);

@@ -23,6 +23,11 @@ public class NoteFileViewModel extends AndroidViewModel implements IViewModel<No
     }
 
     @Override
+    public int insertSingle(NoteFile noteFile) {
+        return repository.insertSingle(noteFile);
+    }
+
+    @Override
     public void insert(NoteFile noteFile) {
         repository.insert(noteFile);
     }

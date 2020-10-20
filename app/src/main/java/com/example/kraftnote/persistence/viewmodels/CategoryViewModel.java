@@ -26,6 +26,11 @@ public class CategoryViewModel extends AndroidViewModel implements IViewModel<Ca
     }
 
     @Override
+    public int insertSingle(Category category) {
+        return categoryRepository.insertSingle(category);
+    }
+
+    @Override
     public void insert(Category category) {
         categoryRepository.insert(category);
     }

@@ -61,8 +61,6 @@ public class RecordingRecyclerView extends RecyclerView {
         this.recordings = recordings;
 
         adapter.notifyDataSetChanged();
-
-//        diffSync(recordings);
     }
 
     private void diffSync(List<NoteFile> recordings) {

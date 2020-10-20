@@ -23,6 +23,11 @@ public class LocationReminderRepository implements IRepository<LocationReminder>
     }
 
     @Override
+    public int insertSingle(LocationReminder locationReminder) {
+        return (int) locationReminderDao.insertSingle(locationReminder);
+    }
+
+    @Override
     public void insert(LocationReminder locationReminder) {
         locationReminderDao.insertAll(locationReminder);
     }

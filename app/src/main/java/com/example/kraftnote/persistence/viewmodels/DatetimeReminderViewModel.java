@@ -22,6 +22,11 @@ public class DatetimeReminderViewModel extends AndroidViewModel implements IView
     }
 
     @Override
+    public int insertSingle(DatetimeReminder reminder) {
+        return repository.insertSingle(reminder);
+    }
+
+    @Override
     public void insert(DatetimeReminder datetimeReminder) {
         repository.insert(datetimeReminder);
     }

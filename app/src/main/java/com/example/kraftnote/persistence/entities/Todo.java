@@ -38,8 +38,9 @@ public class Todo {
     }
 
     @Ignore
-    public Todo(String task) {
+    public Todo(String task, Integer noteId) {
         setTask(task);
+        setNoteId(noteId);
         setCreatedAt(null);
     }
 

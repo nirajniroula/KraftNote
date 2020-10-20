@@ -22,6 +22,11 @@ public class LocationReminderViewModel extends AndroidViewModel implements IView
     }
 
     @Override
+    public int insertSingle(LocationReminder locationReminder) {
+        return repository.insertSingle(locationReminder);
+    }
+
+    @Override
     public void insert(LocationReminder locationReminder) {
         repository.insert(locationReminder);
     }

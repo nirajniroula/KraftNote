@@ -43,4 +43,7 @@ public interface NoteDao {
 
     @Query("SELECT * FROM Notes WHERE note_is_draft=1 ORDER BY note_created_at DESC LIMIT 1")
     Note getLatestDraft();
+
+    @Insert
+    long insertSingle(Note note);
 }

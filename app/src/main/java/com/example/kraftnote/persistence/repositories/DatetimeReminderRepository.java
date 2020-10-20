@@ -22,6 +22,11 @@ public class DatetimeReminderRepository implements IRepository<DatetimeReminder>
     }
 
     @Override
+    public int insertSingle(DatetimeReminder reminder) {
+        return (int) datetimeReminderDao.insertSingle(reminder);
+    }
+
+    @Override
     public void insert(DatetimeReminder datetimeReminder) {
         datetimeReminderDao.insertAll(datetimeReminder);
     }

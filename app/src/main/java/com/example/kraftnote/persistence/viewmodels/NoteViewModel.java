@@ -14,34 +14,39 @@ import com.example.kraftnote.persistence.views.NoteWithRelation;
 import java.util.List;
 
 public class NoteViewModel extends AndroidViewModel implements IViewModel<Note> {
-    private final NoteRepository noteRepository;
+    private final NoteRepository repository;
     private LiveData<List<Note>> notes;
     private LiveData<List<Note>> allNotes;
 
     public NoteViewModel(@NonNull Application application) {
         super(application);
-        noteRepository = new NoteRepository(application);
-        notes = noteRepository.getAll();
-        allNotes = noteRepository.getAll(true);
+        repository = new NoteRepository(application);
+        notes = repository.getAll();
+        allNotes = repository.getAll(true);
+    }
+
+    @Override
+    public int insertSingle(Note note) {
+        return repository.insertSingle(note);
     }
 
     @Override
     public void insert(Note note) {
-        noteRepository.insert(note);
+        repository.insert(note);
     }
 
     @Override
     public void update(Note note) {
-        noteRepository.update(note);
+        repository.update(note);
     }
 
     @Override
     public void delete(Note note) {
-        noteRepository.delete(note);
+        repository.delete(note);
     }
 
     public  Note findById(int id) {
-        return noteRepository.findById(id);
+        return repository.findById(id);
     }
 
     @Override
@@ -50,11 +55,11 @@ public class NoteViewModel extends AndroidViewModel implements IViewModel<Note> 
     }
 
     public LiveData<List<NoteWithRelation>> getAllWithRelation() {
-        return noteRepository.getAllWithRelation();
+        return repository.getAllWithRelation();
     }
 
     public Note getLatestDraft() {
-        return noteRepository.getLatestDraft();
+        return repository.getLatestDraft();
     }
 
     public LiveData<List<Note>> getAllWithDraft() {

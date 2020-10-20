@@ -5,9 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.example.kraftnote.persistence.KraftNoteDatabase;
-import com.example.kraftnote.persistence.daos.CategoryDao;
 import com.example.kraftnote.persistence.daos.TodoDao;
-import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.entities.Todo;
 import com.example.kraftnote.persistence.repositories.contracts.IRepository;
 
@@ -23,9 +21,13 @@ public class TodoRepository implements IRepository<Todo> {
         todoLiveData = todoDao.getAll();
     }
 
+    public int insertSingle(Todo todo) {
+        return (int) todoDao.insertSingle(todo);
+    }
+
     @Override
     public void insert(Todo todo) {
-        todoDao.insertAll(todo);
+        todoDao.insert(todo);
     }
 
     @Override

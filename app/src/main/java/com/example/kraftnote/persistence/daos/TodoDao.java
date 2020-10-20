@@ -14,7 +14,10 @@ import java.util.List;
 @Dao
 public interface TodoDao {
     @Insert
-    void insertAll(Todo... todos);
+    long insertSingle(Todo todo);
+
+    @Insert
+    long[] insert(Todo... todos);
 
     @Update
     void updateAll(Todo... todos);

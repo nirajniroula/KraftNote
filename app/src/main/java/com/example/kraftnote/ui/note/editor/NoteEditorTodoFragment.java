@@ -18,7 +18,10 @@ import com.example.kraftnote.persistence.viewmodels.TodoViewModel;
 import com.example.kraftnote.ui.note.contracts.NoteEditorChildBaseFragment;
 import com.example.kraftnote.ui.note.editor.components.SaveTodoDialogFragment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class NoteEditorTodoFragment extends NoteEditorChildBaseFragment {
     private static final String TAG = NoteEditorTodoFragment.class.getSimpleName();
@@ -87,14 +90,19 @@ public class NoteEditorTodoFragment extends NoteEditorChildBaseFragment {
     }
 
     private void createTodo(String text) {
-        Todo todo = new Todo(text);
-        todoViewModel.insert(todo);
+        Todo todo = new Todo(text, getNote().getId());
+        int id = todoViewModel.insertSingle(todo);
+        todo.setId(id);
         binding.todoRecyclerView.addTodo(todo);
         Toast.makeText(getContext(), R.string.todo_added, Toast.LENGTH_SHORT).show();
     }
 
     private void todosMutated(List<Todo> todos) {
-        binding.todoRecyclerView.setTodos(todos);
+        ArrayList<Todo> collect = todos.stream()
+                .filter(todo -> Objects.equals(todo.getNoteId(), getNote().getId()))
+                .collect(Collectors.toCollection(ArrayList<Todo>::new));
+
+        binding.todoRecyclerView.setTodos(collect);
     }
 
     private void todoDeletionRequested(Todo todo) {

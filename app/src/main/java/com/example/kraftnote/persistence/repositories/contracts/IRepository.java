@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public interface IRepository<T> {
+    int insertSingle(T t);
     void insert(T t);
     void update(T t);
     void delete(T t);

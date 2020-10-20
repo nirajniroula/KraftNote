@@ -24,4 +24,7 @@ public interface LocationReminderDao {
 
     @Query("SELECT * FROM LocationReminders ORDER BY location_reminder_created_at DESC")
     LiveData<List<LocationReminder>> getAll();
+
+    @Insert
+    long insertSingle(LocationReminder locationReminder);
 }

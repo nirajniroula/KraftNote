@@ -15,6 +15,9 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Insert
+    long insertAll(Category category);
+
+    @Insert
     void insertAll(Category... categories);
 
     @Update
@@ -34,4 +37,7 @@ public interface CategoryDao {
 
     @Query("SELECT EXISTS(SELECT * FROM Categories WHERE LOWER(category_name) = LOWER(:name) LIMIT 1)")
     boolean nameExists(String name);
+
+    @Insert
+    long insertSingle(Category category);
 }

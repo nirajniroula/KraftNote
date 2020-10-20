@@ -21,6 +21,11 @@ public class NoteFileRepository implements IRepository<NoteFile> {
         noteFiles = noteFileDao.getAll();
     }
 
+    @Override
+    public int insertSingle(NoteFile noteFile) {
+        return (int) noteFileDao.insertSingle(noteFile);
+    }
+
     public void insert(NoteFile noteFile) {
         noteFileDao.insertAll(noteFile);
     }

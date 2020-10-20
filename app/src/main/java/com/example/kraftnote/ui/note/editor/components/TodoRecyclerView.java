@@ -138,6 +138,7 @@ public class TodoRecyclerView extends RecyclerView {
         private ComponentTodoListItemBinding binding;
         private Todo todo;
         private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = (buttonView, isChecked) -> {
+            updateTaskText();
             if (onTodoCheckChangedListener != null) {
                 onTodoCheckChangedListener.onCheckChanged(todo, isChecked);
             }
@@ -172,17 +173,23 @@ public class TodoRecyclerView extends RecyclerView {
             binding.todoToolbar.setOnMenuItemClickListener(onMenuItemClickListener);
         }
 
-        public void setTodo(Todo todo) {
-            this.todo = todo;
+        private void updateTaskText() {
             binding.todoTask.setText(todo.getTask());
-
-            if(todo.isCompleted()) {
+            binding.todoTask.getPaint().setFlags(Paint.ANTI_ALIAS_FLAG);
+            if (todo.isCompleted()) {
                 binding.todoTask.setPaintFlags(binding.todoTask.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
+
+        }
+
+        public void setTodo(Todo todo) {
+            this.todo = todo;
 
             binding.todoCheckbox.setOnCheckedChangeListener(null);
             binding.todoCheckbox.setChecked(todo.isCompleted());
             binding.todoCheckbox.setOnCheckedChangeListener(onCheckedChangeListener);
+
+            updateTaskText();
         }
     }
 
