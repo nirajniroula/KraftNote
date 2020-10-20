@@ -15,11 +15,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentAddEditNoteBinding;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
+import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorImageFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorRecordingFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorReminderFragment;
@@ -27,9 +29,8 @@ import com.example.kraftnote.ui.note.editor.NoteEditorTitleBodyFragment;
 import com.example.kraftnote.ui.note.editor.NoteEditorTodoFragment;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.HashMap;
+import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Map;
 
 public class AddEditNoteFragment extends Fragment {
     private static final String TAG = AddEditNoteFragment.class.getSimpleName();
@@ -41,11 +42,21 @@ public class AddEditNoteFragment extends Fragment {
     private FragmentCollectionAdapter fragmentCollectionAdapter;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
-    private
+    private final
     OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
             AddEditNoteFragment.this.gotoNoteFragment();
+        }
+    };
+
+    private final
+    ViewPager2.OnPageChangeCallback onPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            binding.viewpager.setUserInputEnabled(true);
+            fragmentCollectionAdapter.getFragment(position).onFragmentVisible();
         }
     };
 
@@ -80,12 +91,15 @@ public class AddEditNoteFragment extends Fragment {
 
         new TabLayoutMediator(
                 binding.tabs, binding.viewpager,
-                (tab, position) -> tab.setText(fragmentCollectionAdapter.getFragmentTitle(position))
+                (tab, position) -> tab.setText(fragmentCollectionAdapter.getFragmentName(position))
         ).attach();
+
+        binding.viewpager.registerOnPageChangeCallback(onPageChangeCallback);
     }
 
     private void listenEvents() {
         categoryViewModel.getAll().observe(getViewLifecycleOwner(), this::categoriesMutated);
+
         binding.closeEditorButton.setOnClickListener(v -> gotoNoteFragment());
     }
 
@@ -105,42 +119,60 @@ public class AddEditNoteFragment extends Fragment {
                 .show();
     }
 
-    private static final class FragmentCollectionAdapter extends FragmentStateAdapter {
-        private Map<Integer, Fragment> fragmentMap = new HashMap<>();
-        private final int[] titles = new int[]{
-                R.string.note,
-                R.string.reminders,
-                R.string.images,
-                R.string.todos,
-                R.string.recordings
+    private final class FragmentCollectionAdapter extends FragmentStateAdapter {
+        private NameAndFragmentTuple[] nameAndFragmentTupleList = new NameAndFragmentTuple[] {
+                new NameAndFragmentTuple(R.string.note, new NoteEditorTitleBodyFragment()),
+                new NameAndFragmentTuple(R.string.images, new NoteEditorImageFragment()),
+                new NameAndFragmentTuple(R.string.reminders, new NoteEditorReminderFragment()),
+                new NameAndFragmentTuple(R.string.todos, new NoteEditorTodoFragment()),
+                new NameAndFragmentTuple(R.string.recordings, new NoteEditorRecordingFragment()),
         };
 
         public FragmentCollectionAdapter(@NonNull Fragment fragment) {
             super(fragment);
-            fragmentMap.put(0, new NoteEditorTitleBodyFragment());
-            fragmentMap.put(1, new NoteEditorReminderFragment());
-            fragmentMap.put(2, new NoteEditorImageFragment());
-            fragmentMap.put(3, new NoteEditorTodoFragment());
-            fragmentMap.put(4, new NoteEditorRecordingFragment());
+
+            final WeakReference<ViewPager2> viewPager2WeakRef = new WeakReference<>(binding.viewpager);
+
+            for (NameAndFragmentTuple tuple : nameAndFragmentTupleList) {
+                tuple.getFragment().setViewPagerWeakRef(viewPager2WeakRef);
+            }
         }
 
-        public int getFragmentTitle(int position) {
-            return titles[position];
+        public int getFragmentName(int position) {
+            return nameAndFragmentTupleList[position].getNameResId();
         }
 
         @NonNull
         @Override
-        public Fragment createFragment(int position) {
-            Fragment fragment = fragmentMap.get(position);
+        public ViewPagerFragment createFragment(int position) {
+            return getFragment(position);
+        }
 
-            if (fragment != null) return fragment;
-
-            return new Fragment();
+        public ViewPagerFragment getFragment(int position) {
+            return nameAndFragmentTupleList[position].getFragment();
         }
 
         @Override
         public int getItemCount() {
-            return fragmentMap.size();
+            return nameAndFragmentTupleList.length;
+        }
+    }
+
+    private final static class NameAndFragmentTuple {
+        private final int nameResId;
+        private final ViewPagerFragment fragment;
+
+        private NameAndFragmentTuple(int nameResId, ViewPagerFragment fragment) {
+            this.nameResId = nameResId;
+            this.fragment = fragment;
+        }
+
+        public final int getNameResId() {
+            return nameResId;
+        }
+
+        public final ViewPagerFragment getFragment() {
+            return fragment;
         }
     }
 }

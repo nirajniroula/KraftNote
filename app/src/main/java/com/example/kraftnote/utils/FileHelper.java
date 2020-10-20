@@ -45,6 +45,10 @@ public class FileHelper {
         return audioDirectory;
     }
 
+    public File getAudioDirectoryFile(String location) {
+        return new File(getAudioDirectory(), location);
+    }
+
     public void saveImage(Bitmap bitmap, Consumer<String> onComplete) {
         String filename = System.currentTimeMillis() + ".png";
         File file = new File(imageDirectory, filename);

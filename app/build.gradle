@@ -80,6 +80,7 @@ dependencies {
     implementation 'com.github.GautamChibde:android-audio-visualizer:2.2.0'
     implementation 'com.github.Armen101:AudioRecordView:1.0.2'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+    implementation 'com.github.rygelouv:android-audio-sensei:0.1.2'
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -28,6 +28,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorImagesBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
+import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
@@ -44,7 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NoteEditorImageFragment extends Fragment {
+public class NoteEditorImageFragment extends ViewPagerFragment {
     private static final String TAG = NoteEditorImageFragment.class.getSimpleName();
 
     public static final int GALLERY_REQUEST = 188;
@@ -56,15 +57,16 @@ public class NoteEditorImageFragment extends Fragment {
     //views
     ImageAdapter imageAdapter;
 
-    // data
+    // view model
     private MutableLiveData<List<NoteFile>> images;
 
     //helper
     private FileHelper fileHelper;
     private PermissionHelper permissionHelper;
 
-    //temp data
-    File capturedImage;
+    // state
+    private File capturedImage;
+    private boolean allowViewPagerSwipeGesture = true;
 
     @Nullable
     @Override
@@ -100,6 +102,9 @@ public class NoteEditorImageFragment extends Fragment {
     private void listenEvents() {
         binding.closeImageViewerButton.setOnClickListener(v -> {
             binding.imageViewerWrapper.setVisibility(View.GONE);
+
+            allowViewPagerSwipeGesture = true;
+            updateViewPagerScrollBehaviour(true);
         });
 
         binding.addImageButton.setOnClickListener(v -> addImageFromGalleryRequested());
@@ -290,8 +295,17 @@ public class NoteEditorImageFragment extends Fragment {
                 binding.imageViewer.setImage(ImageSource.bitmap(bitmapClone));
                 binding.imageViewer.resetScaleAndCenter();
                 binding.imageViewerWrapper.setVisibility(View.VISIBLE);
+                allowViewPagerSwipeGesture = false;
+                updateViewPagerScrollBehaviour(false);
             });
         }
+    }
+
+    @Override
+    public void onFragmentVisible() {
+        super.onFragmentVisible();
+
+        updateViewPagerScrollBehaviour(allowViewPagerSwipeGesture);
     }
 
     private class ImageAdapter extends BaseAdapter {

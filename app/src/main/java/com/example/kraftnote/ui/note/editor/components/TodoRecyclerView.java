@@ -3,9 +3,7 @@ package com.example.kraftnote.ui.note.editor.components;
 import android.content.Context;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -145,12 +143,12 @@ public class TodoRecyclerView extends RecyclerView {
 
         private Toolbar.OnMenuItemClickListener onMenuItemClickListener = item -> {
             switch (item.getItemId()) {
-                case R.id.todo_toolbar_edit:
+                case R.id.toolbar_edit:
                     if (onToolBarMenuEditClicked != null) {
                         onToolBarMenuEditClicked.onClicked(todo);
                     }
                     break;
-                case R.id.todo_toolbar_delete:
+                case R.id.toolbar_delete:
                     if (onToolBarMenuDeleteClicked != null) {
                         onToolBarMenuDeleteClicked.onClicked(todo);
                     }
@@ -167,7 +165,7 @@ public class TodoRecyclerView extends RecyclerView {
         }
 
         private void listenEvents() {
-            binding.todoToolbar.inflateMenu(R.menu.todo_item_menu);
+            binding.todoToolbar.inflateMenu(R.menu.generic_item_menu);
             binding.todoCheckbox.setOnCheckedChangeListener(onCheckedChangeListener);
             binding.todoToolbar.setOnMenuItemClickListener(onMenuItemClickListener);
         }

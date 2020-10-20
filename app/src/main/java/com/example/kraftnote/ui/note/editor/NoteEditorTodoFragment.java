@@ -17,11 +17,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTodoBinding;
 import com.example.kraftnote.persistence.entities.Todo;
+import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteEditorTodoFragment extends Fragment {
+public class NoteEditorTodoFragment extends ViewPagerFragment {
     private static final String TAG = NoteEditorTodoFragment.class.getSimpleName();
 
     private FragmentNoteEditorTodoBinding binding;

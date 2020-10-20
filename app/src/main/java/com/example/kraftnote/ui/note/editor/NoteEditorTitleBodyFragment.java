@@ -14,8 +14,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorTitleBodyBinding;
 import com.example.kraftnote.persistence.entities.Note;
+import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
 
-public class NoteEditorTitleBodyFragment extends Fragment {
+public class NoteEditorTitleBodyFragment extends ViewPagerFragment {
     private static final String TAG = NoteEditorTitleBodyFragment.class.getSimpleName();
 
     private FragmentNoteEditorTitleBodyBinding binding;
@@ -56,5 +57,9 @@ public class NoteEditorTitleBodyFragment extends Fragment {
             note.getValue().setName(name);
             note.setValue(note.getValue());
         });
+    }
+
+    public Note getNote() {
+        return note.getValue();
     }
 }

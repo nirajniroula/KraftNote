@@ -19,6 +19,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentNoteEditorRecordingBinding;
 import com.example.kraftnote.persistence.entities.NoteFile;
+import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
 import com.example.kraftnote.utils.FileHelper;
 import com.example.kraftnote.utils.PermissionHelper;
 import com.visualizer.amplitude.AudioRecordView;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class NoteEditorRecordingFragment extends Fragment {
+public class NoteEditorRecordingFragment extends ViewPagerFragment {
     private static final String TAG = NoteEditorRecordingFragment.class.getSimpleName();
 
     private MediaPlayer player;
@@ -62,11 +63,15 @@ public class NoteEditorRecordingFragment extends Fragment {
         recordings = new MutableLiveData<>(new ArrayList<>());
         fileHelper = new FileHelper(requireContext().getApplicationContext());
         permissionHelper = new PermissionHelper(getContext());
+
+        binding.recordingRecyclerView.setRecordings(recordings.getValue());
     }
 
     private void listenEvents() {
         binding.startButton.setOnClickListener(v -> startRecording());
         binding.stopButton.setOnClickListener(v -> stopRecording());
+
+
     }
 
     private void startRecording() {
@@ -97,7 +102,7 @@ public class NoteEditorRecordingFragment extends Fragment {
                     recordViewWeakReference.get().update(recorderWeakReference.get().getMaxAmplitude());
                 });
             }
-        }, 0, 200);
+        }, 0, 250);
 
         binding.chronometer.setBase(SystemClock.elapsedRealtime());
         binding.chronometer.start();
@@ -147,6 +152,7 @@ public class NoteEditorRecordingFragment extends Fragment {
                 : new ArrayList<>();
 
         allRecordings.add(NoteFile.newAudio(currentRecordingSource.getName()));
+        addRecording(NoteFile.newAudio(currentRecordingSource.getName()));
 
         currentRecordingSource = null;
 
@@ -171,6 +177,18 @@ public class NoteEditorRecordingFragment extends Fragment {
             Log.d(TAG, "Error playing " + source.getAbsolutePath() + " file");
             e.printStackTrace();
         }
+    }
+
+    private void addRecording(NoteFile audio) {
+        List<NoteFile> recordingsValue = recordings.getValue();
+
+        if(recordingsValue == null) {
+            recordingsValue = new ArrayList<>();
+        }
+
+        recordingsValue.add(audio);
+
+        binding.recordingRecyclerView.addRecording(audio);
     }
 
     private void stopPlaying() {

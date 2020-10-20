@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.kraftnote.R;
@@ -22,6 +21,7 @@ import com.example.kraftnote.databinding.FragmentNoteEditorRemindersBinding;
 import com.example.kraftnote.persistence.entities.DatetimeReminder;
 import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.transformers.PlaceToLocationReminder;
+import com.example.kraftnote.ui.note.contracts.ViewPagerFragment;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.LocationHelper;
 import com.example.kraftnote.utils.PermissionHelper;
@@ -37,12 +37,9 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
-public class NoteEditorReminderFragment extends Fragment {
+public class NoteEditorReminderFragment extends ViewPagerFragment {
     private static final String TAG = NoteEditorReminderFragment.class.getSimpleName();
 
     private FragmentNoteEditorRemindersBinding binding;
@@ -61,6 +58,9 @@ public class NoteEditorReminderFragment extends Fragment {
 
     // picker
     private MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
+
+    // state
+    private boolean allowViewPagerSwipeGesture = true;
 
     @Nullable
     @Override
@@ -154,13 +154,22 @@ public class NoteEditorReminderFragment extends Fragment {
             return;
         }
 
+        Log.d(TAG, "MAPS OPEN");
+
         if (googleMap == null) return;
 
         binding.googleMapCardView.setVisibility(View.VISIBLE);
+
+        allowViewPagerSwipeGesture = false;
+        updateViewPagerScrollBehaviour(false);
     }
 
     private void closeGoogleMap() {
         binding.googleMapCardView.setVisibility(View.GONE);
+        Log.d(TAG, "MAPS CLOSE");
+
+        allowViewPagerSwipeGesture = true;
+        updateViewPagerScrollBehaviour(true);
     }
 
     @SuppressLint("DefaultLocale")
@@ -221,4 +230,11 @@ public class NoteEditorReminderFragment extends Fragment {
             timePickerDialog.show();
         }
     };
+
+    @Override
+    public void onFragmentVisible() {
+        super.onFragmentVisible();
+
+        updateViewPagerScrollBehaviour(allowViewPagerSwipeGesture);
+    }
 }
