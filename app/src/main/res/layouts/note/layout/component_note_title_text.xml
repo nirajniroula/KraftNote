@@ -28,7 +28,7 @@
         app:hintAnimationEnabled="false"
         app:hintEnabled="false">
 
-        <com.example.kraftnote.ui.note.editor.components.InputText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/note_title_input_text"
             style="@style/ThemeOverlay.MyTheme.TextInputEditText.NoteTitle"
             android:layout_width="match_parent"

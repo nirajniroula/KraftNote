@@ -50,6 +50,8 @@ public class NoteTitleText extends LinearLayout {
     private void listenEvents() {
         // prevent line break character
         binding.noteTitleInputText.setOnEditorActionListener((v, actionId, event) -> actionId == 0);
+        binding.noteTitleInputText.addTextChangedListener(
+                new TitleTextFormatWatcher(binding.noteTitleInputText, null));
     }
 
 

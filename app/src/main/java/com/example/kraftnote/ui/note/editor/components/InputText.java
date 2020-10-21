@@ -70,9 +70,7 @@ public class InputText extends TextInputEditText {
 
         private boolean checkIfEditTextOnTopAndScrollUp(View v, MotionEvent event) {
             if (v.getScrollY() == 0) {
-                if (event.getHistorySize() > 0 && event.getHistoricalY(0) <= event.getY()) {
-                    return true;
-                }
+                return event.getHistorySize() > 0 && event.getHistoricalY(0) <= event.getY();
             }
             return false;
         }
@@ -88,9 +86,7 @@ public class InputText extends TextInputEditText {
             roundedVal = Math.round(roundedVal) + 20 / getContext().getResources().getDisplayMetrics().scaledDensity;
             roundedVal = roundedVal / 1000;
             if (roundedVal >= 1) {
-                if (event.getHistorySize() > 0 && event.getHistoricalY(0) >= event.getY()) {
-                    return true;
-                }
+                return event.getHistorySize() > 0 && event.getHistoricalY(0) >= event.getY();
             }
             return false;
         }

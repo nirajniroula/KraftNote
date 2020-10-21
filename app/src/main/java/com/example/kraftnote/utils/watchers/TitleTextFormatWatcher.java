@@ -39,12 +39,10 @@ public class TitleTextFormatWatcher implements TextWatcher {
 
         editText.removeTextChangedListener(this);
 
-        final Object[] spans = editable.getSpans(0, editable.length() - 1, Object.class);
+        final ParcelableSpan[] spans = editable.getSpans(0, editable.length() - 1, ParcelableSpan.class);
 
-        for (Object span : spans) {
-            if (span instanceof ParcelableSpan) {
-                editable.removeSpan(span);
-            }
+        for (ParcelableSpan span : spans) {
+            editable.removeSpan(span);
         }
 
         String text = editable.toString();

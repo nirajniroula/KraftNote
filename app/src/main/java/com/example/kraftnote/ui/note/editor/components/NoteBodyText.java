@@ -64,6 +64,8 @@ public class NoteBodyText extends TextInputLayout {
 
     private void listenEvents(Context context) {
         binding.bodyTextarea.setCustomSelectionActionModeCallback(actionModeCallback);
+        binding.bodyTextarea.addTextChangedListener(
+                new BodyTextFormatWatcher(binding.bodyTextarea, null));
     }
 
     public void setBody(String body) {
