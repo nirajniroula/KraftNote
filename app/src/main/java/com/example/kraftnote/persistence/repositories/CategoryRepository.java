@@ -59,6 +59,10 @@ public class CategoryRepository implements IRepository<Category> {
         return categoriesWithNotesCount;
     }
 
+    public Category getDefault() {
+        return categoryDao.getDefault();
+    }
+
     private static class InsertTask extends CategoryMutationTask {
         public InsertTask(CategoryDao categoryDao) {
             super(categoryDao);

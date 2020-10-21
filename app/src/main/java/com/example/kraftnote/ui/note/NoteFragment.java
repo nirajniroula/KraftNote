@@ -25,6 +25,7 @@ import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.viewmodels.NoteFileViewModel;
 import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
 import com.example.kraftnote.persistence.views.NoteWithRelation;
+import com.example.kraftnote.ui.note.editor.components.dialog.ChangeCategoryDialog;
 import com.example.kraftnote.utils.FileHelper;
 
 import java.io.File;
@@ -40,7 +41,10 @@ public class NoteFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
     private NoteViewModel noteViewModel;
     private NoteFileViewModel noteFileViewModel;
-    private List<NoteWithRelation> notes = new ArrayList<>();
+    private ChangeCategoryDialog changeCategoryDialog;
+    private List<Category> categories;
+    private Category defaultCategory;
+    private Note categoryToBeUpdatedNote;
 
     private FileHelper fileHelper;
 
@@ -70,6 +74,8 @@ public class NoteFragment extends Fragment {
     }
 
     private void initializeProperties() {
+        defaultCategory = categoryViewModel.getDefault();
+        changeCategoryDialog = new ChangeCategoryDialog();
         fileHelper = new FileHelper(requireContext());
         navController = NavHostFragment.findNavController(this);
     }
@@ -80,6 +86,17 @@ public class NoteFragment extends Fragment {
         binding.addNoteFab.setOnClickListener(this::addNoteRequest);
         binding.noteRecyclerView.setOnDeleteNoteClickedListener(this::onDeleteNoteRequest);
         binding.noteRecyclerView.setOnEditNoteClickedListener(this::onEditNoteRequest);
+        binding.noteRecyclerView.setOnChangeCategoryClickedListener(this::onNoteCategoryChangeRequest);
+        changeCategoryDialog.setOnCategorySelectedListener(category -> {
+            int categoryId = category != null ? category.getId() : defaultCategory.getId();
+
+            if (categoryId == categoryToBeUpdatedNote.getCategoryId()) return;
+
+            categoryToBeUpdatedNote.setCategoryId(categoryId);
+            noteViewModel.update(categoryToBeUpdatedNote);
+
+            Toast.makeText(getContext(), R.string.note_category_changed, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void onEditNoteRequest(NoteWithRelation noteWithRelation) {
@@ -90,7 +107,6 @@ public class NoteFragment extends Fragment {
     }
 
     private void notesMutated(List<NoteWithRelation> notes) {
-        this.notes = notes;
         binding.noteRecyclerView.setNotes(notes);
     }
 
@@ -113,13 +129,14 @@ public class NoteFragment extends Fragment {
     }
 
     private void categoriesMutated(List<Category> categories) {
+        this.categories = categories;
         binding.categoryTabs.sync(categories);
     }
 
     private void deleteFilesOfNote(Note note) {
         final List<NoteFile> noteFileList = noteFileViewModel.getAllFor(note.getId());
 
-        if(noteFileList == null || noteFileList.size() == 0) return;
+        if (noteFileList == null || noteFileList.size() == 0) return;
 
         final File[] files = noteFileList.stream().map(noteFile -> {
             return noteFile.isAudio()
@@ -140,5 +157,18 @@ public class NoteFragment extends Fragment {
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
 
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private void onNoteCategoryChangeRequest(NoteWithRelation noteWithRelation) {
+        categoryToBeUpdatedNote = noteWithRelation.getNote();
+        List<Category> categoryList = new ArrayList<>(categories);
+        categoryList.set(0, defaultCategory);
+
+        changeCategoryDialog.setOnActivityCreated(() -> {
+            changeCategoryDialog.setCategories(categoryList);
+            changeCategoryDialog.setCategory(noteWithRelation.getCategory());
+        });
+
+        changeCategoryDialog.show(getChildFragmentManager(), TAG);
     }
 }

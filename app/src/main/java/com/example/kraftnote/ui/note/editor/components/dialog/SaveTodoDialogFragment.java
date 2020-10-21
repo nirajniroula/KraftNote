@@ -30,11 +30,9 @@ public class SaveTodoDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_todo_create_edit_dialog, null);
-        binding = FragmentTodoCreateEditDialogBinding.bind(view);
+        binding = FragmentTodoCreateEditDialogBinding.inflate(getLayoutInflater(), null, false);
 
-        dialog = builder.setView(view)
+        dialog = builder.setView(binding.getRoot())
                 .setTitle(
                         getTodo() == null
                                 ? R.string.add_todo

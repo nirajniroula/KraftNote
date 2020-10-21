@@ -40,4 +40,7 @@ public interface CategoryDao {
 
     @Insert
     long insertSingle(Category category);
+
+    @Query("SELECT * FROM Categories WHERE category_hidden = 1 LIMIT 1")
+    Category getDefault();
 }
