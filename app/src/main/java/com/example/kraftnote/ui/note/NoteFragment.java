@@ -21,8 +21,6 @@ import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
 import com.example.kraftnote.persistence.views.NoteWithRelation;
 
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,7 +2,6 @@ package com.example.kraftnote.ui.note;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentAddEditNoteBinding;
-import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.entities.Note;
-import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
 import com.example.kraftnote.ui.note.contracts.NoteEditorChildFragmentBase;
 import com.example.kraftnote.ui.note.editor.NoteEditorImageFragment;
@@ -33,8 +30,6 @@ import com.example.kraftnote.ui.note.editor.NoteEditorTodoFragment;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddEditNoteFragment extends Fragment {
     private static final String TAG = AddEditNoteFragment.class.getSimpleName();
@@ -42,11 +37,8 @@ public class AddEditNoteFragment extends Fragment {
     private FragmentAddEditNoteBinding binding;
 
     private NavController navController;
-    private CategoryViewModel categoryViewModel;
     private NoteViewModel noteViewModel;
     private FragmentCollectionAdapter fragmentCollectionAdapter;
-    private List<Category> categories = new ArrayList<>();
-    private List<Note> notes = new ArrayList<>();
     private Note note;
 
     // This callback will only be called when AddUpdateNoteFragment is at least started
@@ -74,7 +66,6 @@ public class AddEditNoteFragment extends Fragment {
             @NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
 
         requireActivity().getOnBackPressedDispatcher()
@@ -110,20 +101,6 @@ public class AddEditNoteFragment extends Fragment {
         ).attach();
 
         binding.viewpager.registerOnPageChangeCallback(onPageChangeCallback);
-
-        binding.saveNoteButton.setOnClickListener(v -> {
-            final NoteEditorTitleBodyFragment fragment =
-                    fragmentCollectionAdapter.getNoteEditorTitleBodyFragment();
-
-            getNote().setName(fragment.getName());
-            getNote().setBody(fragment.getBody());
-            getNote().setDraft(0);
-            getNote().setCreatedAt(null);
-
-            noteViewModel.update(getNote());
-
-            Toast.makeText(getContext(), R.string.note_saved, Toast.LENGTH_SHORT).show();
-        });
     }
 
     private Note getNote() {
@@ -144,17 +121,21 @@ public class AddEditNoteFragment extends Fragment {
     }
 
     private void listenEvents() {
-        categoryViewModel.getAll().observe(getViewLifecycleOwner(), this::categoriesMutated);
-        noteViewModel.getAllWithDraft().observe(getViewLifecycleOwner(), allNotes -> {
-            Log.d(TAG, allNotes.get(0).toString());
-            Log.d(TAG, allNotes.toString() + " " + allNotes.size());
-        });
-
         binding.closeEditorButton.setOnClickListener(v -> gotoNoteFragment());
-    }
 
-    private void categoriesMutated(List<Category> categories) {
-        Log.d(TAG, "Category Mutated " + categories.size());
+        binding.saveNoteButton.setOnClickListener(v -> {
+            final NoteEditorTitleBodyFragment fragment =
+                    fragmentCollectionAdapter.getNoteEditorTitleBodyFragment();
+
+            getNote().setName(fragment.getName());
+            getNote().setBody(fragment.getBody());
+            getNote().setDraft(0);
+            getNote().setCreatedAt(null);
+
+            noteViewModel.update(getNote());
+
+            Toast.makeText(getContext(), R.string.note_saved, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void gotoNoteFragment() {

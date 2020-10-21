@@ -6,6 +6,15 @@
 <!--    <color name="colorPrimaryDark">#3700B3</color>-->
     <color name="colorAccent">@color/purple_800</color>
     <color name="semi_transparent_black">#AA000000</color>
+    <color name="semi_transparent_black_10">#10000000</color>
+    <color name="semi_transparent_black_20">#20000000</color>
+    <color name="semi_transparent_black_30">#30000000</color>
+    <color name="semi_transparent_black_40">#40000000</color>
+    <color name="semi_transparent_black_50">#50000000</color>
+    <color name="semi_transparent_black_60">#60000000</color>
+    <color name="semi_transparent_black_70">#70000000</color>
+    <color name="semi_transparent_black_80">#80000000</color>
+    <color name="semi_transparent_black_90">#90000000</color>
     <color name="semi_transparent_white">#AAFFFFFF</color>
 
     <color name="white_50">#ffffff</color>

@@ -45,6 +45,7 @@
         android:layout_alignParentBottom="true"
         android:clipToPadding="true"
         android:gravity="top"
+        android:background="@color/grey_50"
         tools:listitem="@layout/component_note_card" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -32,8 +32,16 @@ public class DateHelper {
         return toFormattedString(localDateTime, "EEEE, d MMMM yyyy hh:mm a");
     }
 
+    public static String toFormattedStringAlt(LocalDateTime localDateTime) {
+        return toFormattedString(localDateTime, "EEE, d MMM yyyy, hh:mm a");
+    }
+
+    public static String toFormattedStringAlt(Date date) {
+        return toFormattedStringAlt(toLocalDateTime(date));
+    }
+
     public static String toFormattedString(LocalDateTime localDateTime, String patten) {
-        return localDateTime.format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy hh:mm a"));
+        return localDateTime.format(DateTimeFormatter.ofPattern(patten));
     }
 
     public static String toFileNameFormat() {

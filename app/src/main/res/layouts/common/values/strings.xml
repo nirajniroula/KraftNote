@@ -69,4 +69,5 @@
     <string name="location_reminder_set">Location reminder set</string>
     <string name="location_reminder_updated">Location reminder updated</string>
     <string name="note_saved">Note saved</string>
+    <string name="change_category">Change Category</string>
 </resources>
