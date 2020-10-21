@@ -27,10 +27,15 @@ import com.example.kraftnote.persistence.viewmodels.NoteViewModel;
 import com.example.kraftnote.persistence.views.NoteWithRelation;
 import com.example.kraftnote.ui.note.editor.components.dialog.ChangeCategoryDialog;
 import com.example.kraftnote.utils.FileHelper;
+import com.example.kraftnote.utils.watchers.PlainTextFormatWatcher;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NoteFragment extends Fragment {
     private static final String TAG = NoteFragment.class.getSimpleName();
@@ -45,6 +50,9 @@ public class NoteFragment extends Fragment {
     private List<Category> categories;
     private Category defaultCategory;
     private Note categoryToBeUpdatedNote;
+    private String keyword;
+    private Category selectedCategory;
+    private List<NoteWithRelation> notes;
 
     private FileHelper fileHelper;
 
@@ -87,6 +95,12 @@ public class NoteFragment extends Fragment {
         binding.noteRecyclerView.setOnDeleteNoteClickedListener(this::onDeleteNoteRequest);
         binding.noteRecyclerView.setOnEditNoteClickedListener(this::onEditNoteRequest);
         binding.noteRecyclerView.setOnChangeCategoryClickedListener(this::onNoteCategoryChangeRequest);
+
+        binding.categoryTabs.setOnTabSelectedListener(category -> {
+            selectedCategory = category;
+            supplyFilteredNotesToRecyclerView();
+        });
+
         changeCategoryDialog.setOnCategorySelectedListener(category -> {
             int categoryId = category != null ? category.getId() : defaultCategory.getId();
 
@@ -97,6 +111,23 @@ public class NoteFragment extends Fragment {
 
             Toast.makeText(getContext(), R.string.note_category_changed, Toast.LENGTH_SHORT).show();
         });
+
+        binding.searchNoteInput.addTextChangedListener(
+                new PlainTextFormatWatcher(binding.searchNoteInput, () -> {
+                    if (binding.searchNoteInput.getText() == null) {
+                        keyword = "";
+                    } else {
+                        keyword = binding.searchNoteInput
+                                .getText()
+                                .toString()
+                                .trim()
+                                .toLowerCase()
+                                .replaceAll("\\s+", " ");
+                    }
+
+                    supplyFilteredNotesToRecyclerView();
+                })
+        );
     }
 
     private void onEditNoteRequest(NoteWithRelation noteWithRelation) {
@@ -107,7 +138,8 @@ public class NoteFragment extends Fragment {
     }
 
     private void notesMutated(List<NoteWithRelation> notes) {
-        binding.noteRecyclerView.setNotes(notes);
+        this.notes = notes;
+        supplyFilteredNotesToRecyclerView();
     }
 
     private void onDeleteNoteRequest(NoteWithRelation noteWithRelation) {
@@ -131,6 +163,25 @@ public class NoteFragment extends Fragment {
     private void categoriesMutated(List<Category> categories) {
         this.categories = categories;
         binding.categoryTabs.sync(categories);
+    }
+
+    private void supplyFilteredNotesToRecyclerView() {
+        if (notes == null) return;
+
+        final List<NoteWithRelation> filteredNotes = notes.stream()
+                .filter(noteWithRelation -> selectedCategory == null
+                        || Objects.equals(
+                        noteWithRelation.getCategory().getId(), selectedCategory.getId()
+                ))
+                .filter(noteWithRelation -> (keyword == null)
+                        || (keyword.length() == 0)
+                        || noteWithRelation.getNote()
+                        .getName()
+                        .toLowerCase()
+                        .contains(keyword)
+                ).collect(Collectors.toList());
+
+        binding.noteRecyclerView.setNotes(filteredNotes);
     }
 
     private void deleteFilesOfNote(Note note) {

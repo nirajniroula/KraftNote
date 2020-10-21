@@ -14,9 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 public class CategoryTabLayout extends TabLayout {
     private Map<Integer, Category> categories = new HashMap<>();
+    private Consumer<Category> onTabSelectedListener;
+    private Category selected;
 
     public CategoryTabLayout(@NonNull Context context) {
         super(context);
@@ -36,6 +40,32 @@ public class CategoryTabLayout extends TabLayout {
     private void init(Context context) {
         removeAllTabs();
         addFirstTab();
+
+        addOnTabSelectedListener(new OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(Tab tab) {
+                selected = (Category) tab.getTag();
+                onTabSelectedListener.accept(selected);
+            }
+
+            @Override
+            public void onTabUnselected(Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(Tab tab) {
+
+            }
+        });
+    }
+
+    public Category getSelected() {
+        return selected;
+    }
+
+    public void setOnTabSelectedListener(Consumer<Category> onTabSelectedListener) {
+        this.onTabSelectedListener = onTabSelectedListener;
     }
 
     private void addFirstTab() {
@@ -44,6 +74,7 @@ public class CategoryTabLayout extends TabLayout {
         allTab.setTag(null);
         addTab(allTab);
     }
+
 
     public void sync(List<Category> categoryList) {
         List<Tab> tabsToRemove = new ArrayList<>();
@@ -60,7 +91,7 @@ public class CategoryTabLayout extends TabLayout {
 
             for (Category category : categoryList) {
                 // update if match found
-                if (_category.getId() == category.getId()) {
+                if (Objects.equals(_category.getId(), category.getId())) {
                     tab.setText(category.getName());
                     tab.setTag(category);
                     categories.put(category.getId(), category);
