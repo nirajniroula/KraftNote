@@ -102,6 +102,9 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
 
         autocompleteSupportFragment.getView().setBackgroundColor(Color.WHITE);
         LocationHelper.forFragment(autocompleteSupportFragment);
+
+        onDatetimeSelected();
+        onLocationSelected();
     }
 
     private void listenEvents() {
@@ -129,16 +132,18 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
     }
 
     private void onLocationSelected() {
-        if (googleMap == null || locationReminder == null) {
+        if(locationReminder == null) {
             binding.selectedLocationTextView.setText(R.string.select_a_location);
             return;
         }
 
         String fullAddress = locationReminder.getFullAddress();
+        binding.selectedLocationTextView.setText(fullAddress);
+
+        if (googleMap == null ) return;
+
         String locationName = locationReminder.getName();
         LatLng position = locationReminder.getLatLng();
-
-        binding.selectedLocationTextView.setText(fullAddress);
 
         googleMap.clear();
 
@@ -161,7 +166,7 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
             return;
         }
 
-        Log.d(TAG, "MAPS OPEN");
+        onLocationSelected();
 
         if (googleMap == null) return;
 
