@@ -8,10 +8,11 @@
     android:layout_marginHorizontal="@dimen/keyline_4"
     android:layout_marginTop="@dimen/component_label_horizontal_margin"
     android:clipToPadding="false"
-    android:elevation="1dp"
-    app:cardBackgroundColor="#ede7f6"
+    app:cardBackgroundColor="#ebebf3"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="parent">
+    app:layout_constraintTop_toBottomOf="parent"
+    app:strokeColor="#777b70a6"
+    app:strokeWidth="0.55dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,10 +41,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/keyline_4"
                     android:layout_marginTop="@dimen/keyline_4"
-                    android:text="@string/text_overline"
                     android:fontFamily="@font/open_sans_semi_bold"
+                    android:text="@string/text_overline"
                     android:textAppearance="?attr/textAppearanceOverline"
-                    android:textColor="#9575cd" />
+                    android:textColor="#553bf9" />
 
                 <TextView
                     android:id="@+id/category_notes_count"
@@ -54,7 +55,7 @@
                     android:fontFamily="@font/open_sans_light"
                     android:text="10 Notes"
                     android:textAppearance="?attr/textAppearanceSubtitle2"
-                    android:textColor="#7e57c2"
+                    android:textColor="#25146b"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -80,7 +81,7 @@
             android:paddingBottom="@dimen/keyline_4"
             android:text="@string/text_headline_6"
             android:textAppearance="?attr/textAppearanceHeadline4"
-            android:textColor="#5e35b1"
+            android:textColor="#231069"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/category_info" />

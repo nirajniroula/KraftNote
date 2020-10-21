@@ -42,7 +42,7 @@
         android:layout_alignParentBottom="true"
         android:clipToPadding="true"
         android:gravity="top"
-        android:background="@color/grey_50"
+        android:background="@color/indigo_50"
         tools:listitem="@layout/component_category_card"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -54,7 +54,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="86dp"
-        app:backgroundTint="#7e57c2"
+        app:backgroundTint="@color/indigo_A400"
         app:fabSize="auto"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="#FFFFFF" />

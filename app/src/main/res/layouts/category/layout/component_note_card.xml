@@ -5,13 +5,14 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/keyline_4"
     android:layout_marginTop="@dimen/component_label_horizontal_margin"
     android:clipToPadding="false"
-    app:cardBackgroundColor="#ede7f6"
-    android:layout_marginHorizontal="@dimen/keyline_4"
-    android:elevation="1dp"
+    app:cardBackgroundColor="#ebebf3"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="parent">
+    app:layout_constraintTop_toBottomOf="parent"
+    app:strokeColor="#777b70a6"
+    app:strokeWidth="0.55dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,10 +41,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/keyline_4"
                     android:layout_marginTop="@dimen/keyline_4"
-                    android:text="@string/text_overline"
                     android:fontFamily="@font/open_sans_semi_bold"
+                    android:text="@string/text_overline"
                     android:textAppearance="?attr/textAppearanceOverline"
-                    android:textColor="#9575cd" />
+                    android:textColor="#553bf9" />
 
                 <TextView
                     android:id="@+id/note_category_name"
@@ -51,10 +52,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/keyline_4"
                     android:layout_marginTop="@dimen/keyline_1"
-                    android:text="Uncategorised"
                     android:fontFamily="@font/open_sans_light"
+                    android:text="Uncategorised"
                     android:textAppearance="?attr/textAppearanceSubtitle2"
-                    android:textColor="#9575cd"
+                    android:textColor="#25146b"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -71,16 +72,16 @@
             android:id="@+id/note_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/keyline_4"
-            android:paddingBottom="@dimen/keyline_4"
+            android:ellipsize="end"
             android:fontFamily="@font/open_sans_light"
             android:lineHeight="30dp"
-            android:textSize="24sp"
+            android:maxLines="2"
+            android:paddingHorizontal="@dimen/keyline_4"
+            android:paddingBottom="@dimen/keyline_4"
             android:text="Similar in from or completely designer Any they there and"
             android:textAppearance="?attr/textAppearanceHeadline4"
-            android:textColor="#7e57c2"
-            android:maxLines="2"
-            android:ellipsize="end"
+            android:textColor="#231069"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/note_info"
             tools:ignore="HardcodedText" />

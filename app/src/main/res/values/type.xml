@@ -121,4 +121,24 @@
         <item name="android:background">@null</item>
     </style>
 
+    <style name="TextAppearance.MyTheme.SearchInput.Placeholder" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/semi_transparent_white</item>
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+    </style>
+
+    <style name="ThemeOverlay.MyTheme.TextInputEditText.Search" parent="ThemeOverlay.MyTheme.TextInputEditText.NoteTitle">
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/open_sans_regular</item>
+        <item name="android:background">@drawable/search_background</item>
+        <item name="android:textColorHint">@color/semi_transparent_white</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="hintTextAppearance">@style/TextAppearance.MyTheme.SearchInput.Placeholder</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.MyTheme.SearchInput.Placeholder</item>
+
+<!--        android:textColorHint="@color/semi_transparent_white"
+            android:textCursorDrawable="@null"-->
+    </style>
+
 </resources>
