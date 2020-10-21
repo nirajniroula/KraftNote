@@ -6,22 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".ui.category.CategoryFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:orientation="horizontal">
+        android:clipToPadding="false"
+        android:background="@color/grey_100"
+        android:elevation="4dp">
 
         <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             style="@style/TextAppearance.MyTheme.Overline.Heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/keyline_3"
             android:text="@string/categories"
-            app:drawableStartCompat="@drawable/ic_baseline_category_24" />
-    </LinearLayout>
+            app:drawableStartCompat="@drawable/ic_baseline_category_24"
+            app:drawableTint="@color/semi_transparent_black" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <com.example.kraftnote.ui.category.components.CategoryRecyclerView
         android:id="@+id/category_recycler_view"
@@ -33,6 +42,7 @@
         android:layout_alignParentBottom="true"
         android:clipToPadding="true"
         android:gravity="top"
+        android:background="@color/grey_50"
         tools:listitem="@layout/category_card"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
