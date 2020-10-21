@@ -9,7 +9,7 @@ public class HtmlParser {
     public static String toHtml(Spannable spannable) {
         if (spannable == null) return "";
 
-        return HtmlCompat.toHtml(spannable, HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
+        return HtmlCompat.toHtml(spannable, HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL);
     }
 
     public static Spanned toSpanned(String html) {

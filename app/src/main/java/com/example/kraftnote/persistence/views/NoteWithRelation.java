@@ -101,4 +101,16 @@ public class NoteWithRelation {
     public void setLocationReminder(LocationReminder locationReminder) {
         this.locationReminder = locationReminder;
     }
+
+    @Override
+    public String toString() {
+        return "NoteWithRelation{" +
+                "note=" + note +
+                ", category=" + category +
+                ", files=" + files +
+                ", todos=" + todos +
+                ", datetimeReminder=" + datetimeReminder +
+                ", locationReminder=" + locationReminder +
+                '}';
+    }
 }

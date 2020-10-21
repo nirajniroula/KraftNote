@@ -80,4 +80,14 @@ public class DatetimeReminder {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = (createdAt == null) ? new Date() : createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "DatetimeReminder{" +
+                "id=" + id +
+                ", datetime=" + datetime +
+                ", noteId=" + noteId +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

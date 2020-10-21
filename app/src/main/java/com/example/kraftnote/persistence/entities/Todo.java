@@ -101,4 +101,15 @@ public class Todo {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = (createdAt == null) ? new Date() : createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", task='" + task + '\'' +
+                ", completed=" + completed +
+                ", noteId=" + noteId +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

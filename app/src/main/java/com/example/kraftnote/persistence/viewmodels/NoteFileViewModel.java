@@ -47,7 +47,7 @@ public class NoteFileViewModel extends AndroidViewModel implements IViewModel<No
         return noteFiles;
     }
 
-    public LiveData<List<NoteFile>> getAllFor(int id) {
+    public List<NoteFile> getAllFor(int id) {
         return repository.getAllFor(id);
     }
 }

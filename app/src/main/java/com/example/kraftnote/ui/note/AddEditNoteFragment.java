@@ -110,8 +110,8 @@ public class AddEditNoteFragment extends Fragment {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.getInt("note_id", -1) != -1) {
-            int id = bundle.getInt("note_id");
+        if (bundle != null && bundle.getInt("id", -1) != -1) {
+            int id = bundle.getInt("id");
             return noteViewModel.findById(id);
         }
 

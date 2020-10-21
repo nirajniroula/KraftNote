@@ -38,7 +38,7 @@ public class NoteFileRepository implements IRepository<NoteFile> {
         noteFileDao.deleteAll(noteFile);
     }
 
-    public LiveData<List<NoteFile>> getAllFor(int id) {
+    public List<NoteFile> getAllFor(int id) {
         return noteFileDao.getAllForNote(id);
     }
 

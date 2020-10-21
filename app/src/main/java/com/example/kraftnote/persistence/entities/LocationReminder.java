@@ -131,4 +131,18 @@ public class LocationReminder {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = (createdAt == null) ? new Date() : createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "LocationReminder{" +
+                "id=" + id +
+                ", placeId='" + placeId + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", noteId=" + noteId +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

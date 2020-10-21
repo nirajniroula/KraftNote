@@ -75,4 +75,14 @@ public class Category {
     public void setHidden(Integer hidden) {
         this.hidden = hidden;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", hidden=" + hidden +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

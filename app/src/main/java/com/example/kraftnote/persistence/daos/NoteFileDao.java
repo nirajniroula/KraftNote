@@ -26,7 +26,7 @@ public interface NoteFileDao {
     LiveData<List<NoteFile>> getAll();
 
     @Query("SELECT * FROM NoteFiles WHERE note_file_note_id = :id ORDER BY note_file_created_at DESC")
-    LiveData<List<NoteFile>> getAllForNote(int id);
+    List<NoteFile> getAllForNote(int id);
 
     @Insert
     long insertSingle(NoteFile noteFile);

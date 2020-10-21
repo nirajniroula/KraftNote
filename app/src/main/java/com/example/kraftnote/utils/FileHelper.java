@@ -137,21 +137,23 @@ public class FileHelper {
     }
 
     public void deleteImage(NoteFile image) {
-        deleteFile(getImageDirectoryFile(image.getLocation()));
+        deleteFiles(getImageDirectoryFile(image.getLocation()));
     }
 
     public void deleteAudio(NoteFile recording) {
-        deleteFile(getAudioDirectoryFile(recording.getLocation()));
+        deleteFiles(getAudioDirectoryFile(recording.getLocation()));
     }
 
-    public void deleteFile(File toDeleteFile) {
+    public void deleteFiles(File... files) {
         Executors.newSingleThreadExecutor().execute(() -> {
-            Log.d("Note File is ", toDeleteFile.getAbsolutePath());
+            for (File toDeleteFile : files) {
+                Log.d("Note File is ", toDeleteFile.getAbsolutePath());
 
-            if (toDeleteFile.exists()) {
-                try {
-                    toDeleteFile.delete();
-                } catch (Exception ignored) {
+                if (toDeleteFile.exists()) {
+                    try {
+                        toDeleteFile.delete();
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         });
