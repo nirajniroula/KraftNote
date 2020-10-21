@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blueGrey_50"
+    >
+
+    <RelativeLayout
+        android:id="@+id/datetime_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/note_editor_background"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/keyline_4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/date_and_time_caption"
+            style="@style/TextAppearance.MyTheme.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="@string/date_and_time"
+            android:textColor="@color/white_50" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/date_time_picker_button"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="@string/select"
+            android:textColor="@color/white_50"
+            android:textSize="12sp"
+            app:icon="@drawable/ic_baseline_calendar_today_24"
+            app:iconSize="16dp"
+            app:iconTint="@color/white_50"
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/selected_date_text_view"
+        style="@style/TextAppearance.MyTheme.Headline3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:paddingVertical="@dimen/keyline_9"
+        android:text="Select a date &amp; time"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:fontFamily="@font/open_sans_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/datetime_header"
+        tools:ignore="HardcodedText" />
+
+    <RelativeLayout
+        android:id="@+id/location_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/note_editor_background"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/keyline_4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/selected_date_text_view">
+
+        <TextView
+            android:id="@+id/location_caption"
+            style="@style/TextAppearance.MyTheme.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="@string/location"
+            android:textColor="@color/white_50" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/show_map_button"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="@string/open_map_button"
+            android:textColor="@color/white_50"
+            android:textSize="12sp"
+            app:icon="@drawable/ic_baseline_location_on_24"
+            app:iconSize="16dp"
+            app:iconTint="@color/white_50"
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/places_autocomplete_fragment_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location_header"
+
+        android:paddingHorizontal="@dimen/keyline_4"
+        android:paddingVertical="@dimen/keyline_2"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/places_autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/selected_location_text_view"
+        style="@style/TextAppearance.MyTheme.Headline3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/keyline_2"
+        android:paddingVertical="@dimen/keyline_9"
+        android:text="Select a location"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:fontFamily="@font/open_sans_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/places_autocomplete_fragment_wrapper"
+        tools:ignore="HardcodedText" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/google_map_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/close_map_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/keyline_2"
+                android:layout_marginTop="@dimen/keyline_2"
+                app:backgroundTint="@color/white_50"
+                app:fabSize="mini"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_close_24"
+                app:tint="@color/red_A400" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/navigate_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/keyline_5"
+                android:text="@string/navigate"
+                app:icon="@drawable/ic_baseline_navigation_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <fragment
+                android:id="@+id/google_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

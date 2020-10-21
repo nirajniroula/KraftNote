@@ -2,6 +2,8 @@
   <dictionary name="rosnk">
     <words>
       <w>kraftnote</w>
+      <w>overline</w>
+      <w>uncategorised</w>
     </words>
   </dictionary>
 </component>

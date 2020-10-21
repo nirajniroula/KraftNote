@@ -9,6 +9,7 @@ import com.example.kraftnote.persistence.KraftNoteDatabase;
 import com.example.kraftnote.persistence.daos.NoteDao;
 import com.example.kraftnote.persistence.entities.Note;
 import com.example.kraftnote.persistence.repositories.contracts.IRepository;
+import com.example.kraftnote.persistence.views.NoteWithRelation;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -24,8 +25,14 @@ public class NoteRepository implements IRepository<Note> {
     }
 
     @Override
+    public int insertSingle(Note note) {
+        return (int) noteDao.insertSingle(note);
+    }
+
+    @Override
     public void insert(Note note) {
-        new InsertTask(noteDao).execute(note);
+        noteDao.insertAll(note);
+        //new InsertTask(noteDao).execute(note);
     }
 
     @Override
@@ -41,6 +48,22 @@ public class NoteRepository implements IRepository<Note> {
     @Override
     public LiveData<List<Note>> getAll() {
         return allNotes;
+    }
+
+    public LiveData<List<NoteWithRelation>> getAllWithRelation() {
+        return noteDao.getAllWithRelation();
+    }
+
+    public Note findById(int id) {
+        return noteDao.findById(id);
+    }
+
+    public Note getLatestDraft() {
+        return noteDao.getLatestDraft();
+    }
+
+    public LiveData<List<Note>> getAll(boolean includeDraft) {
+        return noteDao.getAll(includeDraft ? 1 : 0);
     }
 
     private static class InsertTask extends NoteMutationTask {

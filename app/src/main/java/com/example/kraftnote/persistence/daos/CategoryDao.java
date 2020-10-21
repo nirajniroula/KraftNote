@@ -15,6 +15,9 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Insert
+    long insertAll(Category category);
+
+    @Insert
     void insertAll(Category... categories);
 
     @Update
@@ -23,15 +26,21 @@ public interface CategoryDao {
     @Delete
     void deleteAll(Category... categories);
 
-    @Query("SELECT * FROM Categories ORDER BY created_at")
+    @Query("SELECT * FROM Categories WHERE category_hidden = 0 ORDER BY category_created_at")
     LiveData<List<Category>> getAll();
 
-    @Query("SELECT * FROM Categories WHERE id=:id LIMIT 1")
+    @Query("SELECT * FROM Categories WHERE category_id=:id LIMIT 1")
     Category findById(int id);
 
-    @Query("SELECT * FROM CategoryWithNotesCount")
+    @Query("SELECT * FROM CategoryWithNotesCount WHERE category_hidden = 0")
     LiveData<List<CategoryWithNotesCount>> getAllWithNotesCount();
 
-    @Query("SELECT EXISTS(SELECT * FROM Categories WHERE LOWER(name) = LOWER(:name) LIMIT 1)")
+    @Query("SELECT EXISTS(SELECT * FROM Categories WHERE LOWER(category_name) = LOWER(:name) LIMIT 1)")
     boolean nameExists(String name);
+
+    @Insert
+    long insertSingle(Category category);
+
+    @Query("SELECT * FROM Categories WHERE category_hidden = 1 LIMIT 1")
+    Category getDefault();
 }

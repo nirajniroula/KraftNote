@@ -1,8 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/deepPurple_800</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
@@ -16,7 +16,31 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <!--Components-->
+
+    <!--Bottom Sheets-->
+    <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.MyTheme.BottomSheet.Modal</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="bottomSheetStyle">@style/Widget.MyTheme.BottomSheet.Modal</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">
+            @android:color/transparent
+        </item>
+    </style>
+
+    <style name="Widget.MyTheme.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">?attr/shapeAppearanceLargeComponent</item>
+    </style>
+
+    <!--Navigation Drawer-->
+    <style name="Widget.MyTheme.NavigationView" parent="Widget.MaterialComponents.NavigationView">
+        <item name="itemTextAppearance">?attr/textAppearanceBody2</item>
+    </style>
+
+    <style name="Widget.MyTheme.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="iconPadding">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
@@ -26,11 +50,74 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
-    <style name="Widget.App.Button.OutlinedButton.IconOnly.Compact" parent="Widget.App.Button.OutlinedButton.IconOnly">
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:minWidth">32dp</item>
-        <item name="android:minHeight">32dp</item>
+    <style name="Widget.App.Button.TextButton.IconOnly" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="Widget.App.Button.TextButton.TextOnly" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+
+    <style name="Widget.MyTheme.Button.IconOnly" parent="Widget.MaterialComponents.Button">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="Widget.App.Text.IconOnly" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="Widget.MyTheme.BottomAppBar.Colored" parent="@style/Widget.MaterialComponents.BottomAppBar.Colored">
+        <item name="itemIconTint">@color/white_50</item>
+        <item name="itemTextColor">@color/white_50</item>
+        <item name="backgroundTint">@color/blue_A700</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Widget.MyTheme.Button.IconOnly.CircularOutlined" parent="Widget.MyTheme.Button.IconOnly">
+        <!--        -->
+        <item name="iconTint">@color/blue_A700</item>
+        <item name="backgroundTint">@color/grey_50</item>
+    </style>
+
+
+    <style name="Theme.MyTheme.Dialog" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
+        <!--        <item name="colorAccent">@color/colorPrimaryDark</item>-->
+    </style>
+
+    <style name="Theme.MyTheme.Dialog.WrapContent" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
+        <item name="windowMinWidthMajor">0%</item>
+        <item name="windowMinWidthMinor">0%</item>
+    </style>
+
+    <style name="Theme.MyTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
+        <item name="android:background">@color/indigo_A700</item>
+        <item name="tabSelectedTextColor">@color/white_50</item>
+        <item name="tabTextColor">@color/semi_transparent_white</item>
     </style>
 
 </resources>

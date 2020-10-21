@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.example.kraftnote"
@@ -12,6 +12,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation":
+                                      "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -32,9 +39,19 @@ android {
             ]
         }
     }
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -43,17 +60,31 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
-    implementation 'androidx.navigation:navigation-fragment:2.3.0'
-    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.1'
+    implementation 'androidx.navigation:navigation-ui:2.3.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.customview:customview:1.1.0'
     implementation 'androidx.room:room-runtime:2.2.5'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
     implementation 'com.google.android.material:material:1.2.1'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding:1.0.1'
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:1.0.1'
+    implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
-    testImplementation 'junit:junit:4.13'
+    implementation 'com.github.GautamChibde:android-audio-visualizer:2.2.0'
+    implementation 'com.github.Armen101:AudioRecordView:1.0.2'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+    implementation 'com.github.rygelouv:android-audio-sensei:0.1.2'
+
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }

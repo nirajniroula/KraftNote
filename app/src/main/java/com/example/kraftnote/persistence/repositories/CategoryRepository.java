@@ -27,6 +27,11 @@ public class CategoryRepository implements IRepository<Category> {
     }
 
     @Override
+    public int insertSingle(Category category) {
+        return (int) categoryDao.insertSingle(category);
+    }
+
+    @Override
     public void insert(Category category) {
         new InsertTask(categoryDao).execute(category);
     }
@@ -52,6 +57,10 @@ public class CategoryRepository implements IRepository<Category> {
 
     public LiveData<List<CategoryWithNotesCount>> getCategoriesWithNotesCount() {
         return categoriesWithNotesCount;
+    }
+
+    public Category getDefault() {
+        return categoryDao.getDefault();
     }
 
     private static class InsertTask extends CategoryMutationTask {

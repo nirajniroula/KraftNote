@@ -11,23 +11,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.example.kraftnote.ui.category.components.CategoryRecyclerView;
+import com.example.kraftnote.ui.category.dialog.SaveCategoryDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryFragment extends Fragment {
+    private NavController navController;
     private CategoryViewModel categoryViewModel;
     private CategoryRecyclerView categoryRecyclerView;
     private FloatingActionButton addCategoryFab;
-    private AddEditCategoryDialogFragment addEditCategoryDialogFragment;
+    private SaveCategoryDialogFragment saveCategoryDialogFragment;
     List<CategoryWithNotesCount> categoryWithNotesCounts = new ArrayList<>();
 
     @Nullable
@@ -45,15 +48,15 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initializeProperties(view);
+        listenEvents();
+    }
+
+    private void initializeProperties(View view) {
+        navController = NavHostFragment.findNavController(this);
+        saveCategoryDialogFragment = new SaveCategoryDialogFragment();
         addCategoryFab = view.findViewById(R.id.add_category_fab);
         categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
-        addEditCategoryDialogFragment = new AddEditCategoryDialogFragment();
-
-        view.findViewById(R.id.button_fifth)
-                .setOnClickListener(view1 -> NavHostFragment.findNavController(CategoryFragment.this)
-                        .navigate(R.id.action_CategoryFragment_to_FirstFragment));
-
-        listenEvents();
     }
 
     private void listenEvents() {
@@ -62,8 +65,8 @@ public class CategoryFragment extends Fragment {
 
         categoryRecyclerView.onEditButtonClicked(this::onEditRequest);
         categoryRecyclerView.onDeleteButtonClicked(this::onDeleteRequest);
-        addEditCategoryDialogFragment.onAddRequest(this::onSaveCategory);
-        addEditCategoryDialogFragment.setCheckUniqueCallback(this::checkCategoryNameIsUnique);
+        saveCategoryDialogFragment.setOnCategoryAddRequest(this::onSaveCategoryRequest);
+        saveCategoryDialogFragment.setCheckUniqueCallback(this::checkCategoryNameIsUnique);
         addCategoryFab.setOnClickListener((View v) -> onCreateRequest());
     }
 
@@ -85,7 +88,7 @@ public class CategoryFragment extends Fragment {
         return isUnique;
     }
 
-    private void onSaveCategory(Category category) {
+    private void onSaveCategoryRequest(Category category) {
         if (category.getCreatedAt() == null) {
             categoryViewModel.insert(category);
             Toast.makeText(getContext(), R.string.category_added, Toast.LENGTH_SHORT).show();
@@ -97,17 +100,17 @@ public class CategoryFragment extends Fragment {
     }
 
     private void openAddCategoryDialog() {
-        addEditCategoryDialogFragment.show(getChildFragmentManager(), null);
+        saveCategoryDialogFragment.show(getChildFragmentManager(), null);
     }
 
     private void onCreateRequest() {
-        addEditCategoryDialogFragment.setCategory(null);
+        saveCategoryDialogFragment.setCategory(null);
         openAddCategoryDialog();
     }
 
 
     private void onEditRequest(CategoryWithNotesCount categoryWithNotesCount) {
-        addEditCategoryDialogFragment.setCategory(categoryWithNotesCount.getCategory());
+        saveCategoryDialogFragment.setCategory(categoryWithNotesCount.getCategory());
         openAddCategoryDialog();
     }
 
@@ -116,7 +119,7 @@ public class CategoryFragment extends Fragment {
 
         if (categoryWithNotesCount.getNotesCount() > 0) {
             builder
-                    .setTitle(R.string.unperformable_action)
+                    .setTitle(R.string.cannot_perform_action)
                     .setMessage(R.string.cannot_delete_category_having_notes)
                     .setNeutralButton(R.string.ok, null)
                     .show();
@@ -136,5 +139,9 @@ public class CategoryFragment extends Fragment {
     private void categoryWithNotesCountMutated(List<CategoryWithNotesCount> categoryWithNotesCounts) {
         this.categoryWithNotesCounts = categoryWithNotesCounts;
         categoryRecyclerView.setCategories(categoryWithNotesCounts);
+    }
+
+    private void gotoNoteFragment() {
+        navController.navigate(R.id.action_CategoryFragment_to_NoteFragment);
     }
 }

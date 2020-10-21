@@ -1,8 +1,8 @@
 package com.example.kraftnote.persistence.entities.contracts;
 
 public interface IBody {
-    int getId();
-    void setId(int id);
+    Integer getId();
+    void setId(Integer id);
     BodyType getType();
     void setType(BodyType type);
     String getContent();

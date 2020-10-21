@@ -3,28 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/NoteFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.kraftnote.ui.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/NoteFragment"
+        android:name="com.example.kraftnote.ui.note.NoteFragment"
+        android:label="@string/note_fragment_label"
+        tools:layout="@layout/fragment_notes">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            android:id="@+id/action_NoteFragment_to_CategoryFragment"
             app:destination="@id/CategoryFragment" />
+        <action
+            android:id="@+id/action_NoteFragment_to_AddUpdateNoteFragment"
+            app:destination="@id/AddUpdateNoteFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.kraftnote.ui.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/AddUpdateNoteFragment"
+        android:name="com.example.kraftnote.ui.note.AddEditNoteFragment"
+        android:label="@string/save_note_fragment_label"
+        tools:layout="@layout/fragment_add_edit_note">
 
         <action
-            android:id="@+id/action_SecondFragment_to_CategoryFragment"
-            app:destination="@id/CategoryFragment" />
+            android:id="@+id/action_AddUpdateNoteFragment_to_NoteFragment"
+            app:destination="@+id/NoteFragment"
+            app:popUpTo="@+id/NoteFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -34,7 +39,7 @@
         tools:layout="@layout/fragment_category">
 
         <action
-            android:id="@+id/action_CategoryFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_CategoryFragment_to_NoteFragment"
+            app:destination="@id/NoteFragment" />
     </fragment>
 </navigation>
