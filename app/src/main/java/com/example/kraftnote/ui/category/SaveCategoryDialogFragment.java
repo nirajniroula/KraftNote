@@ -35,7 +35,8 @@ public class SaveCategoryDialogFragment extends DialogFragment {
         nameEditText = view.findViewById(R.id.category_name);
         setCancelable(false);
 
-        nameEditText.addTextChangedListener(new PlainTextFormatWatcher(nameEditText));
+        nameEditText.addTextChangedListener(
+                new PlainTextFormatWatcher(nameEditText, this::toggleAddButton));
 
         builder.setView(view)
                 .setTitle(

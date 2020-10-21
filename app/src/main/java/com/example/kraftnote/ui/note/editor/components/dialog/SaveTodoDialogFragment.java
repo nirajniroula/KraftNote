@@ -62,7 +62,8 @@ public class SaveTodoDialogFragment extends DialogFragment {
     }
 
     private void listenEvents() {
-        binding.todoText.addTextChangedListener(new PlainTextFormatWatcher(binding.todoText));
+        binding.todoText.addTextChangedListener(
+                new PlainTextFormatWatcher(binding.todoText, this::toggleAddButton));
 
         dialog.setOnShowListener(alertDialog -> {
             addButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);

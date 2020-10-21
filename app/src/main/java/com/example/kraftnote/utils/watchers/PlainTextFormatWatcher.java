@@ -8,14 +8,18 @@ import android.widget.EditText;
 public class PlainTextFormatWatcher implements TextWatcher {
 
     private final EditText edittext;
+    private final Runnable callback;
 
-    public PlainTextFormatWatcher(EditText editText) {
+    public PlainTextFormatWatcher(EditText editText, Runnable callback) {
         this.edittext = editText;
+        this.callback = callback;
     }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if(callback == null) return;
 
+        callback.run();
     }
 
     @Override
@@ -31,14 +35,16 @@ public class PlainTextFormatWatcher implements TextWatcher {
 
         edittext.removeTextChangedListener(this);
 
-        Object[] spans = editable.getSpans(0, editable.toString().length(), Object.class);
+        ParcelableSpan[] spans = editable.getSpans(0, editable.toString().length(), ParcelableSpan.class);
 
-        for (Object span : spans) {
-            if (span instanceof ParcelableSpan) {
-                editable.removeSpan(span);
-            }
+        for (ParcelableSpan span : spans) {
+            editable.removeSpan(span);
         }
 
         edittext.addTextChangedListener(this);
+
+        if(callback == null) return;
+
+        callback.run();
     }
 }
