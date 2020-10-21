@@ -3,7 +3,6 @@ package com.example.kraftnote.ui.category.components;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
-import android.icu.text.SimpleDateFormat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -13,20 +12,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
+import com.example.kraftnote.utils.DateHelper;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 public class CategoryRecyclerView extends RecyclerView {
@@ -79,14 +75,12 @@ public class CategoryRecyclerView extends RecyclerView {
 
     private class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryHolder> {
         private List<CategoryWithNotesCount> categoryWithNotesCounts = new ArrayList<>();
-        private final String datePattern = "EEE, d MMM yyyy, hh:mm a";
-        private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern, Locale.US);
 
         @NonNull
         @Override
         public CategoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.category_card, parent, false);
+                    .inflate(R.layout.component_category_card, parent, false);
 
             return new CategoryAdapter.CategoryHolder(itemView);
         }
@@ -98,7 +92,7 @@ public class CategoryRecyclerView extends RecyclerView {
             final Category category = categoryWithNotesCount.getCategory();
             final int notesCount = categoryWithNotesCount.getNotesCount();
 
-            String formattedDate = simpleDateFormat.format(category.getCreatedAt());
+            String formattedDate = DateHelper.toFormattedStringAlt(category.getCreatedAt());
             holder.textViewName.setText(category.getName());
 
             holder.textViewNotesCount.setText(

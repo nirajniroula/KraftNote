@@ -5,11 +5,11 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/keyline_4"
     android:layout_marginTop="@dimen/component_label_horizontal_margin"
     android:clipToPadding="false"
-    app:cardBackgroundColor="#ede7f6"
-    android:layout_marginHorizontal="@dimen/keyline_4"
     android:elevation="1dp"
+    app:cardBackgroundColor="#ede7f6"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="parent">
 
@@ -41,6 +41,7 @@
                     android:layout_marginStart="@dimen/keyline_4"
                     android:layout_marginTop="@dimen/keyline_4"
                     android:text="@string/text_overline"
+                    android:fontFamily="@font/open_sans_semi_bold"
                     android:textAppearance="?attr/textAppearanceOverline"
                     android:textColor="#9575cd" />
 
@@ -50,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/keyline_4"
                     android:layout_marginTop="@dimen/keyline_1"
+                    android:fontFamily="@font/open_sans_light"
                     android:text="10 Notes"
                     android:textAppearance="?attr/textAppearanceSubtitle2"
                     android:textColor="#7e57c2"
@@ -69,11 +71,17 @@
             android:id="@+id/category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/keyline_4"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_light"
+            android:lineHeight="30dp"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/keyline_4"
+            android:paddingTop="@dimen/keyline_1"
             android:paddingBottom="@dimen/keyline_4"
             android:text="@string/text_headline_6"
             android:textAppearance="?attr/textAppearanceHeadline4"
             android:textColor="#5e35b1"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/category_info" />
 
