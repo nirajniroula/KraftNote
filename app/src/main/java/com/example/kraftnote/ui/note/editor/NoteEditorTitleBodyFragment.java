@@ -17,11 +17,6 @@ public class NoteEditorTitleBodyFragment extends NoteEditorChildFragmentBase {
     private static final String TAG = NoteEditorTitleBodyFragment.class.getSimpleName();
 
     private FragmentNoteEditorTitleBodyBinding binding;
-    private Note note;
-
-    // state
-    private boolean isTitleEditTextFocused = false;
-    private boolean isBodyEditTextFocused = false;
 
     @Nullable
     @Override
@@ -35,33 +30,12 @@ public class NoteEditorTitleBodyFragment extends NoteEditorChildFragmentBase {
         binding = FragmentNoteEditorTitleBodyBinding.bind(view);
 
         initializeProperties();
-        listenEvents();
     }
 
     private void initializeProperties() {
-        note = getNote();
+        Note note = getNote();
         binding.editorBodyText.setBody(note.getBody());
         binding.noteTitle.setTitle(note.getName());
-    }
-
-    private void listenEvents() {
-        binding.noteTitle.getTextInputEditText()
-                .setOnFocusChangeListener((v, hasFocus) -> {
-                    isTitleEditTextFocused = hasFocus;
-                    binding.getRoot().post(this::onEditTextFocusChanged);
-                });
-
-        binding.editorBodyText.setOnFocusChangeListener((v, hasFocus) -> {
-            isBodyEditTextFocused = hasFocus;
-            binding.getRoot().post(this::onEditTextFocusChanged);
-        });
-    }
-
-    private void onEditTextFocusChanged() {
-        updateViewPagerScrollBehaviour(
-                !isTitleEditTextFocused
-                        && !isBodyEditTextFocused
-        );
     }
 
     public String getName() {
@@ -72,4 +46,10 @@ public class NoteEditorTitleBodyFragment extends NoteEditorChildFragmentBase {
         return binding.editorBodyText.getBody();
     }
 
+    @Override
+    public void onFragmentVisible() {
+        super.onFragmentVisible();
+
+        updateViewPagerScrollBehaviour(false);
+    }
 }
