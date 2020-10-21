@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.kraftnote.R;
 import com.example.kraftnote.persistence.entities.Category;
+import com.example.kraftnote.utils.watchers.PlainTextFormatWatcher;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class SaveCategoryDialogFragment extends DialogFragment {
@@ -33,6 +34,8 @@ public class SaveCategoryDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.category_add_edit_dialog, null);
         nameEditText = view.findViewById(R.id.category_name);
         setCancelable(false);
+
+        nameEditText.addTextChangedListener(new PlainTextFormatWatcher(nameEditText));
 
         builder.setView(view)
                 .setTitle(

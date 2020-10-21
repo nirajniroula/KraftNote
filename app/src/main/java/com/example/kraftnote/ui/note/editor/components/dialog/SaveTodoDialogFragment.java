@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.kraftnote.R;
 import com.example.kraftnote.databinding.FragmentTodoCreateEditDialogBinding;
 import com.example.kraftnote.persistence.entities.Todo;
+import com.example.kraftnote.utils.watchers.PlainTextFormatWatcher;
 
 public class SaveTodoDialogFragment extends DialogFragment {
     private FragmentTodoCreateEditDialogBinding binding;
@@ -63,34 +64,7 @@ public class SaveTodoDialogFragment extends DialogFragment {
     }
 
     private void listenEvents() {
-        binding.todoText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                toggleAddButton();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Editable editable = binding.todoText.getText();
-
-                if (editable == null) return;
-
-                binding.todoText.removeTextChangedListener(this);
-
-                ParcelableSpan[] spans = editable.getSpans(0, editable.toString().length(), ParcelableSpan.class);
-
-                for (ParcelableSpan span : spans)
-                    editable.removeSpan(span);
-
-                binding.todoText.addTextChangedListener(this);
-
-                toggleAddButton();
-            }
-        });
+        binding.todoText.addTextChangedListener(new PlainTextFormatWatcher(binding.todoText));
 
         dialog.setOnShowListener(alertDialog -> {
             addButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
