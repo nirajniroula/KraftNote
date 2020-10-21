@@ -114,4 +114,10 @@
         <item name="windowMinWidthMinor">0%</item>
     </style>
 
+    <style name="Theme.MyTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
+        <item name="android:background">@color/indigo_A700</item>
+        <item name="tabSelectedTextColor">@color/white_50</item>
+        <item name="tabTextColor">@color/semi_transparent_white</item>
+    </style>
+
 </resources>

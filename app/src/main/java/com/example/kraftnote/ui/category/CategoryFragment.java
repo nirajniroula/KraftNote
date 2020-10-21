@@ -19,6 +19,7 @@ import com.example.kraftnote.persistence.entities.Category;
 import com.example.kraftnote.persistence.viewmodels.CategoryViewModel;
 import com.example.kraftnote.persistence.views.CategoryWithNotesCount;
 import com.example.kraftnote.ui.category.components.CategoryRecyclerView;
+import com.example.kraftnote.ui.category.dialog.SaveCategoryDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

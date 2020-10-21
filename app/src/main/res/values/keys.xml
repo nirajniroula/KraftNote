@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="GOOGLE_MAPS_API_KEY" translatable="false">AIzaSyAg-FThhVwi1jYnJHOMKX4hv_EFtd64Rq4</string>
+    <string name="PLACES_API_KEY" translatable="false">AIzaSyCWtPuBC0yB5PeAtqu3YY2_QDWXyo5eYqk</string>
 </resources>

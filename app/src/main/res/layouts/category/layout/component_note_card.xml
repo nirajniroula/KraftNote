@@ -8,11 +8,9 @@
     android:layout_marginHorizontal="@dimen/keyline_4"
     android:layout_marginTop="@dimen/component_label_horizontal_margin"
     android:clipToPadding="false"
-    app:cardBackgroundColor="#ebebf3"
+    app:cardBackgroundColor="@color/indigo_100"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="parent"
-    app:strokeColor="#777b70a6"
-    app:strokeWidth="0.55dp">
+    app:layout_constraintTop_toBottomOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -41,10 +39,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/keyline_4"
                     android:layout_marginTop="@dimen/keyline_4"
-                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:fontFamily="@font/open_sans_light"
                     android:text="@string/text_overline"
                     android:textAppearance="?attr/textAppearanceOverline"
-                    android:textColor="#553bf9" />
+                    android:textColor="#25146b" />
 
                 <TextView
                     android:id="@+id/note_category_name"
@@ -52,10 +50,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/keyline_4"
                     android:layout_marginTop="@dimen/keyline_1"
-                    android:fontFamily="@font/open_sans_light"
+                    android:fontFamily="@font/open_sans_regular"
                     android:text="Uncategorised"
                     android:textAppearance="?attr/textAppearanceSubtitle2"
-                    android:textColor="#25146b"
+                    android:textColor="#553bf9"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -80,8 +78,9 @@
             android:paddingBottom="@dimen/keyline_4"
             android:text="Similar in from or completely designer Any they there and"
             android:textAppearance="?attr/textAppearanceHeadline4"
-            android:textColor="#231069"
+            android:textColor="@color/black_800"
             android:textSize="24sp"
+            android:letterSpacing="0.035"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/note_info"
             tools:ignore="HardcodedText" />

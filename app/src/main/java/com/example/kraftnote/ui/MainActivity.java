@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeProperties() {
-        Places.initialize(this, "AIzaSyCWtPuBC0yB5PeAtqu3YY2_QDWXyo5eYqk");
+        Places.initialize(this, getResources().getString(R.string.PLACES_API_KEY));
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
@@ -61,43 +61,5 @@ public class MainActivity extends AppCompatActivity {
                         ? View.VISIBLE
                         : View.GONE
         );
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem search = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) search.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

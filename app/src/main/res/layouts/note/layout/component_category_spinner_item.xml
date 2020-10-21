@@ -6,8 +6,9 @@
     style="@style/TextAppearance.MyTheme.Subtitle2"
     android:textSize="16sp"
     android:paddingVertical="@dimen/keyline_5"
-    android:background="#ede7f6"
-    android:textColor="@color/semi_transparent_black"
+    android:background="@color/indigo_A700"
+    android:textColor="@color/white_50"
     android:paddingHorizontal="@dimen/keyline_5"
+    android:letterSpacing="0.05"
     app:fontFamily="@font/open_sans_regular"
     android:text="@string/categories"/>
