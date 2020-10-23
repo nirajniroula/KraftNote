@@ -68,4 +68,6 @@
     <string name="note_reminder">Note Reminder</string>
     <string name="save_note_first">Save note to create reminder</string>
     <string name="note_title_is_not_valid">Note title is not valid</string>
+    <string name="comming_soon">Comming Soon</string>
+    <string name="setting">Setting</string>
 </resources>

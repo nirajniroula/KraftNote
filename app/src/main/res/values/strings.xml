@@ -2,6 +2,7 @@
     <string name="app_name">Kraft Note</string>
     <!-- Strings used for fragments for navigation -->
     <string name="category_fragment_label">Category</string>
+    <string name="setting_fragment_label">Setting</string>
     <string name="note_fragment_label">Note</string>
     <string name="save_note_fragment_label">Save Note</string>
 

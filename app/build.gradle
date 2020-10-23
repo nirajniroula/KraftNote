@@ -34,6 +34,7 @@ android {
                     "src/main/res/layouts/common/",
                     "src/main/res/layouts/note/",
                     "src/main/res/layouts/category/",
+                    "src/main/res/layouts/setting/",
                     "src/main/res/layouts/",
                     "src/main/res/",
             ]

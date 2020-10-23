@@ -123,16 +123,12 @@ public class NoteEditorRecordingFragment extends NoteEditorChildFragmentBase {
         visualizerTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (recordViewWeakReference.get() == null) return;
+                if (recordViewWeakReference.get() == null || recorderWeakReference.get() == null)
+                    return;
 
-                recordViewWeakReference.get().post(() -> {
-                    if (recordViewWeakReference.get() == null || recorderWeakReference.get() == null)
-                        return;
-
-                    recordViewWeakReference.get().update(recorderWeakReference.get().getMaxAmplitude());
-                });
+                recordViewWeakReference.get().update(recorderWeakReference.get().getMaxAmplitude());
             }
-        }, 0, 250);
+        }, 0, 100);
 
         binding.chronometer.setBase(SystemClock.elapsedRealtime());
         binding.chronometer.start();

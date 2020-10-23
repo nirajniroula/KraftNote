@@ -1,11 +1,13 @@
 package com.example.kraftnote.services;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Vibrator;
+import android.provider.Settings;
 
 import androidx.core.app.NotificationCompat;
 
@@ -23,6 +25,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle(intent.getStringExtra("title"))
                 .setContentText(intent.getStringExtra("text"))
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                .setLights(Color.RED, 3000, 3000)
                 .build();
         // Show notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

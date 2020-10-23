@@ -134,7 +134,9 @@ public class NoteFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putInt("id", noteWithRelation.getNote().getId());
 
-        navController.navigate(R.id.action_NoteFragment_to_AddUpdateNoteFragment, bundle);
+        binding.getRoot().postDelayed(() -> {
+            navController.navigate(R.id.action_NoteFragment_to_AddUpdateNoteFragment, bundle);
+        }, 300);
     }
 
     private void notesMutated(List<NoteWithRelation> notes) {

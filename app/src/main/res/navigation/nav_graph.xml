@@ -41,4 +41,10 @@
             android:id="@+id/action_CategoryFragment_to_NoteFragment"
             app:destination="@id/NoteFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/SettingFragment"
+        android:name="com.example.kraftnote.ui.setting.SettingFragment"
+        android:label="@string/setting_fragment_label"
+        tools:layout="@layout/fragment_setting" />
 </navigation>
