@@ -3,6 +3,7 @@ package com.example.kraftnote.ui.note;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -215,7 +216,7 @@ public class NoteFragment extends Fragment {
     private void onNoteCategoryChangeRequest(NoteWithRelation noteWithRelation) {
         categoryToBeUpdatedNote = noteWithRelation.getNote();
         List<Category> categoryList = new ArrayList<>(categories);
-        categoryList.set(0, defaultCategory);
+        categoryList.add(0, defaultCategory);
 
         changeCategoryDialog.setOnActivityCreated(() -> {
             changeCategoryDialog.setCategories(categoryList);
