@@ -8,7 +8,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/note_title_caption"
         style="@style/TextAppearance.MyTheme.Overline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +17,6 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/note_title_input_layout"
         style="@style/Widget.MyTheme.TextInputLayout.NoteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,11 +1,18 @@
 package com.example.kraftnote.ui.note.editor;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.kraftnote.R;
@@ -23,9 +31,11 @@ import com.example.kraftnote.persistence.entities.LocationReminder;
 import com.example.kraftnote.persistence.transformers.PlaceToLocationReminder;
 import com.example.kraftnote.persistence.viewmodels.DatetimeReminderViewModel;
 import com.example.kraftnote.persistence.viewmodels.LocationReminderViewModel;
+import com.example.kraftnote.services.NotificationReceiver;
 import com.example.kraftnote.ui.note.contracts.NoteEditorChildFragmentBase;
 import com.example.kraftnote.utils.DateHelper;
 import com.example.kraftnote.utils.LocationHelper;
+import com.example.kraftnote.utils.NotificationHelper;
 import com.example.kraftnote.utils.PermissionHelper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -132,7 +142,7 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
     }
 
     private void onLocationSelected() {
-        if(locationReminder == null) {
+        if (locationReminder == null) {
             binding.selectedLocationTextView.setText(R.string.select_a_location);
             return;
         }
@@ -140,7 +150,7 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
         String fullAddress = locationReminder.getFullAddress();
         binding.selectedLocationTextView.setText(fullAddress);
 
-        if (googleMap == null ) return;
+        if (googleMap == null) return;
 
         String locationName = locationReminder.getName();
         LatLng position = locationReminder.getLatLng();
@@ -157,6 +167,11 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
     }
 
     private void showDatetimePicker() {
+        if (getNote().isDraft()) {
+            Toast.makeText(getContext(), R.string.save_note_first, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         datePicker.show(getChildFragmentManager(), datePicker.toString());
     }
 
@@ -257,6 +272,8 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
 
                             Toast.makeText(getContext(), R.string.datetime_reminder_set, Toast.LENGTH_SHORT)
                                     .show();
+
+                            NotificationHelper.scheduleNotification(requireContext(), datetimeReminder.getDatetime(), getNote().getId(), getNote().getName());
                         } else {
                             datetimeReminder.setNoteId(getNote().getId());
                             datetimeReminder.setDatetime(date);
@@ -264,6 +281,8 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
 
                             Toast.makeText(getContext(), R.string.datetime_reminder_updated, Toast.LENGTH_SHORT)
                                     .show();
+
+                            NotificationHelper.scheduleNotification(requireContext(), datetimeReminder.getDatetime(), getNote().getId(), getNote().getName());
                         }
 
                         onDatetimeSelected();
@@ -283,5 +302,15 @@ public class NoteEditorReminderFragment extends NoteEditorChildFragmentBase {
         super.onFragmentVisible();
 
         updateViewPagerScrollBehaviour(allowViewPagerSwipeGesture);
+    }
+
+    public void scheduleNotification(Context context, long time, String text) {
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra("title", R.string.note_reminder);
+        intent.putExtra("text", text);
+        PendingIntent pending = PendingIntent.getBroadcast(context, getNote().getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Schdedule notification
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pending);
     }
 }

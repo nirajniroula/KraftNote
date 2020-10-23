@@ -4,10 +4,8 @@
     <string name="category_added">Category Added</string>
     <string name="update_category">Update Category</string>
     <string name="category_updated">Category updated</string>
-    <string name="delete_category">Update Category</string>
     <string name="category_deleted">Category Deleted</string>
     <string name="note_category_changed">Note Category Changed</string>
-    <string name="note_updated">Note Updated</string>
     <string name="note_deleted">Note Deleted</string>
     <string name="error_helper_text_add_category">Category name must be unique (case-insensitive).</string>
     <string name="cannot_perform_action">Cannot perform the action</string>

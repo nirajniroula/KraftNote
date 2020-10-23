@@ -41,6 +41,10 @@ public interface NoteDao {
     @Query("SELECT * FROM Notes WHERE note_id=:id LIMIT 1")
     Note findById(int id);
 
+    @Transaction
+    @Query("SELECT * FROM NoteWithRelation WHERE note_id=:id LIMIT 1")
+    NoteWithRelation findByIdWithRelation(int id);
+
     @Query("SELECT * FROM Notes WHERE note_is_draft=1 ORDER BY note_created_at DESC LIMIT 1")
     Note getLatestDraft();
 

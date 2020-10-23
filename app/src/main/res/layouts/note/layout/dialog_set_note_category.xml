@@ -7,8 +7,8 @@
     android:paddingBottom="@dimen/keyline_2">
 
     <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/categorySpinner"
         style="@style/Widget.AppCompat.Spinner.DropDown"
-        android:id="@+id/category_spinner"
         android:layout_width="match_parent"
         android:paddingVertical="@dimen/keyline_3"
         android:layout_height="wrap_content"

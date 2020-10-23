@@ -19,7 +19,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/date_and_time_caption"
             style="@style/TextAppearance.MyTheme.Overline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +29,7 @@
             android:textColor="@color/white_50" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/date_time_picker_button"
+            android:id="@+id/dateTimePickerButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +74,6 @@
         app:layout_constraintTop_toBottomOf="@id/selected_date_text_view">
 
         <TextView
-            android:id="@+id/location_caption"
             style="@style/TextAppearance.MyTheme.Overline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +84,7 @@
             android:textColor="@color/white_50" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/show_map_button"
+            android:id="@+id/showMapButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,7 +122,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/selected_location_text_view"
+        android:id="@+id/selectedLocationTextView"
         style="@style/TextAppearance.MyTheme.Headline3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -140,7 +138,7 @@
         tools:ignore="HardcodedText" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/google_map_card_view"
+        android:id="@+id/googleMapCardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
@@ -154,7 +152,7 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/close_map_button"
+                android:id="@+id/closeMapButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/keyline_2"
@@ -167,7 +165,7 @@
                 app:tint="@color/red_A400" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/navigate_button"
+                android:id="@+id/navigateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/keyline_5"

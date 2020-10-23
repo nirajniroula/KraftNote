@@ -127,6 +127,11 @@ public class AddEditNoteFragment extends Fragment {
             final NoteEditorTitleBodyFragment fragment =
                     fragmentCollectionAdapter.getNoteEditorTitleBodyFragment();
 
+            if(!fragment.isNoteValid()) {
+                Toast.makeText(getContext(), R.string.note_title_is_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             getNote().setName(fragment.getName());
             getNote().setBody(fragment.getBody());
             getNote().setDraft(0);

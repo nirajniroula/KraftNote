@@ -28,7 +28,6 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/location_reminder_text_view"
             style="@style/TextAppearance.MyTheme.Subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +43,6 @@
             app:iconSize="2dp" />
 
         <TextView
-            android:id="@+id/datetime_reminder_text_view"
             style="@style/TextAppearance.MyTheme.Subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

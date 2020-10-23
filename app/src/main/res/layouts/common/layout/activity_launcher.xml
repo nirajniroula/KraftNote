@@ -45,7 +45,6 @@
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/cinzel_decorative_regular"

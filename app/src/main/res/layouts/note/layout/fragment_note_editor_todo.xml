@@ -17,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/todo_caption"
             style="@style/TextAppearance.MyTheme.Overline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +27,7 @@
             android:textColor="@color/white_50" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_todo_button"
+            android:id="@+id/addTodoButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +45,7 @@
     </RelativeLayout>
 
     <com.example.kraftnote.ui.note.editor.components.TodoRecyclerView
-        android:id="@+id/todo_recycler_view"
+        android:id="@+id/todoRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

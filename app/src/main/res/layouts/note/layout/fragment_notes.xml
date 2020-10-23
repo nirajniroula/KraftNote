@@ -57,7 +57,7 @@
         >
 
         <com.example.kraftnote.ui.note.editor.components.InputText
-            android:id="@+id/search_note_input"
+            android:id="@+id/searchNoteInput"
             style="@style/ThemeOverlay.MyTheme.TextInputEditText.Search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.example.kraftnote.ui.note.components.NoteRecyclerView
-        android:id="@+id/note_recycler_view"
+        android:id="@+id/noteRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/search_note_input_wrapper"
@@ -87,7 +87,7 @@
         tools:listitem="@layout/component_note_card" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_note_fab"
+        android:id="@+id/addNoteFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

@@ -8,6 +8,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DateHelper {
+    public static boolean isFuture(Date date) {
+        return date.getTime() - new Date().getTime() > 0;
+    }
+
+    public static boolean isPast(Date date) {
+        return !isFuture(date);
+    }
+
+    public static Date toDate(long ts) {
+        return new Date(ts);
+    }
+
     public static Date toDate(LocalDateTime localDateTime) {
         return java.sql.Date.from(localDateTime.toInstant(OffsetDateTime.now().getOffset()));
     }
@@ -67,4 +79,6 @@ public class DateHelper {
     public static int getCurrentMinute() {
         return LocalDateTime.now().getMinute();
     }
+
+
 }

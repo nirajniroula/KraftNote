@@ -19,24 +19,19 @@
     <string name="do_you_want_to_discard_the_changes">Any changes you may have made will be discarded?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="note_title_field">Note Title</string>
-    <string name="empty" />
     <string name="untitled_note">Untitled note document</string>
     <string name="body_text">Write note contents here…</string>
     <string name="note_body_field">Body</string>
-    <string name="ipsum">Leaders, the advised dissolute on and relations went because incurred and perfecting there unavoidable, cut managers, for the ever the it feedback implemented noone safely former side her the before he sighed. Judgment, touched in to five acquiesce up the day out. Undertaking, thin the has, conflict- for their the times, but back would at one afloat, beginning high many you to him sides him the her then, clarinet deep the workers, certainly economics versus hall and his warned for invitation the this never introduced I excessive either table insurance the explain for wasn\'t of would his and parents attend</string>
     <string name="bold">Bold</string>
     <string name="italic">Italic</string>
     <string name="underline">Underline</string>
     <string name="strikethrough">Strike-through</string>
-    <string name="insert_link">Insert Link</string>
     <string name="normal">Normal</string>
     <string name="not_set">Not set</string>
     <string name="navigate">Navigate</string>
     <string name="note">Note</string>
     <string name="location">Location</string>
     <string name="images">Images</string>
-    <string name="datetime">Datetime</string>
     <string name="reminders">Reminders</string>
     <string name="todos">Todos</string>
     <string name="recordings">Recordings</string>
@@ -47,8 +42,6 @@
     <string name="select_a_date_and_time">Select a date &amp; time</string>
     <string name="title">Title</string>
     <string name="camera">Camera</string>
-    <string name="gallery">Gallery</string>
-    <string name="image_slide">Image slide</string>
     <string name="add_todo">Add Todo</string>
     <string name="update_todo">Update Todo</string>
     <string name="text">Text</string>
@@ -57,7 +50,6 @@
     <string name="todo_updated">Todo updated</string>
     <string name="image_added">Image added</string>
     <string name="image_deleted">Image deleted</string>
-    <string name="audio_source_unreadable">Audio source unreadable</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="record">Record</string>
     <string name="stop">Stop</string>
@@ -73,4 +65,7 @@
     <string name="set">Set</string>
     <string name="search">Search</string>
     <string name="kraft_note_launcher">Kraft Note Launcher</string>
+    <string name="note_reminder">Note Reminder</string>
+    <string name="save_note_first">Save note to create reminder</string>
+    <string name="note_title_is_not_valid">Note title is not valid</string>
 </resources>

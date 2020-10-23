@@ -38,8 +38,12 @@ public class NoteEditorTitleBodyFragment extends NoteEditorChildFragmentBase {
         binding.noteTitle.setTitle(note.getName());
     }
 
+    public boolean isNoteValid() {
+        return getName().length() > 0;
+    }
+
     public String getName() {
-        return binding.noteTitle.getTitle();
+        return binding.noteTitle.getTitle().trim();
     }
 
     public String getBody() {
